@@ -1,0 +1,83 @@
+
+
+  <p align=center><%= link_to '返回前頁', :back %></p>
+
+
+  <div class="table-responsive datagrid">
+    <table class="datatable table-striped" border=1 link=blue>
+      <caption class="text-center" ><strong><%= @uploadgame.gamename %></strong></caption> 
+      <thead>
+        <tr>
+        <th>序號</th>
+        <th>會員編號</th>
+        <th>會員姓名</th>
+        <th>賽前積分</th>
+        <th>勝場數</th>
+        <th>敗場數</th>
+        <th>賽後積分</th>
+        <th>積分增減</th>
+        <th>主辦單位建議積分</th>
+        </tr>
+      </thead>  
+      <tbody>
+        <%  @playerssummery.each do |player| %> 
+          <tr>
+          <td><%= player["serial"] %></td>
+          <td><%= player["id"] %></td>
+          <td><%= player["name"] %></td>
+          <td><%= player["bgamescore"] %></td>
+          <td><%= player["wongames"] %></td>
+          <td><%= player["losegames"] %></td>
+          <td><%= player["agamescore"] %></td>
+          <td><%= player["scorechanged"] %></td>
+          <td><%= player["suggestscore"] %></td>
+          </tr>
+        <% end %>
+      </tbody>    
+      <tfoot>
+        <td colspan=10>
+          <div class="text-center">
+            <%if current_user && !@uploadgame.publishedforchecking %>
+              <%= button_to '公告查核', {:controller => "uploadgames", :action => "publishuploadgame", :game_id => @uploadgame.id }, data: { confirm: 'Are you sure?' },:disabled =>  !((current_user.has_role? :admin) ||(current_user.has_role? :superuser) ) || !session[:access_token]  %>
+                     
+            <%end%> 
+          </div>
+        </td>  
+      </tfoot> 
+    </table>  
+  </div>
+   
+  
+  
+  <div class="table-responsive datagrid">
+    <table class="datatable table-striped" border=1 link=blue>
+      <caption class="text-center" ><strong>詳細比賽紀錄表</strong></caption> 
+      <thead>
+        <tr> 
+        <th>比賽組別</th>
+        <th>勝方姓名</th>
+        <th>大比數</th>
+        <th>敗方姓名</th>
+        <th>小比數</th>
+        </tr>
+      </thead>
+      <tbody>  
+        <%  @gamesrecords.each do |game| %>
+          <tr>  
+          <td><%= game["group"] %></td>
+          <td><%= game["Aplayer"] %></td>
+          <td><%= game["gameresult"] %></td>
+          <td><%= game["Bplayer"] %></td>
+          <td><%= game["detailrecords"] %></td>
+          </tr>
+        <%end %>
+      </tbody> 
+    </table>
+  </div>
+        
+
+     
+          
+ <p align=center><%= link_to '返回前頁', :back %></p>
+
+

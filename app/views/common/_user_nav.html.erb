@@ -1,0 +1,24 @@
+<ul class="nav navbar-nav navbar-right">
+  <% if current_user %>
+    <li class="dropdown">
+      <%= link_to "/account" , :class => "dropdown-toggle", :data => { :toggle => "dropdown" } do %>
+      會員: <%= current_user.username %>
+      <% end %>
+      <%= render_list :class => "dropdown-menu" do |li|
+          li << link_to("修改個人資料",edit_registration_path(current_user))
+          li << link_to("登出",destroy_user_session_path, :method => :delete )
+      end %>
+    </li>
+  <% else %>
+    <li>
+      <%= link_to( new_user_registration_path) do %>
+        <i class="fa fa-users"></i>&nbsp;註冊
+      <% end %>
+    </li>
+    <li>
+      <%= link_to( new_user_session_path )  do %>
+        <i class="fa fa-child"></i>&nbsp;登入系統
+      <% end %>
+    </li>
+  <% end %>
+</ul>

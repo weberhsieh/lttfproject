@@ -1,0 +1,102 @@
+<script src='https://www.google.com/jsapi'></script>
+
+<p align=center><%= link_to '返回前頁', :back %></p>
+
+<div class="table-responsive datagrid">
+  <table class="table-striped table-condensed" border=1 >
+    <caption class="text-center" ><strong>會員基本資料</strong></caption>  
+    <td rowspan=4 ><%= image_tag(@playerprofile.user.playerphoto_url(:thumb)) %></td>
+
+    <td><font color="black">編號:</font></td>
+    <td><font color="black">姓名:</td>
+    <td><i class="fa fa-facebook-square"><font color="black"></i>FB帳號:</font></td>
+    <td><font color="black">性別:</font></td>
+    <tr>
+    <td><strong><%= @playerprofile.user_id %></strong></td>
+    <td><strong><%= @playerprofile.user.username %></strong></td>
+    <td><strong><%= @playerprofile.user.fbaccount %></strong></td>
+    <td><strong><%= @playerprofile.bio %></strong></td>  
+    <tr>  
+    <td><font color="black">初始積分:</font></td>      
+    <td><font color="black">目前積分:</font></td>  
+    <td><font color="black">總勝場數:</font></td> 
+    <td><font color="black">總敗場數:</font></td> 
+    <tr>
+    <td><strong><%= @playerprofile.initscore %></strong></td>
+    <td><strong><font color="red"><%= @playerprofile.curscore %></font></strong></td>   
+    <td><strong><%= @playerprofile.totalwongames %></strong></td> 
+    <td><strong><%= @playerprofile.totallosegames %></strong></td>
+    <tr>
+    <td><font color="black">持拍方式:</td>      
+    <td colspan=2><font color="black">球拍型號:</td>  
+    <td><font color="black">正手膠皮:</td> 
+    <td><font color="black">反手膠皮:</td> 
+    <tr>
+    <td><strong><%= @playerprofile.paddleholdtype %></strong></td>
+    <td colspan=2><strong><%= @playerprofile.paddlemodel %></strong></td>   
+    <td ><strong><%= @playerprofile.forwardrubber %></strong></td> 
+    <td><strong><%= @playerprofile.backrubber %></strong></td>
+    <tr> 
+    <td ><font color="black">最後出賽日期:</font></td>      
+    <td colspan=3><font color="black">最後出賽:</font></td>  
+    <td><font color="black">積分更新日期:</font></td> 
+    <tr>
+    <td><strong><%= @playerprofile.lastgamedate %></strong></td>
+    <td colspan=3><strong><%= @playerprofile.lastgamename %></strong></td>   
+    <td><strong><%= @playerprofile.lastscoreupdatedate %></strong></td> 
+    <tr> 
+    <td colspan=5>  
+      <div id='chart' align="left"></div>
+        <%= render_chart @chart, 'chart' %>
+    </td>
+  </table>
+</div>
+
+
+<br></br>
+
+   <div class="table-responsive datagrid">
+      <table class="datatable table-striped" border=1>
+        <caption class="text-center" ><strong>會員參賽紀錄表</strong></caption>  
+        <thead>
+          <tr>
+          <th>比賽名稱</th>
+          <th>賽前積分</th>
+          <th>勝場數</th>
+          <th>敗場數</th>
+          <th>賽後積分</th>
+          <th>積分增減</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%  @GameTable.each do |game| %>
+            <tr>
+              
+              <td> <%= link_to game_path(:id=>game[6]) do %>
+                      <i class="fa fa-hand-o-up"></i>&nbsp;<font color="#3A01DF"><%= game[0] %></font>
+                   <% end %>     
+              </td>
+              <td><%= game[1] %></td>
+              <td><%= game[2] %></td>
+              <td><%= game[3] %></td>
+              <td><%= game[4] %></td>
+              <td><%= game[5] %></td>
+             </tr>
+          <% end %>
+        </tbody>
+        <%if @GameTable.length>0 %>
+
+          <tfoot>
+            <tr>
+            <td colspan="6">
+            <div class="text-center">
+                <%= paginate @GameTable , :theme => 'twitter-bootstrap-3' %>
+            </div>
+            </td>
+            </tr>
+          </tfoot>
+        <%end%> 
+      </table>
+    </div>
+
+

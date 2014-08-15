@@ -1,0 +1,26 @@
+#map_container{
+
+    width:65%;
+    height:500px;
+    border:1px solid red;
+    margin-right:5px;
+    float:left;
+    
+}
+ #sidebar_container{
+    width:30%;
+    height:500px;
+    border:1px solid red;
+    margin-right:5px;
+    float:left;
+    overflow:auto;
+}
+
+#map_pagecontainer{
+    width:100%;
+    height:500px;
+    border:1px solid red;
+    margin-right:5px;
+    float:left;
+    
+}

@@ -1,0 +1,19 @@
+/* tab color */
+.nav-tabs>li>a {
+  background-color: white; 
+  border-color: #777777;
+  color: black;
+}
+
+/* active tab color */
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  color: red;
+  background-color: #001f1f;
+  border: 1px solid #888888;
+}
+
+/* hover tab color */
+.nav-tabs>li>a:hover {
+  border-color: #000000;
+  background-color: #33333333;
+}

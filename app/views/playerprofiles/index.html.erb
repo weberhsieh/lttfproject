@@ -1,0 +1,46 @@
+<div class="table-responsive datagrid">
+  <table class="datatable  table-striped table-condensed" border=1 link=blue>
+    <caption class="text-center" ><strong>桌球愛好者聯盟積分總表</strong></caption> 
+    <thead>
+      <tr>
+      <th>會員照片</th>
+      <th><%= sortable "user_id", "會員編號" %></th>
+      <th><%= sortable "name", "會員姓名" %></th>
+      <th><%= sortable "curscore", "目前積分" %></th>
+      <th><%= sortable "initscore", "初始積分" %></th>
+      <th><%= sortable "totalwongames", "總勝場數" %></th>
+      <th><%= sortable "totallosegames", "總敗場數" %></th>
+      <th><%= sortable "lastscoreupdatedate", "積分更新日期" %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @playerprofiles.each do |playerprofile| %>
+        <tr>
+        <td><%= image_tag(playerprofile.user.playerphoto_url(:tiny),:class => "dp img-circle img-responsive") %></td>
+        <td><%= playerprofile.user_id %></td>
+        <td>
+          <%= link_to(playerprofile) do %>
+            <i class="fa fa-file-o"></i>&nbsp;<font color="#3A01DF"><%= playerprofile.name %></font>
+          <% end %>
+        </td>
+        <td><font color=red><%= playerprofile.curscore %></font></td>
+        <td><%= playerprofile.initscore %></td>
+        <td><%= playerprofile.totalwongames %></td>
+        <td><%= playerprofile.totallosegames %></td>
+        <td><%= playerprofile.lastscoreupdatedate %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+      <td colspan="8">
+      <div class="text-center">
+        <%= paginate @playerprofiles, :theme => 'twitter-bootstrap-3' %>
+      </div>
+      </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+

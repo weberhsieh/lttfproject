@@ -1,0 +1,90 @@
+<%= form_tag savetoupload_uploadgames_path, multipart: true do %>
+  <p align=center><%= link_to '返回前頁',  :back %> </p>
+  
+
+
+  <div class="table-responsive datagrid">
+    <table class="datatable table-striped" border=1 link=blue>
+      <caption class="text-center" ><strong><%= @uploadgame.gamename %></strong></caption>
+      <thead>
+        <tr>
+        <th>序號</th>
+        <th>會員編號</th>
+        <th>會員姓名</th>
+        <th>賽前積分</th>
+        <th>勝場數</th>
+        <th>敗場數</th>
+        <th>賽後積分</th>
+        <th>積分增減</th>
+        <th>建議積分</th>
+        </tr>
+      </thead>
+      <tbody>  
+        <%  @playerssummery.each do |player| %>
+  
+          <tr>  
+          <td> <%= player["serial"] %></td>
+          <td>  <%= player["id"] %></td>
+          <td><%= player["name"] %></td>
+          <td><%= player["bgamescore"] %></td>
+          <td><%= player["wongames"] %></td>
+          <td><%= player["losegames"] %></td>
+          <td><%= player["agamescore"] %></td>
+          <td> <%= player["scorechanged"] %></td>
+          <td> <%= number_field_tag  "suggestscore[]" , player["suggestscore"] %></td>
+           
+          </tr>
+        <% end %>
+      </tbody>  
+      <tfoot>
+        <td colspan= 9>
+          <div class="text-center">
+            <%= submit_tag "上傳此賽事成績" %>
+          </div>  
+        </td>
+      </tfoot> 
+  
+    </table>  
+  </div>
+
+
+
+  <div class="table-responsive datagrid">
+    <table class="datatable table-striped" border=1 link=blue>
+       <caption class="text-center" ><strong>詳細比賽紀錄</strong></caption>
+      <thead>
+        <tr>
+        <th align=center>比賽組別</th>
+        <th align=center>勝方姓名</th>
+        <th align=center>大比數</th>
+        <th align=center>敗方姓名</th>
+        <th align=center>小比數</th>
+        </tr>
+      </thead>
+      <tbody>   
+         
+        <%  @gamesrecords.each do |game| %>
+          <tr>
+          <td align=left><font color=blue><%= game["group"] %></font></td>
+          <td align=center><font color=blue><%= game["Aplayer"] %></font></td>
+          <td align=center><font color=blue><%= game["gameresult"] %></font></td>
+          <td align=center><font color=blue><%= game["Bplayer"] %></font></td>
+          <td align=left><font color=blue><%= game["detailrecords"] %></font></td>
+          </tr>
+        <% end %>
+          
+      </tbody>
+         
+    </table>  
+  </div>
+<% end %>
+<p align=center><%= link_to '返回前頁',  :back %> </p>   
+    
+  
+
+
+
+
+
+
+ 
