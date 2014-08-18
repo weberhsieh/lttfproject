@@ -194,8 +194,8 @@ class UploadgamesController < ApplicationController
     redirect_to :action => "index"
     
   end
-def updategamescore_to_main_table (uploadgame, adjustplayers)
-  
+def updategamescore_to_main_table (uploadgame, inp_adjustplayers)
+    adjustplayers= inp_adjustplayers.find_all{|v| !(v["wongames"]==0 && v["losegames"]==0) }
    
     playersadjusted= Array.new
     curlines=""
@@ -298,11 +298,13 @@ def updategamescore_to_main_table (uploadgame, adjustplayers)
     @adjustplayers.each do |adjustplayer|  
     adjustplayer["adjustscore"]=params[:adjustscores][i]
     adjustplayer["bgamescore"]=adjustplayer["original bscore"]
-      i+=1
+    i+=1
+      
     end  
     @adjustplayers=set_adjust_players(@adjustplayers)
     @adjustplayers=Uploadgame.hash_calculate_score(@adjustplayers, @gamesrecords)
-    @zeroscoreplayers= @adjustplayers.find_all{|v| v["bgamescore"].to_i==0 ||v["bgamescore"]=="" }
+    #@zeroscoreplayers= @adjustplayers.find_all{|v| v["bgamescore"].to_i==0 ||v["bgamescore"]=="" }
+    @zeroscoreplayers= @adjustplayers.find_all{|v| (v["bgamescore"].to_i==0 ||v["bgamescore"]=="") && (v["adjustscore"]==nil ||v["adjustscore"]=="") && !(v["wongames"]==0 && v["losegames"]==0)}
     flash[:alert]=""
     flash[:alert]="尚有0積分球友，需賦予調整積分才可進行積分更新作業!"  if  @zeroscoreplayers!=[]
     Rails.cache.write("adjustplayers",@adjustplayers)
@@ -343,7 +345,6 @@ def updategamescore_to_main_table (uploadgame, adjustplayers)
       adjustplayer["name"]=player["name"]
       adjustplayer["original bscore"]=player["bgamescore"]
       adjustplayer["bgamescore"]=player["adjustscore"].to_i if (player["adjustscore"]!="" && player["adjustscore"]!=nil)
-    
       adjustplayer["wongames"]=0
       adjustplayer["losegames"]=0
       adjustplayer["scorechanged"]=0
@@ -360,7 +361,7 @@ def updategamescore_to_main_table (uploadgame, adjustplayers)
      @gamesrecords=getdetailgamesrecord(@uploadgame.detailgameinfo)
      @adjustplayers=set_adjust_players(@playerssummery)
      @adjustplayers=Uploadgame.hash_calculate_score(@adjustplayers, @gamesrecords)
-     @zeroscoreplayers= @adjustplayers.find_all{|v| v["bgamescore"].to_i==0 ||v["bgamescore"]=="" }
+     @zeroscoreplayers= @adjustplayers.find_all{|v| (v["bgamescore"].to_i==0 ||v["bgamescore"]=="") && (v["adjustscore"]==nil ||v["adjustscore"]=="") && !(v["wongames"]==0 && v["losegames"]==0)}
      flash[:alert]="尚有0積分球友，需賦予調整積分才可進行積分更新作業!"  if  @zeroscoreplayers!=[]
      Rails.cache.write("curgame", @uploadgame)
      Rails.cache.write("playersummery",@playerssummery)
