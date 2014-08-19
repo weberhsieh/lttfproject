@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   validates :username, presence: true
   validates :username, uniqueness: true, if: -> { self.username.present? }
   validate :username_without_
+  validate :fbaccount_without_
   validates_format_of :email,:with => Devise.email_regexp
   rolify
 
@@ -24,11 +25,11 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   has_one :playerprofile 
+  has_one :gameholder
   attr_accessible :id, :username, :email, :fbaccount, :password, :password_confirmation, :remember_me,:playerphoto ,:playerprofile_attributes
   attr_accessible :role_ids
   accepts_nested_attributes_for :playerprofile   
   mount_uploader :playerphoto, PlayerPhotoUploader 
-  
 def assign_default_role
     self.add_role(:member) if self.roles.blank?
 end
@@ -47,6 +48,11 @@ end
     def username_without_
      
        errors.add(:username, "姓名不得含有\"_\"字元請重新輸入，請用\"-\"字元取代\"_\"字元 ") unless read_attribute(:username).to_s.exclude? "_"  
+      
+    end
+    def fbaccount_without_
+     
+       errors.add(:fbaccount, "FB帳號請勿輸入email!") unless read_attribute(:fbaccount).to_s.exclude? "@"  
       
     end
 end

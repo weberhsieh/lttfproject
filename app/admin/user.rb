@@ -1,6 +1,8 @@
 # encoding: UTF-8”
 ActiveAdmin.register User do
+
   config.sort_order = "id_asc"
+ 
   index do
   	column :id
     column :username
@@ -10,6 +12,7 @@ ActiveAdmin.register User do
       user.roles.collect {|c| c.name.capitalize }.to_sentence    
     end
     actions
+
   end
   
   show do |ad|
@@ -65,7 +68,10 @@ ActiveAdmin.register User do
     	params[:user].each{|k,v| resource.send("#{k}=",v)}  		
   		super  		
   	end
- 
+   def test
+    puts
+   end
     
   end
+
 end

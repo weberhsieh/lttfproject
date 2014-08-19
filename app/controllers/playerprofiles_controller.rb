@@ -133,7 +133,7 @@ class PlayerprofilesController < ApplicationController
   @playerprofile = Playerprofile.where( :user_id => current_user.id).first
   @playerprofile.name=current_user.username
   @playerprofile.save
-  @User=
+  
   UserMailer.registration_confirmation(self).deliver
 
     respond_to do |format|

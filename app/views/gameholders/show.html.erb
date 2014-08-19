@@ -1,0 +1,60 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @gameholder.user_id %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @gameholder.name %>
+</p>
+
+<p>
+  <b>Court name:</b>
+  <%= @gameholder.court_name %>
+</p>
+
+<p>
+  <b>City:</b>
+  <%= @gameholder.city %>
+</p>
+
+<p>
+  <b>County:</b>
+  <%= @gameholder.county %>
+</p>
+
+<p>
+  <b>Zipcode:</b>
+  <%= @gameholder.zipcode %>
+</p>
+
+<p>
+  <b>Address:</b>
+  <%= @gameholder.address %>
+</p>
+
+<p>
+  <b>Lng:</b>
+  <%= @gameholder.lng %>
+</p>
+
+<p>
+  <b>Lat:</b>
+  <%= @gameholder.lat %>
+</p>
+
+<p>
+  <b>Phone:</b>
+  <%= @gameholder.phone %>
+</p>
+
+<p>
+  <b>Sponsor:</b>
+  <%= @gameholder.sponsor %>
+</p>
+
+
+<%= link_to 'Edit', edit_gameholder_path(@gameholder) %> |
+<%= link_to 'Back', gameholders_path %>

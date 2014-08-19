@@ -1,0 +1,70 @@
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<div class="table-responsive datagrid">
+  <table class="datatable  table-striped table-condensed" border=1 link=blue>
+    <caption class="text-center" ><strong>比賽主辦者資料表</strong></caption> 
+
+    <thead>
+      <tr>
+        <th>會員照片</th>
+        <th>會員編號</th>
+        <th>姓名</th>
+        <th>主辦場地</th>
+        <th>地址</th>
+        <th>聯絡電話</th>
+        <th>贊助單位</th>
+        <th>檢視</th>
+        <th>編輯</th>
+        <th>刪除</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @gameholders.each do |gameholder| %>
+    <tr>
+    <td><%= image_tag(gameholder.user.playerphoto_url(:tiny),:class => "dp img-circle img-responsive") %></td>
+    <td><%= gameholder.user_id %></td>
+    <td><%= gameholder.name %></td>
+    <td><%= gameholder.court_name %></td>
+    <td><%= gameholder.address %></td>
+    <td><%= gameholder.phone %></td>
+    <td><%= gameholder.sponsor %></td>
+    <td><%= link_to 'Show', gameholder %></td>
+    <td><%= link_to 'Edit', edit_gameholder_path(gameholder) %></td>
+    <td><%= link_to 'Destroy', gameholder, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+    </tr>
+   <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+      <td colspan="8">
+      <div class="text-center">
+        <%= paginate @gameholders, :theme => 'twitter-bootstrap-3' %>
+      </div>
+      </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+
+
+<%= button_to '申請主辦比賽', new_gameholder_path , method: :get%>
+<a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#basicModal">Click to open Modal</a>
+
+<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&amp;times;</button>
+            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <div id="map" style='width: 100%; height: 200px;'></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+  </div>
+</div>
