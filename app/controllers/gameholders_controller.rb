@@ -12,10 +12,32 @@ class GameholdersController < ApplicationController
     end
   end
   def new
-  
+    @ttcourts = Ttcourt.all
+    @ttcourts_hash=Array.new
+    @ttcourts.each do |ttcourt|
+      @tempcourt=Hash.new
+      @tempcourt['id']=ttcourt.id
+      @tempcourt['placename']=ttcourt.placename
+      @tempcourt['address']=ttcourt.address
+      @tempcourt['lat']=ttcourt.lat
+      @tempcourt['lng']=ttcourt.lng
+      @ttcourts_hash.push(@tempcourt)
+    end  
+    gon.ttcourts=@ttcourts
+    @citiesarray=TWZipCode_hash.keys
+    @countiesarray=TWZipCode_hash[@citiesarray[0]].keys
+    @areacourts=@ttcourts.find_all{|v| (v["city"]==@citiesarray[0])&&(v["county"]==@countiesarray[0])}
+    gon.areacourts=@ttcourts
     @gameholder = current_user.build_gameholder
     @gameholder.user_id=current_user.id
     @gameholder.name=current_user.username
+    @gameholder.address= @citiesarray[0]+@countiesarray[0]
+    gon.action='new'
+    gon.lat=24
+    gon.lng=120.5
+    gon.countiesarray=@countiesarray
+    gon.twzipecode=TWZipCode_hash
+    gon.ttcourts=@ttcourts
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @gameholder }
@@ -30,8 +52,8 @@ class GameholdersController < ApplicationController
   end
   def edit
     @gameholder = Gameholder.find(params[:id])
-    gon.lat=25
-    gon.lng=121
+    gon.lat=24
+    gon.lng=120.5
   end
 
    def create
@@ -81,10 +103,9 @@ def update
   def resolve_layout
     case action_name
     
-    when "index" 
-      "gmapindex"
+   
     when "edit" ,"new"
-      "gmapedit"  
+      "gameholderedit"  
     else
       "application"
     end

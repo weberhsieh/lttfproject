@@ -24,3 +24,13 @@
     float:left;
     
 }
+html, body, #map-canvas  {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#map-canvas {
+  width:500px;
+  height:480px;
+}
