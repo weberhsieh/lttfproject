@@ -123,7 +123,14 @@
 
                 </div>
               </div>
+              <div class="form-group">
+                <div class="col-xs-10 col-md-10 col-lg-10">
 
+                      <%= f.label "聯絡信箱:", :class => "form-label" %>
+                      <email><%=  @gameholder.user.email %> </email>
+
+                </div>
+              </div>
 
             <div class="form-group">
               <div class="col-xs-10 col-md-10 col-lg-10">
@@ -168,8 +175,8 @@
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="btn">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">放棄離開</button>
+                    <button type="button" class="btn btn-primary" id="btn" data-dismiss="modal" >選定存檔</button>
                   </div>
                 </div><!-- /.modal-content -->
               </div><!-- /.modal-dialog -->
@@ -231,7 +238,6 @@ var len=cSelect.options.length;
  var cSelect=document.getElementById("gameholder_city");
  cAddress.value=cSelect.value+which;
  gon.areacourts=_.where(gon.ttcourts, {city: cSelect.value, county: which});
- console.log(gon.areacourts);
  changeareacourts(gon.areacourts);
  codeAddress();
 
@@ -243,22 +249,20 @@ function areacourtsChange(selectObj) {
  var cCourtname=document.getElementById("gameholder_court_name"); 
  var cAddress=document.getElementById("gameholder_address");
  var cCity=document.getElementById("gameholder_city");
- var cCounty=document.getElementById("gameholder_city");
+ var cCounty=document.getElementById("gameholder_county");
  var cLat=document.getElementById("gameholder_lat");
  var cLng=document.getElementById("gameholder_lng");
- console.log('which=');
- console.log(which);
-
  var aa=_.findWhere(gon.ttcourts,{id: which});
- console.log(aa);
  cCourtname.value=aa['placename'];
  cAddress.value=aa['address'];
  cCity.value=aa['city'];
- cCounty=aa['county'];
- cLat=aa['lat'];
- cLng=aa['lng']; 
- codeAddress(); 
- console.log("areacourts change");
+ cCounty.value=aa['county'];
+ cLat.value=aa['lat'];
+ cLng.value=aa['lng']; 
+ gon.lat=aa['lat'];
+ gon.lng=aa['lng'];
+ resetlocation(aa);
+
 }
 function changeareacourts(areacourts){
    var cAreaSelect=document.getElementById("area_courts");
