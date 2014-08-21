@@ -36,3 +36,4 @@ coverage/*
 *.rbc
 capybara-*.html
 .rspec
+gemfile.lock
