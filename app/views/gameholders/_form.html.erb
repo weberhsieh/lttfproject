@@ -4,7 +4,7 @@
 
 <div class="row">
   
-     <form class="form-horizontal" role="form">
+    
     
      <div class="col-xs-8 col-md-10 col-lg-10 col-md-offset-2">
           
@@ -20,7 +20,8 @@
           </div>
         </div>
         <div style="padding-top:30px" class="panel-body" >
-        <%= form_for(@gameholder) do |f| %>
+        <%= form_for @gameholder ,class: "form-horizontal",role:"form"  do |f| %>
+
           <% if @gameholder.errors.any? %>
             <div id="error_explanation">
                <h2><%= pluralize(@gameholder.errors.count, "error") %> prohibited this gameholder from being saved:</h2>
@@ -74,7 +75,6 @@
   
             <div class="form-group">
               <div class="col-xs-10 col-md-10 col-lg-10">   
-
                     <%= f.label "鄉鎮市區：", :class => "form-label" %>
                     <%= f.select :county, @countiesarray, {:required => true, :class => "form-control", :size => "50"}, :onchange => "countyChange(this);"  %>
 
@@ -142,13 +142,14 @@
             </div>
             
 
-
+   
             <div class="col-md-offset-4 col-md-5">
-              <%= f.submit "進行新增/變更" %>
+        
               <%= f.submit "進行新增/變更", :class => "btn btn-block btn-info", :id => "btn-edit" do%>
                 <i class="icon-hand-right"></i>
               <% end %>
             </div>
+
             <div class="col-md-3"></div>
 
           <% end %>
@@ -156,7 +157,7 @@
       </div>
      </div>
       </div>    
-  </div>
+
 </div>
 
  

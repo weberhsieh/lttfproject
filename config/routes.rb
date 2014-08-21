@@ -42,7 +42,11 @@ devise_for :users, :controllers => { :registrations => 'users/registrations' }
   end
   root :to => "playerprofiles#index"
   resources :ttcourts 
-  resources :gameholders
+  resources :gameholders do
+     collection do
+       get :approveprocess 
+     end 
+  end 
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
