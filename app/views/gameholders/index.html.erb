@@ -45,7 +45,6 @@
   </table>
 </div>
 
+<%= button_to '申請主辦比賽', new_gameholder_path , method: :get%>
 
 
- <%= button_to '申請主辦比賽', new_gameholder_path , method:  :get,  :disabled => (@currentUser_inGameHolder)  || !(current_user), :form_class=> "btn btn-primary"  %>
-<%= button_to '審核新申請資料', approveprocess_gameholders_path , method:  :get,  :disabled => !(current_user)||!((current_user.has_role? :admin) ||(current_user.has_role? :superuser)), :form_class=> "btn btn-primary"  %>

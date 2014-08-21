@@ -1,7 +1,6 @@
 
 
 <%= include_gon %>
-
 <div class="row">
   
     
@@ -20,7 +19,7 @@
           </div>
         </div>
         <div style="padding-top:30px" class="panel-body" >
-        <%= form_for @gameholder ,class: "form-horizontal",role:"form"  do |f| %>
+       <%= form_for(@gameholder ,:html =>{:class =>"form-horizontal form-inline",:role =>"form" }) do |f| %>
 
           <% if @gameholder.errors.any? %>
             <div id="error_explanation">
@@ -76,7 +75,7 @@
             <div class="form-group">
               <div class="col-xs-10 col-md-10 col-lg-10">   
                     <%= f.label "鄉鎮市區：", :class => "form-label" %>
-                    <%= f.select :county, @countiesarray, {:required => true, :class => "form-control", :size => "50"}, :onchange => "countyChange(this);"  %>
+                    <%= f.select :county, @countiesarray, {:required => true, :class => "form-control", :size => "50"}, :onchange => "countyChange(this,true);"  %>
 
               </div>  
             </div>
@@ -86,7 +85,7 @@
                 <div class="col-xs-10 col-md-10 col-lg-10">
  
                       <%= f.label "地址:", :class => "form-label" %>
-                      <%= f.text_field :address, :required => true, :class => "form-control", :size => "50",:onchange=>"codeAddress(this);"  %>
+                      <%= f.text_field :address, :required => true, :class => "form-control", :size => "50",:onchange=>"codeAddress(this, true);"  %>
                 </div>
               </div>
 
@@ -132,15 +131,7 @@
                 </div>
               </div>
 
-            <div class="form-group">
-              <div class="col-xs-10 col-md-10 col-lg-10">
-            
-                    <%= f.label "贊助單位:", :class => "form-label" %>
-                    <%= f.text_field :sponsor, :class =>"form-control", :size => "50"  %>
-
-              </div>
-            </div>
-            
+      
 
    
             <div class="col-md-offset-4 col-md-5">
@@ -240,8 +231,9 @@ var len=cSelect.options.length;
  var cSelect=document.getElementById("gameholder_city");
  cAddress.value=cSelect.value+which;
  gon.areacourts=_.where(gon.ttcourts, {city: cSelect.value, county: which});
- changeareacourts(gon.areacourts);
+ //changeareacourts(gon.areacourts);
  codeAddress();
+ 
 
 }
 function areacourtsChange(selectObj) {
@@ -257,12 +249,13 @@ function areacourtsChange(selectObj) {
  var aa=_.findWhere(gon.ttcourts,{id: which});
  cCourtname.value=aa['placename'];
  cAddress.value=aa['address'];
- cCity.value=aa['city'];
- cCounty.value=aa['county'];
+ //cCity.value=aa['city'];
+ //cCounty.value=aa['county'];
  cLat.value=aa['lat'];
  cLng.value=aa['lng']; 
  gon.lat=aa['lat'];
  gon.lng=aa['lng'];
+ //console.log(cCity);
  resetlocation(aa);
 
 }
@@ -290,4 +283,3 @@ function changeareacourts(areacourts){
   }   
 
 }
-</script>

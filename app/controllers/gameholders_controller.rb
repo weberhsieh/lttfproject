@@ -47,13 +47,14 @@ class GameholdersController < ApplicationController
     @areacourts=@ttcourts.find_all{|v| (v["city"]==@citiesarray[0])&&(v["county"]==@countiesarray[0])}
     gon.areacourts=@ttcourts
     @gameholder = current_user.build_gameholder
-    @gameholder.user_id=current_user.id
+    #@gameholder.user_id=current_user.id
     @gameholder.name=current_user.username
     @gameholder.address= @citiesarray[0]+@countiesarray[0]
     @gameholder.approved=false
     gon.action='new'
     gon.lat=24
     gon.lng=120.5
+    gon.citiesarray=@citiesarray
     gon.countiesarray=@countiesarray
     gon.twzipecode=TWZipCode_hash
     gon.ttcourts=@ttcourts
@@ -92,18 +93,18 @@ class GameholdersController < ApplicationController
   end
 
    def create
-  binding.pry
+
   @gameholder = Gameholder.new(params[:gameholder])
   #@gameholder.user_id=current_user.id
   #@gameholder.name=current_user.username
   respond_to do |format|
       if @gameholder.save
-         binding.pry
+ 
         format.html { redirect_to @gameholder, notice: 'Game was successfully created.' }
         format.json { render json: @gameholder, status: :created, location: @gameholder }
       else
         flash[:notice] = "create failure"
-         binding.pry
+
         format.html { render action: "new", notice: 'create failure' }
         format.json { render json: @gameholder.errors, status: :unprocessable_entity }
       end
