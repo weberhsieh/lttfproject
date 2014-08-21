@@ -24,7 +24,7 @@
           <% if @gameholder.errors.any? %>
             <div id="error_explanation">
                <h2><%= pluralize(@gameholder.errors.count, "error") %> prohibited this gameholder from being saved:</h2>
-
+                   
                <ul>
                  <% @gameholder.errors.full_messages.each do |msg| %>
                    <li><%= msg %></li>
@@ -55,7 +55,7 @@
               <div class="col-xs-10 col-md-10 col-lg-10">
                    
                     <%= f.label "場地名稱:", :class => "form-label" %>
-                    <%= f.text_field :court_name,:required => true, :class =>"form-control", :size => "50"  %>
+                    <%= f.text_field :court_name, :class =>"form-control", :size => "50"  %>
                     <br>
                     <p align=center><a href="#" class="btn btn-md btn-success" data-toggle="modal" data-target="#myMapModal">從打桌球地圖上的場地尋找</a>
                      </p> 
@@ -98,7 +98,7 @@
               <div class="col-xs-10 col-md-10 col-lg-10">
 
                     <%= f.label "經度：", :class => "form-label" %>
-                    <%= f.number_field :lng, :required => true, :class => "text_field",:step=>'any' ,:size => "15"%>
+                    <%= f.number_field :lng,  :class => "text_field",:step=>'any' ,:size => "15"%>
   
               </div>
             </div>
@@ -108,7 +108,7 @@
               <div class="col-xs-10 col-md-10 col-lg-10">
            
                     <%= f.label "緯度：", :class => "form-label" %>
-                    <%= f.number_field :lat, :required => true, :class => "text_field",:step=>'any', :size => "15"  %>
+                    <%= f.number_field :lat,  :class => "text_field",:step=>'any', :size => "15"  %>
 
               </div>
             </div>
@@ -144,6 +144,7 @@
 
 
             <div class="col-md-offset-4 col-md-5">
+              <%= f.submit "進行新增/變更" %>
               <%= f.submit "進行新增/變更", :class => "btn btn-block btn-info", :id => "btn-edit" do%>
                 <i class="icon-hand-right"></i>
               <% end %>

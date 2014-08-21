@@ -65,6 +65,7 @@ class TtcourtsController < ApplicationController
     @ttcourt.infosource = '網路'
     gon.countiesarray=@countiesarray
     gon.twzipecode=TWZipCode_hash
+    binding.pry
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @ttcourt }
@@ -89,7 +90,7 @@ class TtcourtsController < ApplicationController
   # POST /ttcourts.json
   def create
     @ttcourt = Ttcourt.new(params[:ttcourt])
-
+    binding.pry
     respond_to do |format|
       if @ttcourt.save
         format.html { redirect_to @ttcourt, notice: @ttcourt.placename+'資料新增成功!' }

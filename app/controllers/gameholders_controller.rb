@@ -1,10 +1,13 @@
 class GameholdersController < ApplicationController
 	layout :resolve_layout
-	before_filter :authenticate_user!  ,:find_user
+	before_filter :authenticate_user!  ,:find_user , :except=>[:index, :show]
 	def index
     #@playerprofiles = Playerprofile.all
-     @gameholders = Gameholder.includes(:user).page(params[:page]).per(50)
-
+    if (current_user) && (current_user.has_role(:admin)||current_user.has_role(:superuser))
+       @gameholders = Gameholder.includes(:user).page(params[:page]).per(50)
+    else
+       @gameholders = Gameholder.alreadyapproved.includes(:user).page(params[:page]).per(50)
+    end  
 
     respond_to do |format|
       format.html # index.html.erb
@@ -39,6 +42,7 @@ class GameholdersController < ApplicationController
     gon.twzipecode=TWZipCode_hash
     gon.ttcourts=@ttcourts
     respond_to do |format|
+      binding.pry
       format.html # new.html.erb
       format.json { render json: @gameholder }
     end
@@ -52,30 +56,30 @@ class GameholdersController < ApplicationController
   end
   def edit
     @gameholder = Gameholder.find(params[:id])
-    gon.lat=24
-    gon.lng=120.5
+   
   end
 
    def create
     
-
+  binding.pry
   @gameholder = Gameholder.new(params[:gameholder])
-  @gameholder.user_id=current_user.id
-  @gameholder.name=current_user.username
+  #@gameholder.user_id=current_user.id
+  #@gameholder.name=current_user.username
   @gameholder.save
     respond_to do |format|
       if @gameholder.save
         format.html { redirect_to @gameholder, notice: 'Game was successfully created.' }
         format.json { render json: @gameholder, status: :created, location: @gameholder }
       else
-        format.html { render action: "new" }
+        flash[:notice] = "create failure"
+        format.html { render action: "new", notice: 'create failure' }
         format.json { render json: @gameholder.errors, status: :unprocessable_entity }
       end
     end
   end
 def update
      @gameholder = Gameholder.find(params[:id])
-
+     binding.pry
     respond_to do |format|
       if @gameholder.update_attributes(params[:gameholder])
         format.html { redirect_to @gameholder, notice: 'Game was successfully updated.' }
@@ -96,7 +100,8 @@ def update
     end
   end
    def find_user
-    @user = User.find( current_user.id )
+   
+    @currentUser_inGameHolder = Gameholder.find_by_user_id(  current_user.id  )
   end
      private
 
