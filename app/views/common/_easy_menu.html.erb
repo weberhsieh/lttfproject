@@ -8,11 +8,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-     <div class = "navbar-brand"><a  href= "/"><img src="/images/lttf_logo_60x40.jpg" class="img-responsive" alt="LTTF Logo"></a>
+   
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
+        <li>   <div class = "navbar-brand"><a  href= "/"><img src="/images/lttf_logo_60x40.jpg" class="img-responsive" alt="LTTF Logo"></a></li>
         <li><%= link_to '積分總表', playerprofiles_path %></li>
         <li><%= link_to '賽事查核', gamescorechecking_uploadgames_path %><li>
         <li><%= link_to '歷史積分賽', games_path %><li>
@@ -21,10 +22,11 @@
              <li><%= link_to '參賽名單整理', googleplayerlist_playerprofiles_path %></li>
          <%end%>
         <li><%= link_to '台灣打桌球地圖', ttcourts_path %><li>
-      </ul>
       
-      <%= render :partial => "common/search_form" %>
-      <%= render :partial => "common/user_nav"%>
+      
+      <li><%= render :partial => "common/search_form" %></li>
+      <li><%= render :partial => "common/user_nav"%></li>
+      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>

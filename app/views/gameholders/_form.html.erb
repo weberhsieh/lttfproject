@@ -1,5 +1,4 @@
 
-
 <%= include_gon %>
 
 <div class="row">
@@ -52,20 +51,10 @@
 
               </div>
             </div>
-            <div class="form-group">
-              <div class="col-xs-10 col-md-10 col-lg-10">
-                   
-                    <%= f.label "場地名稱:", :class => "form-label" %>
-                    <%= f.text_field :courtname, :class =>"form-control", :size => "50"  %>
-                    <br>
-                    <p align=center><a href="#" class="btn btn-md btn-success" data-toggle="modal" data-target="#myMapModal">從打桌球地圖上的場地尋找</a>
-                     </p> 
-              </div>
-            </div>
 
 
             <div class="form-group">
-              <div class="col-xs-10 col-md-10 col-lg-10">      
+              <div class="col-xs-10 col-md-10 col-lg-10 col-md-offset-5">      
 
                     <%= f.label "所在縣市:", :class => "form-label" %>
                     <%= f.select :city, @citiesarray, {:required => true, :class =>"form-control", :size => "50"}, :onchange => "cityChange(this);"  %>
@@ -74,13 +63,26 @@
             </div>   
   
             <div class="form-group">
-              <div class="col-xs-10 col-md-10 col-lg-10">   
+              <div class="col-xs-10 col-md-10 col-lg-10 col-md-offset-5">   
                     <%= f.label "鄉鎮市區：", :class => "form-label" %>
                     <%= f.select :county, @countiesarray, {:required => true, :class => "form-control", :size => "50"}, :onchange => "countyChange(this);"  %>
 
               </div>  
             </div>
-            
+             <div class="col-xs-10 col-md-10 col-lg-10">
+                <br>
+                 <p align=center>
+                  <a href="#" class="btn btn-lg btn-info" data-toggle="modal" data-target="#myMapModal">從打桌球地圖上的場地挑選</a>
+                  </p>
+              </div>       
+            <div class="form-group">
+              <div class="col-xs-10 col-md-10 col-lg-10">
+                    
+                    <%= f.label "場地名稱:", :class => "form-label" %>
+                    <%= f.text_field :courtname, :class =>"form-control", :size => "50"  %>
+
+              </div>
+            </div>
 
               <div class="form-group">
                 <div class="col-xs-10 col-md-10 col-lg-10">
@@ -144,7 +146,7 @@
 
    
             <div class="col-md-offset-4 col-md-5">
-        
+               <br>
               <%= f.submit "進行新增/變更", :class => "btn btn-block btn-info", :id => "btn-edit" do%>
                 <i class="icon-hand-right"></i>
               <% end %>
@@ -160,19 +162,20 @@
 
 </div>
 
- 
-          <a href="#myMapModal" "btn btn-md btn-success" data-toggle="modal">從打桌球地圖上尋找</a>
+          
               <div class="modal fade" id="myMapModal">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Modal title</h4>
+                    <h4 class="modal-title">請選擇球館</h4>
                   </div>
                   <div class="modal-body">
                     <div class="container">
                       <div class="row">   
-                      <%= collection_select( "area","courts", @areacourts,:id,:placename  )%>
+                     
+                        <%= collection_select( "area","courts", @areacourts,:id,:placename  )%>
+                        <br><strong>請先在上一頁面選擇您球館所在的縣市及地區!</strong>
                       </div>
                     </div>
                   </div>
