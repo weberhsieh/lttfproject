@@ -5,7 +5,7 @@ class GameholdersController < InheritedResources::Base
   before_filter :find_user
 	def index
     #@playerprofiles = Playerprofile.all
-    if (current_user) && (current_user.has_role(:admin)||current_user.has_role(:superuser))
+    if (current_user) && ((current_user.has_role? :admin)||(current_user.has_role? :superuser))
        @gameholders = Gameholder.includes(:user).page(params[:page]).per(50)
     else
        @gameholders = Gameholder.alreadyapproved.includes(:user).page(params[:page]).per(50)
