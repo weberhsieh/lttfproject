@@ -44,7 +44,7 @@
             <div class="form-group">
               <div class="col-xs-10 col-md-10 col-lg-10">
                 <%= f.label "所在縣市", :class => "form-label" %>:
-                <%= f.select :city, @citiesarray, {:required => true, :class =>"form-control", :size => "50"}, :onchange => "cityChange(this);"  %>
+                <%= f.select :city_id, @citiesarray, {:required => true, :class =>"form-control", :size => "50"}, :onchange => "cityChange(this);"  %>
               </div>
             </div>
 

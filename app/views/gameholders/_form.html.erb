@@ -67,15 +67,16 @@
               <div class="col-xs-10 col-md-10 col-lg-10">      
 
                     <%= f.label "所在縣市:", :class => "form-label" %>
-                    <%= f.select :city, @citiesarray, {:required => true, :class =>"form-control", :size => "50"}, :onchange => "cityChange(this);"  %>
-
+              
+                   <%= f.select :city,  @citiesarray, {:required => true, :class =>"form-control", :size => "50"}, :onchange => "cityChange(this)"  %>
               </div>
             </div>   
   
             <div class="form-group">
               <div class="col-xs-10 col-md-10 col-lg-10">   
                     <%= f.label "鄉鎮市區：", :class => "form-label" %>
-                    <%= f.select :county, @countiesarray, {:required => true, :class => "form-control", :size => "50"}, :onchange => "countyChange(this,true);"  %>
+               <%= f.select :county, @countiesarray, {:required => true, :class => "form-control", :size => "50"}, :onchange =>"countyChange(this)"  %>
+                   
 
               </div>  
             </div>
@@ -85,7 +86,7 @@
                 <div class="col-xs-10 col-md-10 col-lg-10">
  
                       <%= f.label "地址:", :class => "form-label" %>
-                      <%= f.text_field :address, :required => true, :class => "form-control", :size => "50",:onchange=>"codeAddress(this, true);"  %>
+                      <%= f.text_field :address, :required => true, :class => "form-control", :size => "50",:onchange=>"codeAddress(this)"  %>
                 </div>
               </div>
 
@@ -189,12 +190,12 @@ function cityChange(selectObj) {
   var idx = selectObj.selectedIndex;
   // get the value of the selected option
   var which = selectObj.options[idx].value;
-
+  gon.city=which;
   //gon.countiesarray= gon.twzipecode[which];
   // get the country select element via its known id
   gon.countiesarray=Object.keys(gon.twzipecode[which]);
 
- 
+ console.log("incitychange");
  // remove the current options from the country select 
  var cSelect=document.getElementById("gameholder_county");
  
@@ -233,7 +234,7 @@ var len=cSelect.options.length;
  gon.areacourts=_.where(gon.ttcourts, {city: cSelect.value, county: which});
  //changeareacourts(gon.areacourts);
  codeAddress();
- 
+ gon.county=which;
 
 }
 function areacourtsChange(selectObj) {

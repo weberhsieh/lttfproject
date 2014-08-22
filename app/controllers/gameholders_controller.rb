@@ -43,6 +43,14 @@ class GameholdersController < ApplicationController
     end  
     gon.ttcourts=@ttcourts
     @citiesarray=TWZipCode_hash.keys
+    @cities=Array.new
+    i=1;
+    @citiesarray.each do |city|
+      @tempcity=Hash.new
+      @tempcity={:id=>i, :cityname=>city}
+      i=i+1;
+      @cities.push(@tempcity)
+    end  
     @countiesarray=TWZipCode_hash[@citiesarray[0]].keys
     @areacourts=@ttcourts.find_all{|v| (v["city"]==@citiesarray[0])&&(v["county"]==@countiesarray[0])}
     gon.areacourts=@ttcourts
@@ -95,10 +103,9 @@ class GameholdersController < ApplicationController
    def create
 
   @gameholder = Gameholder.new(params[:gameholder])
-  #@gameholder.user_id=current_user.id
-  #@gameholder.name=current_user.username
+  
   respond_to do |format|
-      if @gameholder.save
+      if @gameholder.save!
  
         format.html { redirect_to @gameholder, notice: 'Game was successfully created.' }
         format.json { render json: @gameholder, status: :created, location: @gameholder }
