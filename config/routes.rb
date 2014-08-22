@@ -2,6 +2,8 @@ Lttfproject::Application.routes.draw do
 
   
 
+
+
   resources :uploadgames do
     collection do
       get  :upload
@@ -39,7 +41,12 @@ devise_for :users, :controllers => { :registrations => 'users/registrations' }
   end
   root :to => "playerprofiles#index"
   resources :ttcourts 
-
+  resources :gameholders do
+     collection do
+       get :approveprocess 
+       post :approve
+     end 
+  end 
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

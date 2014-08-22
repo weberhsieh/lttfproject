@@ -33,8 +33,8 @@ gem 'jquery-rails'
 
 # Deploy with Capistrano
 # gem 'capistrano'
-#gem 'pry', :group => :development
-#gem "pry-nav" ,:group => :development
+gem 'pry', :group => :development
+gem "pry-nav" ,:group => :development
 # To use debugger
 # gem 'debugger'
 gem "devise"

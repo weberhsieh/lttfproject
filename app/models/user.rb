@@ -24,6 +24,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   has_one :playerprofile 
+  has_one :gameholder
   attr_accessible :id, :username, :email, :fbaccount, :password, :password_confirmation, :remember_me,:playerphoto ,:playerprofile_attributes
   attr_accessible :role_ids
   accepts_nested_attributes_for :playerprofile   
