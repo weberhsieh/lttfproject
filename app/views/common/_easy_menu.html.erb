@@ -15,13 +15,22 @@
       <ul class="nav navbar-nav">
         <li>   <div class = "navbar-brand"><a  href= "/"><img src="/images/lttf_logo_60x40.jpg" class="img-responsive" alt="LTTF Logo"></a></li>
         <li><%= link_to '積分總表', playerprofiles_path %></li>
-        <li><%= link_to '賽事查核', gamescorechecking_uploadgames_path %><li>
-        <li><%= link_to '歷史積分賽', games_path %><li>
-        <% if current_user &&((current_user.has_role? :admin)||(current_user.has_role? :superuser)||(current_user.has_role? :gameholder)) %>
-             <li><%= link_to '積分賽成績作業', uploadgames_path %></li>
-             <li><%= link_to '參賽名單整理', googleplayerlist_playerprofiles_path %></li>
-         <%end%>
-        <li><%= link_to '台灣打桌球地圖', ttcourts_path %><li>
+        <li><%= link_to '賽事查核', gamescorechecking_uploadgames_path %></li>
+        <li><%= link_to '歷史積分賽', games_path %></li>
+        <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle">主辦人專區<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <% if current_user &&((current_user.has_role? :admin)||(current_user.has_role? :superuser)||(current_user.has_role? :gameholder)) %>
+                <li><%= link_to '積分賽成績作業', uploadgames_path %></li>
+                <li><%= link_to '參賽名單整理', googleplayerlist_playerprofiles_path %></li>
+               
+              <%end%>
+              <% if current_user %>
+                <li><%= link_to '主辦人相關資料處理及主辦人申請', gameholders_path %></li>
+              <% end %>
+            </ul>
+        </li>
+        <li><%= link_to '台灣打桌球地圖', ttcourts_path %></li>
       
       
       <li><%= render :partial => "common/search_form" %></li>

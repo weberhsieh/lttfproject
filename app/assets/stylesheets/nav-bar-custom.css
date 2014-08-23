@@ -1,8 +1,8 @@
 /* Red */
 $bgDefault      : #006699;
-$bgHighlight    : #c0392b;
+$bgHighlight    : #ac44ad;
 $colDefault     : #ecf0f1;
-$colHover       : #ffbbbc;
+$colHover       : #ba44ad;
 /* Green 
 $bgDefault      : #2ecc71;
 $bgHighlight    : #27ae60;
@@ -55,6 +55,7 @@ $colHover       : #ffe6d1; /
                     .caret {
                         border-top-color: $colHover;
                         border-bottom-color: $colHover; }}}}}
+            
     .navbar-toggle {
         border-color: $bgHighlight;
         &:hover, &:focus {
