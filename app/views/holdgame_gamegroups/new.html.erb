@@ -26,35 +26,33 @@
 
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
-                <%= f.label "分組名稱", :class => "form-label" %>:
+                <%= f.label "分組名稱:", :class => "form-label" %>
                 <%= f.text_field :groupname, :required => true, :autofocus => true, :class => "form-control"  %>
               </div>
             </div>
-             <br>
-             <br>
-             <br>
+             
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
-                <%= f.label "開始時間", :class => "form-label" %>:
+                <%= f.label "開始時間:", :class => "form-label" %>
                 <%= f.text_field  :starttime, :required => true , :class => "form-control"  %>
               </div>
              </div> 
             
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
-                <%= f.label "參賽費用", :class => "form-label" %>:
+                <%= f.label "參賽費用:", :class => "form-label" %>
                 <%= f.number_field  :gamefee ,:required => true, :class => "form-control" %>
               </div>
             </div> 
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
-                <%= f.label "參賽人數", :class => "form-label" %>:
+                <%= f.label "參賽人數:", :class => "form-label" %>
                 <%= f.number_field :noofplayers , :required => true , :class => "form-control" %>
               </div>
             </div>
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
-                <%= f.label "備取人數", :class => "form-label" %>:
+                <%= f.label "備取人數:", :class => "form-label" %>
                 <%= f.number_field :noofbackupplayers , :required => true, :class => "form-control" %>
 
               </div>
@@ -62,28 +60,28 @@
             <br>
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
-                <%= f.label "比賽制度", :class => "form-label" %>:
+                <%= f.label "比賽制度:", :class => "form-label" %>
                 <%= f.select  :grouptype, ['個人賽', '雙打賽','團體賽'],:required => true,  :class => "form-control" %>
               </div>
             </div> 
 
-
+             <br>
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
-                <%= f.label "積分限制", :class => "form-label" %>:
-                <%= f.select  :scorelimitation, ['限制最高分', '限制最低分','限制高低分', '無積分限制'], {:required => true, :class => "form-control", :size => "50"},  :onchange=>"toggleSelect();" %>
+                <%= f.label "積分限制:", :class => "form-label" %>
+                <%= f.select  :scorelimitation, ['限制高低分','限制最高分', '限制最低分', '無積分限制'], {:required => true, :class => "form-control", :size => "50"},  :onchange=>"toggleSelect();" %>
               </div>
             </div>   
-
+            <br>
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
-                <%= f.label "低分限制", :class => "form-label" %>:
+                <%= f.label "低分限制:", :class => "form-label",:id=> "low-label" %>
                 <%= f.number_field :scorelow , :class => "form-control" ,:size=>"50" %>
               </div>
             </div>                  
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
-                <%= f.label "高分限制", :class => "form-label" %>:
+                <%= f.label "高分限制:", :class => "form-label", :id=> "high-label" %>
                 <%= f.number_field :scorehigh , :class => "form-control", :size=>"50" %>
               </div>
             </div>         
@@ -141,23 +139,31 @@ function toggleSelect()
 if (document.getElementById("gamegroup_scorelimitation").value == '限制最高分')
 {
    document.getElementById("gamegroup_scorelow").style.display="none";
+   document.getElementById("low-label").style.display="none";
    document.getElementById("gamegroup_scorehigh").style.display="block";
+   document.getElementById("high-label").style.display="block";
   // document.getElementById("gamegroup_scorelow").visibled = true;
 }
 if (document.getElementById("gamegroup_scorelimitation").value == '限制最低分')
 {
     document.getElementById("gamegroup_scorehigh").style.display="none";
+    document.getElementById("high-label").style.display="none";
     document.getElementById("gamegroup_scorelow").style.display="block";
+    document.getElementById("low-label").style.display="block";
 }
 if (document.getElementById("gamegroup_scorelimitation").value == '限制高低分')
 {
-      document.getElementById("gamegroup_scorehigh").style.display="block";
+    document.getElementById("gamegroup_scorehigh").style.display="block";
+    document.getElementById("high-label").style.display="block";
     document.getElementById("gamegroup_scorelow").style.display="block";
+    document.getElementById("low-label").style.display="block";
 }
 if (document.getElementById("gamegroup_scorelimitation").value == '無積分限制')
 {
-      document.getElementById("gamegroup_scorehigh").style.display="none";
+    document.getElementById("gamegroup_scorehigh").style.display="none";
+    document.getElementById("high-label").style.display="none";
     document.getElementById("gamegroup_scorelow").style.display="none";
+    document.getElementById("low-label").style.display="none";
 } 
 }
 </script>

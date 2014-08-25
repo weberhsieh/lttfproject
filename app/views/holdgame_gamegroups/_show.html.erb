@@ -14,8 +14,8 @@
         <tr>
         <td><strong><%=gamegroup.groupname %></strong></td>
         <td><strong><%=gamegroup.grouptype %></strong></td>
-        <td><strong><%=gamegroup.maximumplayers %></strong></td>
-        <td><strong><%=gamegroup.backupplayers %></strong></td>
+        <td><strong><%=gamegroup.noofplayers %></strong></td>
+        <td><strong><%=gamegroup.noofbackupplayers %></strong></td>
 
         <tr>  
         <% if gamegroup.scorelimitation == '無積分限制' %>	
@@ -30,7 +30,7 @@
           <td colspan=2><font color="black">積分限制:</font></td>
           <tr>
           <td colspan=2><strong><%=gamegroup.gamefee %></strong></td>    
-          <td colspan=2><strong><%=gamegroup.scorelow%>--<%=gamegroup.scorehigh%></strong></td> 
+          <td colspan=2><strong><%=gamegroup.scorelow%>~<%=gamegroup.scorehigh%></strong></td> 
         <% end %>
         <% if gamegroup.scorelimitation == '限制最高分' %>	
           <td colspan=2><font color="black">報名費用:</font></td>
@@ -47,11 +47,10 @@
           <td colspan=2><strong>大於<%=gamegroup.scorelow%></strong></td> 
         <% end %>        
         <tr>
-        <td colspan=2><font color="black">預計比賽開始時間:</font></td>
-        <td colspan=2><font color="black">預計比賽結束時間:</font></td>
+        <td colspan=4><font color="black">預計比賽開始時間:</font></td>
         <tr>
-        <td colspan=2><strong><%= gamegroup.groupsstarttime.strftime("%F %H:%M")  %></strong></td>
-        <td colspan=2><strong><%=gamegroup.groupsendtime.strftime("%F %H:%M") %></strong></td>
+        <td colspan=4><strong><%= gamegroup.starttime.strftime("%F %H:%M")  %></strong></td>
+      
         <tr>
         
         

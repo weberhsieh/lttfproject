@@ -1,9 +1,4 @@
- 
- 
-<br>
-<br>
-<br>
-<ul>
+
   
 
 <% @gamegroups.each do |gamegroup| %>
@@ -13,7 +8,7 @@
 	  <%= link_to 'edit', edit_holdgame_gamegroup_path(@holdgame, gamegroup) %>
 	  <%= link_to 'destroy', holdgame_gamegroup_path(@holdgame, gamegroup),
 	                            :method => :delete %>
-    <td><%= link_to 'gameplayers', holdgame_gamegroup_gameplayers_path(@holdgame,gamegroup) %></td>
+    <td><!%= link_to 'gameplayers', holdgame_gamegroup_gameplayers_path(@holdgame,gamegroup) %></td>
 	</li>
 <% end %>
 
@@ -24,22 +19,31 @@
 <div class="container">
   
 
-    <ul class="nav nav-tabs" id="tabs">
+    <ul class="nav nav-pills" id="tabs" role="tablist"> 
       <% @gamegroups.each do |gamegroup| %>
-        <li><a href= "<%= '#tab'+ nextTab.to_s %>" data-toggle="tab"><%=gamegroup.groupname %></a></li>
+        <% if nextTab==@gamegroups.length %>
+            <li class="active"><a href= "<%= '#tab'+ nextTab.to_s %>"  role="tab" data-toggle="pill"><%=gamegroup.groupname %></a></li>
+         <% else %>
+            <li><a href= "<%= '#tab'+ nextTab.to_s %>"  role="tab" data-toggle="tab"><%=gamegroup.groupname %></a></li>
+         
+        <% end %>  
         <% nextTab+=1 %>
       <%end%>
     
       <div class="tab-content">
         <% nextTab = 1 %>
         <% @gamegroups.each do |gamegroup| %>
-        
+          <% if nextTab==@gamegroups.length %>
+            <div class="tab-pane in active" id="<%= 'tab'+ nextTab.to_s %>" >
+          <% else %>
             <div class="tab-pane" id="<%= 'tab'+ nextTab.to_s %>" >
+          <% end  %>    
               <%= render :partial => "show", :locals => { :gamegroup => gamegroup } %>
-            </div> 
+          </div> 
        
             <% nextTab+=1 %>
         <%end%>    
       </div>
    </ul>
 </div> 
+

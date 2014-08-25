@@ -40,7 +40,7 @@ class HoldgamesController < InheritedResources::Base
   	respond_to do |format|
       if @holdgame.save
  
-        format.html { redirect_to holdgame_gamegroups(@holdgame), notice: '比賽資料建檔完成!' }
+        format.html { redirect_to holdgame_gamegroups_path(@holdgame), notice: '比賽資料建檔完成!' }
         format.json { render json: @holdgame, status: :created, location: @holdgame }
       else
         flash[:notice] = "比賽資料建檔資料失敗!"
