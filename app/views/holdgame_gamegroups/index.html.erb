@@ -1,0 +1,45 @@
+ 
+ 
+<br>
+<br>
+<br>
+<ul>
+  
+
+<% @gamegroups.each do |gamegroup| %>
+	<li>
+	  <%= gamegroup.groupname %>
+	  <%= link_to 'show', holdgame_gamegroup_path(@holdgame,gamegroup) %>
+	  <%= link_to 'edit', edit_holdgame_gamegroup_path(@holdgame, gamegroup) %>
+	  <%= link_to 'destroy', holdgame_gamegroup_path(@holdgame, gamegroup),
+	                            :method => :delete %>
+    <td><%= link_to 'gameplayers', holdgame_gamegroup_gameplayers_path(@holdgame,gamegroup) %></td>
+	</li>
+<% end %>
+
+</ul>
+
+<%= link_to 'new game', new_holdgame_gamegroup_path(@holdgame) %>
+<% nextTab = 1 %>
+<div class="container">
+  
+
+    <ul class="nav nav-tabs" id="tabs">
+      <% @gamegroups.each do |gamegroup| %>
+        <li><a href= "<%= '#tab'+ nextTab.to_s %>" data-toggle="tab"><%=gamegroup.groupname %></a></li>
+        <% nextTab+=1 %>
+      <%end%>
+    
+      <div class="tab-content">
+        <% nextTab = 1 %>
+        <% @gamegroups.each do |gamegroup| %>
+        
+            <div class="tab-pane" id="<%= 'tab'+ nextTab.to_s %>" >
+              <%= render :partial => "show", :locals => { :gamegroup => gamegroup } %>
+            </div> 
+       
+            <% nextTab+=1 %>
+        <%end%>    
+      </div>
+   </ul>
+</div> 

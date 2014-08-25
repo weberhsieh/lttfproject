@@ -12,12 +12,13 @@ end
 
 def new
   @gamegroup = @holdgame.gamegroups.build
+  
 end
 
 def create
   @gamegroup = @holdgame.gamegroups.build( params[:gamegroup] )
   if @gamegroup.save
-    redirect_to holdgame_gamegroup_url( @holdgame )
+    redirect_to holdgame_gamegroups_url( @holdgame )
   else
     render :action => :new
   end

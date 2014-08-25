@@ -4,4 +4,5 @@ class Gameholder < ActiveRecord::Base
   scope :waitingforapprove, where( :approved => false )
   scope :alreadyapproved, where( :approved => true )
   belongs_to :user
+  has_many :holdgames
 end

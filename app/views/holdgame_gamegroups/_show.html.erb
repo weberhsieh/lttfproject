@@ -1,0 +1,61 @@
+<div class="top-buffer">
+</div>  
+<%= link_to 'show', holdgame_gamegroup_path(@holdgame,gamegroup) %>
+<%= link_to 'edit', edit_holdgame_gamegroup_path(@holdgame, gamegroup) %>
+<%= link_to 'destroy', holdgame_gamegroup_path(@holdgame, gamegroup),
+	                            :method => :delete %>
+<div class="col-xs-12 col-md-12 col-lg-12">
+<div class="table-responsive datagrid">
+  <table class="table-striped table-condensed" border=1 >
+        <td><font color="black">分組名稱:</font></td>
+        <td><font color="black">比賽賽制:</font></td>
+        <td><font color="black">預計參賽人數:</font></td>      
+        <td><font color="black">備取人數:</font></td>  
+        <tr>
+        <td><strong><%=gamegroup.groupname %></strong></td>
+        <td><strong><%=gamegroup.grouptype %></strong></td>
+        <td><strong><%=gamegroup.maximumplayers %></strong></td>
+        <td><strong><%=gamegroup.backupplayers %></strong></td>
+
+        <tr>  
+        <% if gamegroup.scorelimitation == '無積分限制' %>	
+          <td colspan=2><font color="black">報名費用:</font></td>
+          <td colspan=2><font color="black">積分限制:</font></td>
+          <tr>
+          <td colspan=2><strong><%=gamegroup.gamefee %></strong></td>    
+          <td colspan=2><strong><%=gamegroup.scorelimitation %></strong></td> 
+        <% end %>
+        <% if gamegroup.scorelimitation == '限制高低分' %>	
+          <td colspan=2><font color="black">報名費用:</font></td>
+          <td colspan=2><font color="black">積分限制:</font></td>
+          <tr>
+          <td colspan=2><strong><%=gamegroup.gamefee %></strong></td>    
+          <td colspan=2><strong><%=gamegroup.scorelow%>--<%=gamegroup.scorehigh%></strong></td> 
+        <% end %>
+        <% if gamegroup.scorelimitation == '限制最高分' %>	
+          <td colspan=2><font color="black">報名費用:</font></td>
+          <td colspan=2><font color="black">積分限制:</font></td>
+          <tr>
+          <td colspan=2><strong><%=gamegroup.gamefee %></strong></td>    
+          <td colspan=2><strong>小於<%=gamegroup.scorehigh%></strong></td> 
+        <% end %>
+        <% if gamegroup.scorelimitation == '限制最低分' %>	
+          <td colspan=2><font color="black">報名費用:</font></td>
+          <td colspan=2><font color="black">積分限制:</font></td>
+          <tr>
+          <td colspan=2><strong><%=gamegroup.gamefee %></strong></td>    
+          <td colspan=2><strong>大於<%=gamegroup.scorelow%></strong></td> 
+        <% end %>        
+        <tr>
+        <td colspan=2><font color="black">預計比賽開始時間:</font></td>
+        <td colspan=2><font color="black">預計比賽結束時間:</font></td>
+        <tr>
+        <td colspan=2><strong><%= gamegroup.groupsstarttime.strftime("%F %H:%M")  %></strong></td>
+        <td colspan=2><strong><%=gamegroup.groupsendtime.strftime("%F %H:%M") %></strong></td>
+        <tr>
+        
+        
+      
+</table>
+</div>
+</div>

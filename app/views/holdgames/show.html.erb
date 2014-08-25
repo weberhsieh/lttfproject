@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Gameholder:</b>
+  <%= @holdgame.gameholder_id %>
+</p>
+
+<p>
+  <b>Gamename:</b>
+  <%= @holdgame.gamename %>
+</p>
+
+<p>
+  <b>Startdate:</b>
+  <%= @holdgame.startdate %>
+</p>
+
+<p>
+  <b>Enddate:</b>
+  <%= @holdgame.enddate %>
+</p>
+
+<p>
+  <b>Gametype:</b>
+  <%= @holdgame.gametype %>
+</p>
+
+<p>
+  <b>Gamenote:</b>
+  <%= @holdgame.gamenote %>
+</p>
+
+
+<%= link_to 'Edit', edit_holdgame_path(@holdgame) %> |
+<%= link_to 'Back', holdgames_path %>

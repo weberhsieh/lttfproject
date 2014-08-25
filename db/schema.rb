@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140822042224) do
+ActiveRecord::Schema.define(:version => 20140825054723) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "namespace"
@@ -27,6 +27,21 @@ ActiveRecord::Schema.define(:version => 20140822042224) do
   add_index "active_admin_comments", ["author_type", "author_id"], :name => "index_active_admin_comments_on_author_type_and_author_id"
   add_index "active_admin_comments", ["namespace"], :name => "index_active_admin_comments_on_namespace"
   add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_active_admin_comments_on_resource_type_and_resource_id"
+
+  create_table "gamegroups", :force => true do |t|
+    t.integer  "holdgame_id"
+    t.string   "groupname"
+    t.string   "grouptype"
+    t.integer  "noofplayers"
+    t.integer  "noofbackupplayers"
+    t.string   "scorelimitation"
+    t.integer  "scorelow"
+    t.integer  "scorehigh"
+    t.datetime "starttime"
+    t.integer  "gamefee"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
 
   create_table "gameholders", :force => true do |t|
     t.integer  "user_id"
@@ -55,6 +70,17 @@ ActiveRecord::Schema.define(:version => 20140822042224) do
     t.string   "originalfileurl"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+  end
+
+  create_table "holdgames", :force => true do |t|
+    t.integer  "gameholder_id"
+    t.string   "gamename"
+    t.date     "startdate"
+    t.date     "enddate"
+    t.string   "gametype"
+    t.text     "gamenote"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "playerprofiles", :force => true do |t|

@@ -1,0 +1,7 @@
+<div class="top-buffer">
+</div> 
+
+<%= form_for @gamegroup, :url => holdgame_gamegroups_path(@holdgame, @gamegroup), :html => { :method => :put } do |f| %>
+   <%= f.text_field :groupname %>
+   <%= f.submit %>
+<% end %>

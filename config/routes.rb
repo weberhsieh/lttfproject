@@ -3,6 +3,12 @@ Lttfproject::Application.routes.draw do
   
 
 
+ resources :holdgames do
+      resources :gamegroups, :controller => 'holdgame_gamegroups' 
+        #resource :gameplayers, :controller => 'gamegroup_gameplayers'
+      #end
+  end
+
 
   resources :uploadgames do
     collection do

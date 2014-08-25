@@ -1,0 +1,70 @@
+<div class="top-buffer">
+</div>  
+
+<div class="row">
+   <div class="col-xs-8 col-md-8 col-lg-8">
+    <div style="margin-top:20px">
+      <div class="pull-right"><h3><font color="blue">桌球愛好者聯盟比賽舉辦登錄系統</font></h3></div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div style="margin-top:10px">
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12 col-md-12 col-lg-12">
+    <div class="table-responsive datagrid">
+      <table class="datatable  table-striped table-condensed" border=1 link=blue>
+        <thead>
+          <tr>
+            <th>賽事名稱</th>
+            <th>比賽日期</th>
+            <th>比賽地點</th>
+            <th>主辦人員</th>
+            <th>詳細比賽資訊</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @holdgames.each do |holdgame| %>
+            <tr>
+                <td><%= holdgame.gamename %></td>
+                <td><%= holdgame.startdate.strftime('%F') %></td>
+                <td><%= holdgame.gameholder.courtname %></td>
+                <td><%= holdgame.gameholder.name %></td>
+                <td>
+                  <p style="white-space: pre-line ;width:200px ;background:#0ff">
+                    <%= holdgame.gamenote %>
+                  </p>
+                </td>
+             
+                <td><%= link_to 'Show', holdgame %></td>
+                <td><%= link_to 'Edit', edit_holdgame_path(holdgame) %></td>
+                <td><%= link_to 'Destroy', holdgame, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                <td><%= link_to 'gamegroups', holdgame_gamegroups_path(holdgame) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="8">
+              <div class="text-center">
+               <%= paginate @holdgames, :theme => 'twitter-bootstrap-3' %>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+ 
+
+
+
+<%= link_to 'New Holdgame', new_holdgame_path %>

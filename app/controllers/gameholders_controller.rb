@@ -67,7 +67,7 @@ class GameholdersController < InheritedResources::Base
     end
   end
   def show
-  	 @gameholder = Gameholder.find(params[:id])
+  	  @gameholder = Gameholder.find(params[:id])
   	  respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @gameholder}
@@ -95,7 +95,7 @@ class GameholdersController < InheritedResources::Base
     gon.lng=@gameholder.lng
   end
 
-   def create
+  def create
 
   @gameholder = Gameholder.new(params[:gameholder])
   #@gameholder.user_id=current_user.id
