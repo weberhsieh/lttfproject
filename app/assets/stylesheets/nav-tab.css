@@ -1,41 +1,13 @@
-/* tab color */
-.nav-tabs>li>a {
-  background-color: white; 
-  border-color: #777777;
-  color: black;
+.nav-tabs > li.active > a,
+        .nav-tabs > li.active > a:hover,
+        .nav-tabs > li.active > a:focus {
+          color: #555555;
+          cursor: default;
+          background-color: #ffffff;
+          border: 5px solid #dddddd;
+          border-bottom-color: solid;
 
-}
-
-/* active tab color */
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
-  color: red;
-  background-color: #001f1f;
-  border: 5px solid #888888;
-  outline:0;
-   border-color: #010101;
-}
-
-/* hover tab color */
-.nav-tabs>li>a:hover {
-  border-color: #010101;
-  background-color: #33333333;
-}
-.container {
-    margin: 10px;
-    height: auto;
-    overflow: hidden;
-    border-bottom: 1px solid #ccc;
-
-}
-
-.nav-tabs {
-    margin: 0;
-
-}
-
-.tab-content {
-    height: 100%; 
-    border-left: 1px solid #ccc ; 
-    border-right: 1px solid #ccc;
-
-}
+          } 
+#tabs li a { border-color: blue;background-color:#A5C967; }
+#tabs li.active a {border-bottom-color: transparent;background-color:yellow; }
+.my-tab .tab-pane{ border:solid 1px blue;  border-top: 1; background-color:#F7EFC6;}

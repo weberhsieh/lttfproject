@@ -1,4 +1,64 @@
 
+  <h1 align=center> <%= @holdgame.startdate %> <%= @holdgame.gamename %></h1>
+<div class="col-md-6">
+
+       
+   <div class ="well">
+
+    <p>
+      <b>比賽名稱:</b>
+       <%= @holdgame.gamename %>
+    </p>
+
+    <p>
+    <b>比賽日期:</b>
+      <%= @holdgame.startdate %>
+    </p>
+    <p>
+    <b>比賽場地:</b>
+      <%= @gameholder.courtname %>
+    </p>
+    <p>
+      <b>比賽地址:</b>
+      <%= @gameholder.address %>
+    </p>
+
+    <p>
+    <b>比賽類型:</b>
+      <%= @holdgame.gametype %>
+    </p>
+
+   <p>
+      <b>主辦人:</b>
+      <%= @gameholder.name %>
+   </p>
+
+
+   <p>
+     <b>主辦人電話:</b>
+     <%= @gameholder.phone %>
+   </p>
+
+   <p>
+     <b>主辦人信箱:</b>
+     <%=  @gameholder.email %>
+    </p>
+   <p>
+     <b>贊助單位:</b>
+     <%=  @gameholder.sponsor %>
+   </p>
+
+   <p>
+    <b>比賽相關資料說明:</b>
+    <%= @holdgame.gamenote %>
+   </p>
+ </div>
+</div> 
+<div class="col-md-6">
+    <div id="map" style='width: 100%; height: 300px;'></div>
+</div> 
+ 
+
   
 
 <% @gamegroups.each do |gamegroup| %>
@@ -19,10 +79,10 @@
 <div class="container">
   
 
-    <ul class="nav nav-pills" id="tabs" role="tablist"> 
+    <ul class="nav nav-tabs" id="tabs" role="tablist"> 
       <% @gamegroups.each do |gamegroup| %>
         <% if nextTab==@gamegroups.length %>
-            <li class="active"><a href= "<%= '#tab'+ nextTab.to_s %>"  role="tab" data-toggle="pill"><%=gamegroup.groupname %></a></li>
+            <li class="active"><a href= "<%= '#tab'+ nextTab.to_s %>"  role="tab" data-toggle="tab"><%=gamegroup.groupname %></a></li>
          <% else %>
             <li><a href= "<%= '#tab'+ nextTab.to_s %>"  role="tab" data-toggle="tab"><%=gamegroup.groupname %></a></li>
          
@@ -30,7 +90,7 @@
         <% nextTab+=1 %>
       <%end%>
     
-      <div class="tab-content">
+      <div class="tab-content my-tab">
         <% nextTab = 1 %>
         <% @gamegroups.each do |gamegroup| %>
           <% if nextTab==@gamegroups.length %>

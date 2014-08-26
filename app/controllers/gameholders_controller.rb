@@ -52,6 +52,7 @@ class GameholdersController < InheritedResources::Base
     @gameholder = current_user.build_gameholder
     #@gameholder.user_id=current_user.id
     @gameholder.name=current_user.username
+    @gameholder.email=current_user.email
     @gameholder.address= @citiesarray[0]+@countiesarray[0]
     @gameholder.approved=false
     gon.action='new'

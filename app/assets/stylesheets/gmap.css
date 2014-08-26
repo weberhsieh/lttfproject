@@ -24,3 +24,28 @@
     float:left;
     
 }
+#gameinfo_container{
+    width:70%;
+    height:auto;
+    border:none;
+    margin-right:1px;
+    float:left;
+    overflow:auto;
+}
+#gameinfo_mappagecontainer{
+    width:100%;
+    height:auto;
+    border:1px solid red;
+    margin-right:5px;
+    float:left;
+    
+}
+#gameinfo_mapcontainer{
+
+    width:30%;
+    height:400px;
+    border:1px solid red;
+    margin-right:5px;
+    float:left;
+    
+}
