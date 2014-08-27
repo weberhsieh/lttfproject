@@ -4,9 +4,12 @@ Lttfproject::Application.routes.draw do
 
 
  resources :holdgames do
-      resources :gamegroups, :controller => 'holdgame_gamegroups' 
-        #resource :gameplayers, :controller => 'gamegroup_gameplayers'
-      #end
+      resources :gamegroups, :controller => 'holdgame_gamegroups' do
+        collection do
+          post :registration
+        end  
+
+      end
   end
 
 

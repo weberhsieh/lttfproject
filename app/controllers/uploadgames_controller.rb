@@ -39,7 +39,6 @@ class UploadgamesController < ApplicationController
   
   def gamescorechecking
     @uploadgames = Uploadgame.waitingchecking.page(params[:page]).per(10)
-   
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @uploadgames }

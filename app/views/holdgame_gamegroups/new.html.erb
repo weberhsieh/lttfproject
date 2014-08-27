@@ -64,8 +64,29 @@
                 <%= f.select  :grouptype, ['個人賽', '雙打賽','團體賽'],:required => true,  :class => "form-control" %>
               </div>
             </div> 
-
+            <br>
+          
+              
+                <div class="form-group">
+                  <div class="col-xs-12 col-md-12 col-lg-12">
+                 
+                
+                <%= f.label '報名方式:',:class => "form-label"  %>
+               
+                <label class="radio inline">
+                <%= f.radio_button :regtype , "single", :checked => 'checked',:class => "form-control" %>個人
+               </label>
+                <label class="radio inline">
+                <%= f.radio_button :regtype , "double",:class => "form-control"  %>兩人
+                 </label>
+                  <label class="radio inline">
+                <%= f.radio_button :regtype , "team" ,:class => "form-control"%>團隊
+              </label>
+              </div>
+         
+            </div>
              <br>
+   
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
                 <%= f.label "積分限制:", :class => "form-label" %>
