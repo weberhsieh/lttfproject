@@ -4,46 +4,78 @@ class HoldgameGamegroupsController < ApplicationController
 	before_filter :find_holdgame
 
 def index
+
   @gamegroups = @holdgame.gamegroups
   if !params[:targettab]
     @targettabindex=1
     #@gamegroup=@holdgame.gamegroups.first
   else
-    @targettabindex=params[:targettab]
+    @targettabindex=params[:targettab].to_i
   end  
   @attendee=create_attendee_array(@gamegroups)
- 
-  
+  @user_meet_groups=check_user_meetgroupqualify(@gamegroups)
+  #@user_registered=check_user_registered(current_user.id,@attendee)
+
 end
 def create_attendee_array(gamegroups)
- @attendee_array=Array.new
- gamegroups.each do |gamegroup|
- @attendee_array.push(expand_attendee(gamegroup.regtype,gamegroup.groupattendants))
- end
- return @attendee_array
-end  
-def expand_attendee(regtype,groupattendee)
+  @attendee_array=Array.new
+  @user_in_groups=Hash.new
+  gamegroups.each do |gamegroup|
+   @attendee_array.push(expand_attendee(gamegroup.id,gamegroup.regtype,gamegroup.groupattendants))
+  end
+  return @attendee_array
+end
+
+def check_user_meetgroupqualify(gamegroups)
+  user_meet_groups=Hash.new
+  gamegroups.each do |gamegroup|
+    case gamegroup.scorelimitation
+      when '無積分限制'
+         user_meet_groups[gamegroup.id]=true
+      when '限制高低分'
+        user_meet_groups[gamegroup.id]= (current_user.playerprofile.curscore >= gamegroup.scorelow) &&
+                                        (current_user.playerprofile.curscore<=gamegroup.scorehigh) 
+      when '限制最高分'
+         user_meet_groups[gamegroup.id]= (current_user.playerprofile.curscore<=gamegroup.scorehigh) 
+      when '限制最低分'                                    
+        user_meet_groups[gamegroup.id]= (current_user.playerprofile.curscore>=gamegroup.scorelow) 
+    end
+  end  
+  return user_meet_groups
+end
+
+
+def expand_attendee(groupid,regtype,groupattendee)
+  
   @attendee=Array.new
   if groupattendee!=[] 
-  case regtype
-    when "single"
-      groupattendee.each do |player|
+    case regtype
+      when "single"
+        groupattendee.each do |player|
         attendant=Hash.new
         attendant['phone']=player.phone
         attendant['registor']=player.registor_id
         temp1=player.attendee.split(')')
         dummy,attendant['user_id'],attendant['name'],attendant['email'],attendant['pos']=temp1[0].split(',')
         attendant['user_id']=attendant['user_id'].to_i
+        if attendant['user_id']==current_user.id
+          @user_in_groups[groupid]=player.id
+        else
+         
+          @user_in_groups[groupid]=nil
+        end  
+
         user=User.find(attendant['user_id'])
         attendant['curscore']=user.playerprofile.curscore 
         attendant['email']=user.email
+        attendant['id']=player.id
         @attendee.push(attendant) 
       end
     
-    when "double"
+      when "double"
     
-    when "team"  
-    end    
+      when "team"  
+      end    
   else
      attendant=Hash.new
      @attendee.push(attendant) 
@@ -52,10 +84,10 @@ def expand_attendee(regtype,groupattendee)
    @attendee 
 end
 def registration
-     binding.pry
+     
      @curgroup=Gamegroup.find(params[:gamegroup_id])
      attendant=@curgroup.groupattendants.build
-     binding.pry
+    
      Groupattendant.transaction do
      
      attendant.regtype= @curgroup.regtype
@@ -67,11 +99,21 @@ def registration
     @attendee=create_attendee_array(@gamegroups)
     @targettabindex=@gamegroups.index(@curgroup)+1
     
-    redirect_to  holdgame_gamegroups_path(@holdgame), :targettab=> @targettabindex
+    redirect_to  holdgame_gamegroups_path(@holdgame, {:targettab=> @targettabindex})
+end  
+def cancel_current_user_registration
+  @attendant=Groupattendant.find(params[:user_in_groupattendant])
+  @curgroup=@attendant.gamegroup
+  @attendant.destroy
+  @gamegroups = @holdgame.gamegroups
+  @attendee=create_attendee_array(@gamegroups)
+  @targettabindex=@gamegroups.index(@curgroup)+1
+    
+  redirect_to  holdgame_gamegroups_path(@holdgame, {:targettab=> @targettabindex})
+
 end  
 def show
-
-  
+ 
   @gamegroup = @holdgame.gamegroups.find( params[:id] )
   @groupttendee= @gamegroup.groupttendants
   @attendee =expand_attendee(@gamegroup.regtype,@groupttendee)

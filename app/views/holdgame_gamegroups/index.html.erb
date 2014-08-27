@@ -101,8 +101,7 @@
           <% else %>
             <div class="tab-pane" id="<%= 'tab'+ nextTab.to_s %>" >
           <% end  %>    
-          
-              <%= render :partial => "show", :locals => { :gamegroup => gamegroup , :attendeearray => @attendee[nextTab-1]} %>
+          <%= render :partial => "show", :locals => { :gamegroup => gamegroup , :attendeearray => @attendee[nextTab-1], :user_registered=>@user_registered, :user_in_group =>  @user_in_groups[gamegroup.id], :user_meet_groups => @user_meet_groups[gamegroup.id]} %>
           </div> 
        
             <% nextTab+=1 %>

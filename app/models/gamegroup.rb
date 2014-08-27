@@ -5,6 +5,6 @@ class Gamegroup < ActiveRecord::Base
   belongs_to :holdgame
   has_many :groupattendants
   def self.regtypes
-  {'single'=>'個人', 'double'=>'雙人', 'team'=>'團體'}
- end
+   {'single'=>'個人', 'double'=>'雙人', 'team'=>'團體'}
+  end
 end

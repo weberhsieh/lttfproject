@@ -88,20 +88,29 @@
       </thead>  
       <tbody>
 
-        <%  attendeearray.each do |player| %> 
+        <%  attendeearray.each_with_index do |player,serial| %> 
           <tr>
-
-          <td><%= @serial %></td>
+          
+          <% if player!={} %>
+            <td><%= serial+1 %></td>
+          <% end %> 
           <td><%= player["user_id"] %></td>
           <td><%= player["name"] %></td>
           <td><%= player["curscore"] %></td>
           <td><%= player["registor"] %></td>
           </tr>
-        <% @serial+=1 %>
+    
         <% end %>
       </tbody>    
       <tfoot>
-        <%= button_to '報名參賽', {:controller => "holdgame_gamegroups", :action => "registration" , :gamegroup_id => gamegroup.id },:method => :post, data: { confirm: '確定核准此筆申請資料?' }  %>
+
+        <% if user_in_group %>
+          <%= button_to '取消參賽', {:controller => "holdgame_gamegroups", :action => "cancel_current_user_registration" , :user_in_groupattendant=>user_in_group},:method => :post, data: { confirm: '確定取消報名?' }  %>
+        <% else %>
+           <% if user_meet_groups %>
+              <%= button_to '報名參賽', {:controller => "holdgame_gamegroups", :action => "registration" , :gamegroup_id => gamegroup.id },:method => :post, data: { confirm: '確定報名參賽?' }  %>
+           <%end%>   
+        <%end%>   
         
       </tfoot>  
     </table>  

@@ -7,6 +7,7 @@ Lttfproject::Application.routes.draw do
       resources :gamegroups, :controller => 'holdgame_gamegroups' do
         collection do
           post :registration
+          post :cancel_current_user_registration
         end  
 
       end
