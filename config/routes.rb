@@ -8,6 +8,7 @@ Lttfproject::Application.routes.draw do
         collection do
           post :registration
           post :cancel_current_user_registration
+          get :playerinput
         end  
 
       end

@@ -1,0 +1,20 @@
+<script type='text/javascript' src='//code.jquery.com/jquery-2.0.2.js'></script>
+<%= include_gon %>
+<%= form_tag playerinput_holdgame_gamegroups_path, :method => :get do %>
+    
+     <p align =center>   
+   <input type="text" id="keyword" name="keyword" class="form-control" value="<%= @query_string %>" placeholder="<%= @query_string ||   "姓名或編號皆可" %>">
+       <%= submit_tag "輸入" %> 
+     </p> 
+
+     <% (1..@noinputplayers).each do |playerindex| %>
+     <%= number_field_tag  "playerid[]", @userids[playerindex-1]  %>
+     <%= text_field_tag   "playername[]", @usernames[playerindex-1] %>
+     <%= number_field_tag "playercurscore[]",@usercurscores[playerindex-1] %>
+     <%end%> 
+  <%end%>
+
+
+  <script type="text/javascript">
+  
+  </script>

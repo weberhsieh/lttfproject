@@ -1,4 +1,4 @@
- 
+
 
 <div class="col-xs-12 col-md-12 col-lg-12">
 <div class="table-responsive datagrid">
@@ -87,31 +87,40 @@
         </tr>
       </thead>  
       <tbody>
-
-        <%  attendeearray.each_with_index do |player,serial| %> 
-          <tr>
           
-          <% if player!={} %>
-            <td><%= serial+1 %></td>
-          <% end %> 
-          <td><%= player["user_id"] %></td>
-          <td><%= player["name"] %></td>
-          <td><%= player["curscore"] %></td>
-          <td><%= player["registor"] %></td>
-          </tr>
+          <tr>
+          <% case gamegroup.regtype %>
+            <% when "single" %>
+            
+              <%  attendeearray.each_with_index do |player,serial| %> 
+                <% if player[0]!={} %>
+                  <td><%= serial+1 %></td>
+                <% end %> 
+                <td><%= player[0]["user_id"] %></td>
+                <td><%= player[0]["name"] %></td>
+                <td><%= player[0]["curscore"] %></td>
+                <td><%= player[0]["registor"] %></td>
+                </tr>
     
-        <% end %>
+              <% end %>
+          
+            <% when "double" %>
+            <% when  "team" %>
+          <%end%>  
+       
       </tbody>    
       <tfoot>
 
         <% if user_in_group %>
-          <%= button_to '取消參賽', {:controller => "holdgame_gamegroups", :action => "cancel_current_user_registration" , :user_in_groupattendant=>user_in_group},:method => :post, data: { confirm: '確定取消報名?' }  %>
+          <%= button_to '取消報名', {:controller => "holdgame_gamegroups", :action => "cancel_current_user_registration" , :user_in_groupattendant=>user_in_group },  {:onclick => "return confirm('確定取消報名?')", :method => :post}  %>
+        
         <% else %>
-           <% if user_meet_groups %>
-              <%= button_to '報名參賽', {:controller => "holdgame_gamegroups", :action => "registration" , :gamegroup_id => gamegroup.id },:method => :post, data: { confirm: '確定報名參賽?' }  %>
+           <% if user_meet_group %>
+              <%= button_to '報名參賽', {:controller => "holdgame_gamegroups", :action => "registration" , :gamegroup_id => gamegroup.id },{:onclick => "return confirm('確定報名參賽?')", :method => :post}  %>
            <%end%>   
         <%end%>   
         
       </tfoot>  
     </table>  
   </div>
+<%= link_to '輸入報名資料', {:controller => "holdgame_gamegroups", :action => "playerinput" , :gamegroup_id=>gamegroup.id },:method => :get %>

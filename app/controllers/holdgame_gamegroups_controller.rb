@@ -6,40 +6,56 @@ class HoldgameGamegroupsController < ApplicationController
 def index
 
   @gamegroups = @holdgame.gamegroups
-  if !params[:targettab]
-    @targettabindex=1
+  if !params[:targroupid]
+    @targetgroup_id=@gamegroups.first.id
+   
     #@gamegroup=@holdgame.gamegroups.first
   else
-    @targettabindex=params[:targettab].to_i
+    @targetgroup_id=params[:targroupid].to_i
   end  
+
   @attendee=create_attendee_array(@gamegroups)
-  @user_meet_groups=check_user_meetgroupqualify(@gamegroups)
+  
+  @user_meet_groups=check_user_meetgroupqualify(@gamegroups,current_user.id)
   #@user_registered=check_user_registered(current_user.id,@attendee)
 
 end
 def create_attendee_array(gamegroups)
-  @attendee_array=Array.new
+  @attendee_array=Hash.new
   @user_in_groups=Hash.new
   gamegroups.each do |gamegroup|
-   @attendee_array.push(expand_attendee(gamegroup.id,gamegroup.regtype,gamegroup.groupattendants))
+    @group_attendee_array=Array.new
+    #@attendee_array.push(expand_attendee(gamegroup.id,gamegroup.regtype,gamegroup.groupattendants))
+    if(!gamegroup.groupattendants.empty? )
+       
+        gamegroup.groupattendants.each do |attendant|
+          @temp=attendant.playerlist
+          @group_attendee_array.push(@temp)
+     
+          user_in_group=@temp.find_all{|v|v['user_id']==current_user.id}
+          if(!user_in_group.empty?)
+            @user_in_groups[gamegroup.id]=attendant.id
+          else
+            @user_in_groups[gamegroup.id]=nil
+          end  
+       
+      end  
+    end
+
+    #@attendee_array.push(@group_attendee_array)
+    @attendee_array[gamegroup.id]=@group_attendee_array
   end
-  return @attendee_array
+
+  @attendee_array
 end
 
-def check_user_meetgroupqualify(gamegroups)
+def check_user_meetgroupqualify(gamegroups, player_id)
   user_meet_groups=Hash.new
+  player=User.find(player_id)
+
   gamegroups.each do |gamegroup|
-    case gamegroup.scorelimitation
-      when '無積分限制'
-         user_meet_groups[gamegroup.id]=true
-      when '限制高低分'
-        user_meet_groups[gamegroup.id]= (current_user.playerprofile.curscore >= gamegroup.scorelow) &&
-                                        (current_user.playerprofile.curscore<=gamegroup.scorehigh) 
-      when '限制最高分'
-         user_meet_groups[gamegroup.id]= (current_user.playerprofile.curscore<=gamegroup.scorehigh) 
-      when '限制最低分'                                    
-        user_meet_groups[gamegroup.id]= (current_user.playerprofile.curscore>=gamegroup.scorelow) 
-    end
+ 
+    user_meet_groups[gamegroup.id]=gamegroup.check_meet_group_qualify(player.playerprofile.curscore)
   end  
   return user_meet_groups
 end
@@ -91,15 +107,16 @@ def registration
      Groupattendant.transaction do
      
      attendant.regtype= @curgroup.regtype
-     attendant.attendee='(,'+current_user.id.to_s+','+current_user.username+','+current_user.email+','+'隊長'+')'
+     attendant.attendee='(,'+current_user.id.to_s+','+current_user.username+','+current_user.email+','+''+')'
+     attendant.phone=current_user.phone
      attendant.save 
    end 
 
-    @gamegroups = @holdgame.gamegroups
-    @attendee=create_attendee_array(@gamegroups)
-    @targettabindex=@gamegroups.index(@curgroup)+1
+    #@gamegroups = @holdgame.gamegroups
+    #@attendee=create_attendee_array(@gamegroups)
+    #@targettabindex=@gamegroups.index(@curgroup)+1
     
-    redirect_to  holdgame_gamegroups_path(@holdgame, {:targettab=> @targettabindex})
+    redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
 end  
 def cancel_current_user_registration
   @attendant=Groupattendant.find(params[:user_in_groupattendant])
@@ -109,9 +126,48 @@ def cancel_current_user_registration
   @attendee=create_attendee_array(@gamegroups)
   @targettabindex=@gamegroups.index(@curgroup)+1
     
-  redirect_to  holdgame_gamegroups_path(@holdgame, {:targettab=> @targettabindex})
+  redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
 
-end  
+end 
+def copy_players_from_tags(playeridlist,playernamelist,playercurscorelist)
+   
+end 
+def playerinput
+    @userids=Array.new
+    @usernames=Array.new
+    @usercurscores=Array.new
+    reg = /^\d+$/
+   
+    if(params[:keyword])
+        @userids=params[:playerid] if params[:playerid]
+        @usernames=params[:playername] if params[:playername]
+        @usercurscores=params[:playercurscore] if params[:playercurscore]
+  
+      if ! reg.match(params[:keyword])
+            @user = User.where(:username=>params[:keyword]).first
+
+      else
+
+        tempid=params[:keyword].to_i
+        @user=User.find(tempid)  
+        binding.pry
+      end  
+      if @user
+        
+        @userids.push(@user.id)
+        @usernames.push(@user.username)
+        @usercurscores.push(@user.playerprofile.curscore)
+        gon.noinputplayers=@userids.length
+     else
+       gon.noinputplayers=params[:playerid].length
+     end 
+    else
+      gon.noinputplayers=0
+     
+    end  
+  
+    @noinputplayers=gon.noinputplayers
+end
 def show
  
   @gamegroup = @holdgame.gamegroups.find( params[:id] )
@@ -122,18 +178,15 @@ end
 def new
  
   @gamegroup = @holdgame.gamegroups.build
-  
+ 
 end
 
 def create
   @gamegroup = @holdgame.gamegroups.build( params[:gamegroup] )
   if @gamegroup.save
 #    redirect_to holdgame_gamegroups_url( @holdgame )
-    @gamegroups = @holdgame.gamegroups
-    @targettabindex=@gamegroups.index(@gamegroup)+1
-    @groupttendee=@gamegroup.groupattendants
-    @attendee =Hash.new
-    render :index
+   
+     redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@gamegroup.id}) 
   else
     render :action => :new
   end
@@ -149,7 +202,7 @@ def update
   @gamegroup = @holdgame.gamegroups.find( params[:id] )
 
   if @gamegroup.update_attributes( params[:gamegroup] )
-    redirect_to holdgame_gamegroups_url( @holdgame )
+    redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@gamegroup.id}) 
   else
     render :action => :new
   end
@@ -158,6 +211,7 @@ end
 
 def destroy
   @gamegroup = @holdgame.gamegroups.find( params[:id] )
+  @gamegroup.groupattendants.delete_all
   @gamegroup.destroy
 
   redirect_to holdgame_gamegroups_url( @holdgame )

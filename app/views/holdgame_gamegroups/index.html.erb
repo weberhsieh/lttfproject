@@ -78,33 +78,33 @@
 <%= link_to 'new game', new_holdgame_gamegroup_path(@holdgame) %>
 
 </div>
-<% nextTab = 1 %>
-<div class="container">
-  
 
+<div class="container">
+   
     <ul class="nav nav-tabs" id="tabs" role="tablist"> 
-      <% @gamegroups.each do |gamegroup| %>
-        <% if nextTab==@targettabindex %>
-            <li class="active"><a href= "<%= '#tab'+ nextTab.to_s %>"  role="tab" data-toggle="tab"><%=gamegroup.groupname %></a></li>
+      <% @gamegroups.each_with_index do |gamegroup, tabindex| %>
+        <% if gamegroup.id== @targetgroup_id %>
+            <li class="active"><a href= "<%= '#tab'+ (tabindex+1).to_s %>"  role="tab" data-toggle="tab"><%=gamegroup.groupname %></a></li>
          <% else %>
-            <li><a href= "<%= '#tab'+ nextTab.to_s %>"  role="tab" data-toggle="tab"><%=gamegroup.groupname %></a></li>
+            <li><a href= "<%= '#tab'+ (tabindex+1).to_s %>"  role="tab" data-toggle="tab"><%=gamegroup.groupname %></a></li>
          
         <% end %>  
-        <% nextTab+=1 %>
+        
       <%end%>
     
       <div class="tab-content my-tab">
-        <% nextTab = 1 %>
-        <% @gamegroups.each do |gamegroup| %>
-          <% if nextTab==@targettabindex %>
-            <div class="tab-pane in active" id="<%= 'tab'+ nextTab.to_s %>" >
+  
+        <% @gamegroups.each_with_index do |gamegroup,tabindex| %>
+          <% if gamegroup.id==@targetgroup_id %>
+            <div class="tab-pane in active" id="<%= 'tab'+ (tabindex+1).to_s %>" >
           <% else %>
-            <div class="tab-pane" id="<%= 'tab'+ nextTab.to_s %>" >
-          <% end  %>    
-          <%= render :partial => "show", :locals => { :gamegroup => gamegroup , :attendeearray => @attendee[nextTab-1], :user_registered=>@user_registered, :user_in_group =>  @user_in_groups[gamegroup.id], :user_meet_groups => @user_meet_groups[gamegroup.id]} %>
+            <div class="tab-pane" id="<%= 'tab'+ (tabindex+1).to_s %>" >
+          <% end  %>   
+        
+          <%= render :partial => "show", :locals => { :gamegroup => gamegroup , :attendeearray => @attendee[gamegroup.id], :user_registered=>@user_registered, :user_in_group =>  @user_in_groups[gamegroup.id], :user_meet_group => @user_meet_groups[gamegroup.id]} %>
           </div> 
        
-            <% nextTab+=1 %>
+ 
         <%end%>    
       </div>
    </ul>

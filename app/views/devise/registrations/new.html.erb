@@ -43,6 +43,13 @@
             <div class="col-xs-12 col-md-12 col-lg-12"></br></div>
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
+                <%= f.label "電話", :class => "form-label" %>:
+                <%= f.text_field :phone, :class =>"form-control",:size => "50",:placeholder =>"僅提供積分賽主辦人連絡用!" %>
+              </div>
+            </div>
+            <div class="col-xs-12 col-md-12 col-lg-12"></br></div>
+            <div class="form-group">
+              <div class="col-xs-12 col-md-12 col-lg-12">
                 <%= f.label "密碼", :class => "form-label" %>:
                 <%= f.password_field :password, autocomplete: "off", :required => true, :class =>"form-control", :size => "50",
                  :placeholder =>"請輸入四位數以上之密碼"%>

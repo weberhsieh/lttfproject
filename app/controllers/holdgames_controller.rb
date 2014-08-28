@@ -65,6 +65,10 @@ class HoldgamesController < InheritedResources::Base
   end
   def destroy
     @holdgame = Holdgame.find(params[:id])
+    @holdgame.gamegroups.each do |gamegroup|
+      gamegroup.groupattendants.delete_all
+    end  
+    @holdgame.gamegroups.delete_all
     @holdgame.destroy
 
     respond_to do |format|
