@@ -71,22 +71,23 @@
                   <div class="col-xs-12 col-md-12 col-lg-12">
                  
                 
-                <%= f.label '報名方式:',:class => "form-label"  %>
-               
-                <label class="radio inline">
+                <%= f.label '報名方式:',:class => "control-label", :for=> "raidos"  %>
+
+                <label class="radio inline" for="gamegroup_regtype_single">
                 <%= f.radio_button :regtype , "single", :checked => 'checked',:class => "form-control" %>個人
                </label>
-                <label class="radio inline">
+                <label class="radio inline" for="gamegroup_regtype_double">
                 <%= f.radio_button :regtype , "double",:class => "form-control"  %>兩人
                  </label>
-                  <label class="radio inline">
+                  <label class="radio inline" for="gamegroup_regtype_double">
                 <%= f.radio_button :regtype , "team" ,:class => "form-control"%>團隊
               </label>
               </div>
          
             </div>
              <br>
-   
+
+
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
                 <%= f.label "積分限制:", :class => "form-label" %>

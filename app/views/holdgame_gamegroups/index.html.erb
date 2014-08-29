@@ -1,9 +1,9 @@
-
+<div class="col-md-12">
   <h1 align=center> <%= @holdgame.startdate %> <%= @holdgame.gamename %></h1>
 <div class="col-md-6">
 
        
-   <div class ="well">
+   <div class ="well" style='width: 100%'>
 
     <p>
       <b>比賽名稱:</b>
@@ -57,9 +57,8 @@
 <div class="col-md-6">
     <div id="map" style='width: 100%; height: 300px;'></div>
 </div> 
- <div class="col-md-12">
+
  
- </div>
 <div class="col-md-12">
    
 <% @gamegroups.each do |gamegroup| %>
@@ -73,10 +72,11 @@
 	</li>
 <% end %>
 
-
-
-<%= link_to 'new game', new_holdgame_gamegroup_path(@holdgame) %>
-
+ <% if @holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser)   %>
+   <%= button_to '新增比賽分組', new_holdgame_gamegroup_path(@holdgame), :method => :get  %>
+ <%end%>  
+<!%= link_to 'new game', new_holdgame_gamegroup_path(@holdgame) %>
+</div>
 </div>
 
 <div class="container">

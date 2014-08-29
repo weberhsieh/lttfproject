@@ -69,11 +69,43 @@
  <%= link_to 'show', holdgame_gamegroup_path(@holdgame,gamegroup) %>
          <%= link_to 'edit', edit_holdgame_gamegroup_path(@holdgame, gamegroup) %>
          <%= link_to 'destroy', holdgame_gamegroup_path(@holdgame, gamegroup),
-                              :method => :delete %>    
+                      :method => :delete %>  
+              
+
+
+
+<!-- Button (Double) -->
+
+
+<table width="100">
+<tr>
+  <% if @holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser)   %>
+     <td><%= button_to '修改分組資料', edit_holdgame_gamegroup_path(@holdgame, gamegroup), :method=>:get %></td>
+
+     <td><%= button_to '刪除此分組', holdgame_gamegroup_path(@holdgame, gamegroup),
+                              :method => :delete %></td>
+  <% end %>                            
+
+<td>
+       
+        
+   
+           <% if !user_in_group && user_meet_group && gamegroup.regtype=='single'%>
+              <%= button_to '報名參賽', {:controller => "holdgame_gamegroups", :action => "registration" , :gamegroup_id => gamegroup.id },{:onclick => "return confirm('確定報名參賽?')", :method => :post}  %>
+           <%end%>   
+       
+         
+</td>     
+<td><%= button_to '幫他人報名', {:controller => "holdgame_gamegroups", :action => "playerinput" , :gamegroup_id=>gamegroup.id },:method => :get %></td>                         
+</tr>
+</table>
+
+
+
 </div>
 
 <br>
-<% @serial=1 %>
+
 <div class="table-responsive datagrid">
     <table class="datatable table-striped" border=1 link=blue>
       <caption class="text-center" ><strong>已報名清單</strong></caption> 
@@ -83,7 +115,7 @@
         <th>會員編號</th>
         <th>會員姓名</th>
         <th>目前積分</th>
-        <th>登錄報名人員</th>
+        <th></th>
         </tr>
       </thead>  
       <tbody>
@@ -99,7 +131,11 @@
                 <td><%= player[0]["user_id"] %></td>
                 <td><%= player[0]["name"] %></td>
                 <td><%= player[0]["curscore"] %></td>
-                <td><%= player[0]["registor"] %></td>
+                <td>
+                    <% if player[0]["user_id"]==current_user.id ||  player[0]["registor"]==current_user.id ||@holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser)   %>
+                     <%= button_to '取消報名', {:controller => "holdgame_gamegroups", :action => "cancel_current_user_registration" , :user_in_groupattendant=>user_in_group },  {:onclick => "return confirm('確定取消報名?')", :method => :post}  %>
+                    <%end%>
+                </td>  
                 </tr>
     
               <% end %>
@@ -111,16 +147,7 @@
       </tbody>    
       <tfoot>
 
-        <% if user_in_group %>
-          <%= button_to '取消報名', {:controller => "holdgame_gamegroups", :action => "cancel_current_user_registration" , :user_in_groupattendant=>user_in_group },  {:onclick => "return confirm('確定取消報名?')", :method => :post}  %>
-        
-        <% else %>
-           <% if user_meet_group %>
-              <%= button_to '報名參賽', {:controller => "holdgame_gamegroups", :action => "registration" , :gamegroup_id => gamegroup.id },{:onclick => "return confirm('確定報名參賽?')", :method => :post}  %>
-           <%end%>   
-        <%end%>   
-        
+  
       </tfoot>  
     </table>  
   </div>
-<%= link_to '輸入報名資料', {:controller => "holdgame_gamegroups", :action => "playerinput" , :gamegroup_id=>gamegroup.id },:method => :get %>

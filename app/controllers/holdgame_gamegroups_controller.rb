@@ -109,6 +109,7 @@ def registration
      attendant.regtype= @curgroup.regtype
      attendant.attendee='(,'+current_user.id.to_s+','+current_user.username+','+current_user.email+','+''+')'
      attendant.phone=current_user.phone
+     attendant.registor_id=current_user.id
      attendant.save 
    end 
 
@@ -137,7 +138,7 @@ def playerinput
     @usernames=Array.new
     @usercurscores=Array.new
     reg = /^\d+$/
-   
+
     if(params[:keyword])
         @userids=params[:playerid] if params[:playerid]
         @usernames=params[:playername] if params[:playername]
@@ -150,7 +151,6 @@ def playerinput
 
         tempid=params[:keyword].to_i
         @user=User.find(tempid)  
-        binding.pry
       end  
       if @user
         
@@ -159,14 +159,14 @@ def playerinput
         @usercurscores.push(@user.playerprofile.curscore)
         gon.noinputplayers=@userids.length
      else
-       gon.noinputplayers=params[:playerid].length
+       @noinputplayers=params[:playerid].length
      end 
     else
-      gon.noinputplayers=0
+       @noinputplayers=0
      
     end  
   
-    @noinputplayers=gon.noinputplayers
+    
 end
 def show
  
