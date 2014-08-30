@@ -157,7 +157,7 @@ def playerinput
         @userids.push(@user.id)
         @usernames.push(@user.username)
         @usercurscores.push(@user.playerprofile.curscore)
-        gon.noinputplayers=@userids.length
+        @noinputplayers=@userids.length
      else
        @noinputplayers=params[:playerid].length
      end 

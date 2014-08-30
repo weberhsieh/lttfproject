@@ -1,0 +1,93 @@
+
+
+<form class="form-inline">
+<%= form_tag singleplayerinput_holdgame_gamegroups_path, :method => :get do %>
+    
+     <p align =center>   
+   <input type="text" id="keyword" name="keyword" class="form-control" value="<%= @query_string %>" placeholder="<%= @query_string ||   "姓名或編號皆可" %>">
+       <%= submit_tag "輸入" %> 
+     </p> 
+
+<br>
+
+<div class="table-responsive datagrid">
+    <table class="datatable table-striped" border=1 link=blue>
+      <caption class="text-center" ><strong>報名清單</strong></caption> 
+      <thead>
+        <tr>
+        <th>報名序號</th>
+        <th>會員編號</th>
+        <th>會員姓名</th>
+        <th>目前積分</th>
+        </tr>
+      </thead>  
+      <tbody>
+          
+          <tr>
+               <%binding.pry%>           
+               <% (1..@noinputplayers).each do |playerindex| %> 
+             
+                <td><%= playerindex %></td>
+             
+                <td> <%= number_field_tag  "playerid[]", @userids[playerindex-1]  %></td>
+                <td> <%= text_field_tag   "playername[]", @usernames[playerindex-1]  %></td>
+                <td> <%= text_field_tag   "playercurscore[]",  @usercurscores[playerindex-1]  %></td>
+                
+                </tr>
+    
+              <% end %>
+                 <% @userlist.each_with_index do |user,serial| %> 
+             
+                <td><%= serial+1 %></td>
+             
+                <td> <%= number_field_tag  "playerid[]", user.id  %></td>
+                <td> <%= text_field_tag   "playername[]", user.username %></td>
+                <td> <%= text_field_tag   "playercurscore[]",  user.playerprofile.curscore  %></td>
+                
+                </tr>
+    
+              <% end %>
+      
+       
+      </tbody>    
+      <tfoot>
+     </tfoot>  
+    </table>  
+  </div>
+<table width="100">
+<tr>
+  
+                            
+
+<td>
+  <%= button_to '確認輸入參賽名單', {:controller => "holdgame_gamegroups", :action => "single_groupregistration" , :gamegroup_id => @curgroup.id },{:onclick => "return confirm('確認輸入參賽名單?')", :method => :post}  %>
+</td>
+<td>     
+  <%= button_to '放棄輸入參賽名單', {:controller => "holdgame_gamegroups", :action => "index" , :targroupid => gamegroup.id },{:onclick => "return confirm('確認放棄目前輸入之參賽名單?')", :method => :get}  %>
+</td>    
+                      
+</tr>
+</table>
+ <% end %>     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
