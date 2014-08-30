@@ -1,11 +1,12 @@
 <form class="form-inline">
-<%= form_tag playerinput_holdgame_gamegroups_path, :method => :get do %>
+<%= form_tag singleplayerinput_holdgame_gamegroups_path, multipart: true do %>
     
-     <p align =center>   
-   <input type="text" id="keyword" name="keyword" class="form-control" value="<%= @query_string %>" placeholder="<%= @query_string ||   "姓名或編號皆可" %>">
-       <%= submit_tag "輸入" %> 
-     </p> 
-  <%end%>     
+  <p align =center>   
+    <input type="text" id="keyword" name="keyword" class="form-control" value="<%= @query_string %>" placeholder="<%= @query_string ||   "姓名或編號皆可" %>">
+    <%= submit_tag "輸入" , :name => "getplayerfromuser" %> 
+      
+  </p> 
+
 <br>
 <div class="table-responsive datagrid">
     <table class="datatable table-striped" border=1 link=blue>
@@ -50,17 +51,17 @@
 
 <td>
  
-  <%= button_to '確認輸入參賽名單', singlegroupregistration_holdgame_gamegroups_path(@holdgame, @curgamegroupid),{:onclick => "return confirm('確認輸入參賽名單?')", :method => :get}  %>
+  <%= submit_tag '確認輸入參賽名單', :name => "singleplayerregistration" , data: { confirm:'確認輸入參賽名單?' }  %>
 </td>
 <td>     
-  <%= button_to '放棄輸入參賽名單', holdgame_gamegroups_path(@holdgame,{:targroupid => @curgamegroupid}),{:onclick => "return confirm('確認放棄輸入?')", :method => :post}  %>
+  <%= submit_tag '放棄輸入參賽名單', :name => "quit", data: { confirm:'確認放棄輸入?' }  %>
 
 </td>    
                       
 </tr>
 </table>
-
-
+<%end%>   
+ 
 
 
 

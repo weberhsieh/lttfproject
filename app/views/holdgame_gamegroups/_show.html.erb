@@ -97,7 +97,7 @@
          
 </td>     
 
-<td><%= button_to '幫他人報名', singleplayerinput_holdgame_gamegroups_path(@holdgame,gamegroup) , :method=>:get  %></td>
+<td><%= button_to '幫他人報名', singleplayerinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
                  
 </tr>
 </table>
@@ -125,7 +125,6 @@
           <tr>
           <% case gamegroup.regtype %>
             <% when "single" %>
-            <%binding.pry%>
               <%  attendeearray.each_with_index do |player,serial| %> 
                 <% if player[0]!={} %>
                   <td><%= serial+1 %></td>

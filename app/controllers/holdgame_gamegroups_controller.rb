@@ -13,7 +13,7 @@ def index
   else
     @targetgroup_id=params[:targroupid].to_i
   end  
- binding.pry
+
   @attendee=create_attendee_array(@gamegroups)
   
   @user_meet_groups=check_user_meetgroupqualify(@gamegroups,current_user.id)
@@ -120,12 +120,12 @@ def registration
     redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
 end  
 def singlegroupregistration
-  binding.pry
+
   @curgroup=Gamegroup.find(params[:format])
   attendant=@curgroup.groupattendants.build
   @playerlist=Array.new
   @playerlist=User.find(params[:playerid]) if params[:playerid]
-  binding.pry
+
   Groupattendant.transaction do
      
     attendant.regtype= @curgroup.regtype
@@ -135,9 +135,9 @@ def singlegroupregistration
     attendant.attendee=''
     @playerlist.each do |player|
       attendant.attendee+='(,'+player.id.to_s+','+player.username+','+player.email+','+''+')'
-      binding.pry
+
     end 
-    binding.pry
+
     attendant.save 
   end 
 
@@ -148,7 +148,7 @@ def singlegroupregistration
     redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
 end  
 def cancel_current_user_registration
-  binding.pry
+
   @attendant=Groupattendant.find(params[:user_in_groupattendant])
   @curgroup=@attendant.gamegroup
   @attendant.destroy
@@ -184,29 +184,47 @@ def playerinput
     
 end
 def singleplayerinput
-
-    @curgamegroupid=params[:format]
-    reg = /^\d+$/
-    @playerlist=Array.new
-    @playerlist=User.find(params[:playerid]) if params[:playerid]
-    if(params[:keyword])
-          
-      if ! reg.match(params[:keyword])
-        @newplayer = User.where(:username=>params[:keyword]).first
-
-      else
-        @newplayer=User.find(params[:keyword].to_i)  
-      end  
-             
-      @playerlist.push(@newplayer) if @newplayer
-      
-    end  
-  
+  if params[:singleplayerregistration]
+      @curgroup=Gamegroup.find(params[:format])
+      attendant=@curgroup.groupattendants.build
+      @playerlist=Array.new
+      @playerlist=User.find(params[:playerid]) if params[:playerid]
+      Groupattendant.transaction do
+        attendant.regtype= @curgroup.regtype
+        attendant.attendee='(,'+current_user.id.to_s+','+current_user.username+','+current_user.email+','+''+')'
+        attendant.phone=current_user.phone
+        attendant.registor_id=current_user.id
+        attendant.attendee=''
+        @playerlist.each do |player|
+          attendant.attendee+='(,'+player.id.to_s+','+player.username+','+player.email+','+''+')'
+        end 
+        attendant.save 
+      end 
+      redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) 
     
+                        
+    elsif params[:quit]
+      @curgroup=Gamegroup.find(params[:format])
+      redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) 
+    else #for "getplayerfromuser" and no name option
+      @curgamegroupid=params[:format]
+      reg = /^\d+$/
+      @playerlist=Array.new
+      @playerlist=User.find(params[:playerid]) if params[:playerid]
+      if(params[:keyword])
+          
+        if ! reg.match(params[:keyword])
+          @newplayer = User.where(:username=>params[:keyword]).first
+        else
+          @newplayer=User.find(params[:keyword].to_i)  
+        end  
+        @playerlist.push(@newplayer) if @newplayer
+      end  
+    end  
 end
 def show
-  binding.pry
-  @gamegroup = @holdgame.gamegroups.find( params[:id] )
+
+  @gamegroup = @holdgame.gamegroups.find( params[:format] )
   @groupttendee= @gamegroup.groupttendants
   @attendee =expand_attendee(@gamegroup.regtype,@groupttendee)
 end
