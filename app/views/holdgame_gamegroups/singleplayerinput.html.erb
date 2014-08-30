@@ -1,15 +1,12 @@
-
-
 <form class="form-inline">
-<%= form_tag singleplayerinput_holdgame_gamegroups_path, :method => :get do %>
+<%= form_tag playerinput_holdgame_gamegroups_path, :method => :get do %>
     
      <p align =center>   
    <input type="text" id="keyword" name="keyword" class="form-control" value="<%= @query_string %>" placeholder="<%= @query_string ||   "姓名或編號皆可" %>">
        <%= submit_tag "輸入" %> 
      </p> 
-
+  <%end%>     
 <br>
-
 <div class="table-responsive datagrid">
     <table class="datatable table-striped" border=1 link=blue>
       <caption class="text-center" ><strong>報名清單</strong></caption> 
@@ -24,25 +21,14 @@
       <tbody>
           
           <tr>
-               <%binding.pry%>           
-               <% (1..@noinputplayers).each do |playerindex| %> 
+                          
+               <% @playerlist.each_with_index do |player,playerindex| %> 
              
-                <td><%= playerindex %></td>
+                <td><%= playerindex+1 %></td>
              
-                <td> <%= number_field_tag  "playerid[]", @userids[playerindex-1]  %></td>
-                <td> <%= text_field_tag   "playername[]", @usernames[playerindex-1]  %></td>
-                <td> <%= text_field_tag   "playercurscore[]",  @usercurscores[playerindex-1]  %></td>
-                
-                </tr>
-    
-              <% end %>
-                 <% @userlist.each_with_index do |user,serial| %> 
-             
-                <td><%= serial+1 %></td>
-             
-                <td> <%= number_field_tag  "playerid[]", user.id  %></td>
-                <td> <%= text_field_tag   "playername[]", user.username %></td>
-                <td> <%= text_field_tag   "playercurscore[]",  user.playerprofile.curscore  %></td>
+                <td> <%= number_field_tag  "playerid[]", player.id  %></td>
+                <td> <%= text_field_tag   "playername[]", player.username  %></td>
+                <td> <%= text_field_tag   "playercurscore[]", player.playerprofile.curscore %></td>
                 
                 </tr>
     
@@ -54,21 +40,26 @@
      </tfoot>  
     </table>  
   </div>
+
+
+
 <table width="100">
 <tr>
   
                             
 
 <td>
-  <%= button_to '確認輸入參賽名單', {:controller => "holdgame_gamegroups", :action => "single_groupregistration" , :gamegroup_id => @curgroup.id },{:onclick => "return confirm('確認輸入參賽名單?')", :method => :post}  %>
+ 
+  <%= button_to '確認輸入參賽名單', singlegroupregistration_holdgame_gamegroups_path(@holdgame, @curgamegroupid),{:onclick => "return confirm('確認輸入參賽名單?')", :method => :get}  %>
 </td>
 <td>     
-  <%= button_to '放棄輸入參賽名單', {:controller => "holdgame_gamegroups", :action => "index" , :targroupid => gamegroup.id },{:onclick => "return confirm('確認放棄目前輸入之參賽名單?')", :method => :get}  %>
+  <%= button_to '放棄輸入參賽名單', holdgame_gamegroups_path(@holdgame,{:targroupid => @curgamegroupid}),{:onclick => "return confirm('確認放棄輸入?')", :method => :post}  %>
+
 </td>    
                       
 </tr>
 </table>
- <% end %>     
+
 
 
 

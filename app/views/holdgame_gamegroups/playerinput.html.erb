@@ -23,13 +23,13 @@
           
           <tr>
                           
-               <% (1..@noinputplayers).each do |playerindex| %> 
+               <% @playerlist.each_with_index do |player,playerindex| %> 
              
-                <td><%= playerindex %></td>
+                <td><%= playerindex+1 %></td>
              
-                <td> <%= number_field_tag  "playerid[]", @userids[playerindex-1]  %></td>
-                <td> <%= text_field_tag   "playername[]", @usernames[playerindex-1]  %></td>
-                <td> <%= text_field_tag   "playercurscore[]",  @usercurscores[playerindex-1]  %></td>
+                <td> <%= number_field_tag  "playerid[]", player.id  %></td>
+                <td> <%= text_field_tag   "playername[]", player.username  %></td>
+                <td> <%= text_field_tag   "playercurscore[]", player.playerprofile.curscore %></td>
                 
                 </tr>
     
