@@ -2,7 +2,10 @@
 class HoldgameGamegroupsController < ApplicationController
   layout :resolve_layout
 	before_filter :find_holdgame
-
+  SAVE = "Save"
+  REVISE = "Revise the plan"
+  PROPOSE = "Propose now"
+  FINALIZE = "Finalize"
 def index
 
   @gamegroups = @holdgame.gamegroups
@@ -14,9 +17,9 @@ def index
     @targetgroup_id=params[:targroupid].to_i
   end  
 
-  @attendee=create_attendee_array(@gamegroups)
+  #@attendee=create_attendee_array(@gamegroups)
   
-  @user_meet_groups=check_user_meetgroupqualify(@gamegroups,current_user.id)
+  #@user_meet_groups=check_user_meetgroupqualify(@gamegroups,current_user.id)
   #@user_registered=check_user_registered(current_user.id,@attendee)
 
 end
@@ -102,15 +105,25 @@ end
 def registration
 
      @curgroup=Gamegroup.find(params[:format])
-     attendant=@curgroup.groupattendants.build
+     attendantrecord=@curgroup.groupattendants.build
     
      Groupattendant.transaction do
      
-     attendant.regtype= @curgroup.regtype
-     attendant.attendee='(,'+current_user.id.to_s+','+current_user.username+','+current_user.email+','+''+')'
-     attendant.phone=current_user.phone
-     attendant.registor_id=current_user.id
-     attendant.save 
+     attendantrecord.regtype= @curgroup.regtype
+     #attendantrecord.attendee='(,'+current_user.id.to_s+','+current_user.username+','+current_user.email+','+''+')'
+     attendantrecord.phone=current_user.phone
+     attendantrecord.registor_id=current_user.id
+     if attendantrecord.save
+       player=attendantrecord.attendants.build
+       player.regtype=attendantrecord.regtype
+       player.phone=attendantrecord.phone
+        player.registor_id=attendantrecord.registor_id
+        player.player_id=current_user.id
+        player.name=current_user.username
+        player.email=current_user.email
+        player.curscore=current_user.playerprofile.curscore
+        player.save
+     end 
    end 
 
     #@gamegroups = @holdgame.gamegroups
@@ -119,26 +132,33 @@ def registration
     
     redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
 end  
-def singlegroupregistration
-
-  @curgroup=Gamegroup.find(params[:format])
-  attendant=@curgroup.groupattendants.build
+def singlegroupregistration(group_id, playerids)
+  
+  @curgroup=Gamegroup.find(group_id)
+  attendantrecord=@curgroup.groupattendants.build 
   @playerlist=Array.new
-  @playerlist=User.find(params[:playerid]) if params[:playerid]
+  @playerlist=User.find(playerids) if playerids
 
   Groupattendant.transaction do
      
-    attendant.regtype= @curgroup.regtype
-    attendant.attendee='(,'+current_user.id.to_s+','+current_user.username+','+current_user.email+','+''+')'
-    attendant.phone=current_user.phone
-    attendant.registor_id=current_user.id
-    attendant.attendee=''
-    @playerlist.each do |player|
-      attendant.attendee+='(,'+player.id.to_s+','+player.username+','+player.email+','+''+')'
-
-    end 
-
-    attendant.save 
+    attendantrecord.regtype= @curgroup.regtype
+    attendantrecord.attendee='(,'+current_user.id.to_s+','+current_user.username+','+current_user.email+','+''+')'
+    attendantrecord.phone=current_user.phone
+    attendantrecord.registor_id=current_user.id
+    if attendantrecord.save
+      @playerlist.each do |player|
+        attendant=attendantrecord.attendants.build
+        attendant.regtype=attendantrecord.regtype
+        attendant.phone=attendantrecord.phone
+        attendant.registor_id=attendantrecord.registor_id
+        attendant.player_id=player.id
+        attendant.name=player.username
+        attendant.email=player.email
+        attendant.curscore=player.playerprofile.curscore
+        attendant.save
+      end 
+    end
+   
   end 
 
     #@gamegroups = @holdgame.gamegroups
@@ -149,12 +169,10 @@ def singlegroupregistration
 end  
 def cancel_current_user_registration
 
-  @attendant=Groupattendant.find(params[:user_in_groupattendant])
+  @attendantrecord=Groupattendant.find(params[:user_in_groupattendant])
   @curgroup=@attendant.gamegroup
-  @attendant.destroy
-  @gamegroups = @holdgame.gamegroups
-  @attendee=create_attendee_array(@gamegroups)
-  @targettabindex=@gamegroups.index(@curgroup)+1
+  @attendantrecord.attendants.delete_all
+  @attendantrecord.delete
     
   redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
 
@@ -184,28 +202,14 @@ def playerinput
     
 end
 def singleplayerinput
+  binding.pry
   if params[:singleplayerregistration]
-      @curgroup=Gamegroup.find(params[:format])
-      attendant=@curgroup.groupattendants.build
-      @playerlist=Array.new
-      @playerlist=User.find(params[:playerid]) if params[:playerid]
-      Groupattendant.transaction do
-        attendant.regtype= @curgroup.regtype
-        attendant.attendee='(,'+current_user.id.to_s+','+current_user.username+','+current_user.email+','+''+')'
-        attendant.phone=current_user.phone
-        attendant.registor_id=current_user.id
-        attendant.attendee=''
-        @playerlist.each do |player|
-          attendant.attendee+='(,'+player.id.to_s+','+player.username+','+player.email+','+''+')'
-        end 
-        attendant.save 
-      end 
-      redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) 
-    
+     singlegroupregistration(params[:format], params[:playerid])
+     
                         
     elsif params[:quit]
       @curgroup=Gamegroup.find(params[:format])
-      redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) 
+    
     else #for "getplayerfromuser" and no name option
       @curgamegroupid=params[:format]
       reg = /^\d+$/
@@ -220,13 +224,19 @@ def singleplayerinput
         end  
         @playerlist.push(@newplayer) if @newplayer
       end  
-    end  
+    end 
+    if params[:singleplayerregistration] || params[:quit]
+           respond_with resource, :location => holdgame_gamegroups_path(@holdgame, {:targroupid=>params[:fromat]}) 
+       return
+       end
+   
+
 end
 def show
 
   @gamegroup = @holdgame.gamegroups.find( params[:format] )
-  @groupttendee= @gamegroup.groupttendants
-  @attendee =expand_attendee(@gamegroup.regtype,@groupttendee)
+  @groupttendee= @gamegroup.groupattendants
+  @attendee =@gamegroup.allgroupattendee
 end
 
 def new

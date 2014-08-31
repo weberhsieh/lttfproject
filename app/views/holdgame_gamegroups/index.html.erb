@@ -101,7 +101,7 @@
             <div class="tab-pane" id="<%= 'tab'+ (tabindex+1).to_s %>" >
           <% end  %>   
         
-          <%= render :partial => "show", :locals => { :gamegroup => gamegroup , :attendeearray => @attendee[gamegroup.id], :user_registered=>@user_registered, :user_in_group =>  @user_in_groups[gamegroup.id], :user_meet_group => @user_meet_groups[gamegroup.id]} %>
+          <%= render :partial => "show", :locals => { :gamegroup => gamegroup , :attendeearray =>  gamegroup.allgroupattendee, :user_registered=>@user_registered, :user_in_group => gamegroup.findplayer(current_user.id), :user_meet_group => gamegroup.check_meet_group_qualify(current_user.playerprofile.curscore)} %>
           </div> 
        
  

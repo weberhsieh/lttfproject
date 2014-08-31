@@ -88,8 +88,7 @@
 
 <td>
        
-        
-   
+
   <% if !user_in_group && user_meet_group && gamegroup.regtype=='single'%>
      <%= button_to '報名參賽',registration_holdgame_gamegroups_path(@holdgame,gamegroup),{:onclick => "return confirm('確定報名參賽?')", :method => :post}  %>
   <%end%>   
@@ -121,19 +120,19 @@
         </tr>
       </thead>  
       <tbody>
-          
+          <%binding.pry%>
           <tr>
           <% case gamegroup.regtype %>
             <% when "single" %>
               <%  attendeearray.each_with_index do |player,serial| %> 
-                <% if player[0]!={} %>
-                  <td><%= serial+1 %></td>
-                <% end %> 
-                <td><%= player[0]["user_id"] %></td>
-                <td><%= player[0]["name"] %></td>
-                <td><%= player[0]["curscore"] %></td>
+              
+                <td><%= serial+1 %></td>
+              
+                <td><%= player.player_id %></td>
+                <td><%= player.name %></td>
+                <td><%= player.curscore %></td>
                 <td>
-                    <% if player[0]["user_id"]==current_user.id ||  player[0]["registor"]==current_user.id ||@holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser)   %>
+                    <% if player.player_id==current_user.id ||  player.registor_id==current_user.id ||@holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser)   %>
                  
                       <%= button_to '取消報名', cancel_current_user_registration_holdgame_gamegroups_path(@holdgame, gamegroup, :user_in_groupattendant=>user_in_group) ,  {:onclick => "return confirm('確定取消報名?')", :method => :post}  %>
                     <%end%>
