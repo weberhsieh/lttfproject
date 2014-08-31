@@ -11,7 +11,7 @@ class Groupattendant < ActiveRecord::Base
 
   def findplayer(player_id)
       binding.pry
-   	  if self.playerlist.find_all{|v| v['player_id']==player_id}
+   	  if self.playerlist.find_all{|v| v.player_id==player_id}
    	    return true
    	  else
    	  	return false 

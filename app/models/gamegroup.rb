@@ -43,6 +43,7 @@ class Gamegroup < ActiveRecord::Base
   end
 
   def findplayer(player_id)
+    binding.pry
     self.groupattendants.each do |attendrecord|
      return true if attendrecord.findplayer(player_id)  
     end 

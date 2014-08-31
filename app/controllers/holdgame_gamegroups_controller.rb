@@ -6,6 +6,16 @@ class HoldgameGamegroupsController < ApplicationController
   REVISE = "Revise the plan"
   PROPOSE = "Propose now"
   FINALIZE = "Finalize"
+ def test
+  binding.pry
+
+ end
+ def Propose
+   binding.pry
+ end
+ def Finalize
+   binding.pry
+ end 
 def index
 
   @gamegroups = @holdgame.gamegroups
@@ -129,7 +139,7 @@ def registration
     #@gamegroups = @holdgame.gamegroups
     #@attendee=create_attendee_array(@gamegroups)
     #@targettabindex=@gamegroups.index(@curgroup)+1
-    
+   
     redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
 end  
 def singlegroupregistration(group_id, playerids)
@@ -165,7 +175,7 @@ def singlegroupregistration(group_id, playerids)
     #@attendee=create_attendee_array(@gamegroups)
     #@targettabindex=@gamegroups.index(@curgroup)+1
     
-    redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
+
 end  
 def cancel_current_user_registration
 
@@ -212,6 +222,7 @@ def singleplayerinput
     
     else #for "getplayerfromuser" and no name option
       @curgamegroupid=params[:format]
+      @curgroup=Gamegroup.find(params[:format])
       reg = /^\d+$/
       @playerlist=Array.new
       @playerlist=User.find(params[:playerid]) if params[:playerid]
@@ -222,13 +233,20 @@ def singleplayerinput
         else
           @newplayer=User.find(params[:keyword].to_i)  
         end  
-        @playerlist.push(@newplayer) if @newplayer
+          binding.pry
+        if(@curgroup.findplayer(@newplayer.id))
+           flash[:notice] = "此球友已經完成報名，請勿重覆報名!"
+        elsif  @newplayer   
+          @playerlist.push(@newplayer) 
+        else
+          flash[:notice] = "無此球友資料，請查明後再輸入!" 
+        end  
       end  
     end 
-    if params[:singleplayerregistration] || params[:quit]
-           respond_with resource, :location => holdgame_gamegroups_path(@holdgame, {:targroupid=>params[:fromat]}) 
-       return
-       end
+    
+    redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) if params[:singleplayerregistration] || params[:quit]      
+      
+   
    
 
 end

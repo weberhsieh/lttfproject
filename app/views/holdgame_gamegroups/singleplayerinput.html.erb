@@ -2,7 +2,7 @@
 <%= form_tag singleplayerinput_holdgame_gamegroups_path, multipart: true do %>
   <p align =center>   
     <input type="text" id="keyword" name="keyword" class="form-control" value="<%= @query_string %>" placeholder="<%= @query_string ||   "姓名或編號皆可" %>">
-    <%= submit_tag "輸入" ,HoldgameGamegroupsController::PROPOSE, :name => "getplayerfromuser" %> 
+    <%= submit_tag "輸入"  %> 
       
   </p> 
 
@@ -50,10 +50,10 @@
 
 <td>
  
-  <%= submit_tag '確認輸入參賽名單',HoldgameGamegroupsController::SAVE, :name => "singleplayerregistration" , data: { confirm:'確認輸入參賽名單?' }  %>
+  <%= submit_tag '確認輸入參賽名單', :name => "singleplayerregistration" , data: { confirm:'確認輸入參賽名單?' }  %>
 </td>
 <td>     
-  <%= submit_tag '放棄輸入參賽名單',HoldgameGamegroupsController::FINALIZE, :name => "quit", data: { confirm:'確認放棄輸入?' }  %>
+  <%= submit_tag '放棄輸入參賽名單', :name => "quit", data: { confirm:'確認放棄輸入?' }  %>
 
 </td>    
                       
