@@ -1,21 +1,8 @@
 # encoding: UTF-8”
 class HoldgameGamegroupsController < ApplicationController
-  layout :resolve_layout
-	before_filter :find_holdgame
-  SAVE = "Save"
-  REVISE = "Revise the plan"
-  PROPOSE = "Propose now"
-  FINALIZE = "Finalize"
- def test
-  binding.pry
+ layout :resolve_layout 
+ before_filter :find_holdgame 
 
- end
- def Propose
-   binding.pry
- end
- def Finalize
-   binding.pry
- end 
 def index
 
   @gamegroups = @holdgame.gamegroups
@@ -180,16 +167,14 @@ end
 def cancel_current_user_registration
 
   @attendantrecord=Groupattendant.find(params[:user_in_groupattendant])
-  @curgroup=@attendant.gamegroup
+  @curgroup=@attendantrecord.gamegroup
   @attendantrecord.attendants.delete_all
   @attendantrecord.delete
     
   redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
 
 end 
-def copy_players_from_tags(playeridlist,playernamelist,playercurscorelist)
-   
-end 
+
 def playerinput
 
     gamegroupid=params[:format]
@@ -212,9 +197,9 @@ def playerinput
     
 end
 def singleplayerinput
-  binding.pry
+
   if params[:singleplayerregistration]
-     singlegroupregistration(params[:format], params[:playerid])
+     singlegroupregistration(params[:format], params[:playerid].uniq)
      
                         
     elsif params[:quit]
@@ -225,30 +210,86 @@ def singleplayerinput
       @curgroup=Gamegroup.find(params[:format])
       reg = /^\d+$/
       @playerlist=Array.new
-      @playerlist=User.find(params[:playerid]) if params[:playerid]
+      @playerlist=User.find(params[:playerid].uniq) if params[:playerid]
       if(params[:keyword])
           
         if ! reg.match(params[:keyword])
           @newplayer = User.where(:username=>params[:keyword]).first
         else
-          @newplayer=User.find(params[:keyword].to_i)  
+          @newplayer=User.find_by_id(params[:keyword].to_i)  
         end  
-          binding.pry
-        if(@curgroup.findplayer(@newplayer.id))
-           flash[:notice] = "此球友已經完成報名，請勿重覆報名!"
-        elsif  @newplayer   
-          @playerlist.push(@newplayer) 
-        else
+        binding.pry
+        if !@newplayer 
           flash[:notice] = "無此球友資料，請查明後再輸入!" 
+    
+        elsif(@curgroup.findplayer(@newplayer.id))
+          flash[:notice] = "此球友已經完成報名，請勿重覆報名!"
+
+        elsif params[:playerid] && params[:playerid].include?(@newplayer.id.to_s)
+          flash[:notice]="此球友已經輸入("+@newplayer.id.to_s+","+@newplayer.username+")，請勿重覆輸入!"
+        elsif !@curgroup.check_meet_group_qualify(@newplayer.playerprofile.curscore) 
+          flash[:notice] = "此球友不符合此分組參賽資格，無法報名此分組比賽!"  
+           
+        else   
+           @playerlist.push(@newplayer)
         end  
       end  
     end 
     
     redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) if params[:singleplayerregistration] || params[:quit]      
-      
-   
-   
+end
 
+def get_inputplayer(playerlist,keyword)
+  reg = /^\d+$/
+  if ! reg.match(keyword)
+    @newplayer = User.where(:username=>keyword).first
+  else
+    @newplayer=User.find_by_id(keyword.to_i)  
+  end  
+  if !@newplayer 
+          flash[:notice] = "無此球友資料，請查明後再輸入!" 
+    
+  elsif(@curgroup.findplayer(@newplayer.id))
+          flash[:notice] = "此球友已經完成報名，請勿重覆報名!"
+
+  elsif playerlist && playerlist.include?(@newplayer.id.to_s)
+          flash[:notice]="此球友("+@newplayer.id.to_s+","+@newplayer.username+")已經輸入，請勿重覆輸入!"
+  elsif !@curgroup.check_meet_group_qualify(@newplayer.playerprofile.curscore) 
+          flash[:notice] = "此球友("+@newplayer.id.to_s+","+@newplayer.username+","+@newpayer.playerprofile.curscore.to_s
+               +")不符合此分組參賽資格，無法報名此分組比賽!"  
+  else
+    return @newplayer    
+  end
+  return nil      
+end  
+
+def doubleplayersinput
+
+  if params[:registration]
+     singlegroupregistration(params[:format], params[:playerid].uniq)
+     
+                        
+    elsif params[:quit]
+      @curgroup=Gamegroup.find(params[:format])
+    
+    else #for "getplayerfromuser" and no name option
+      binding.pry
+      @playerlist=Array.new
+      @playerlist=User.find(params[:playerid].uniq) if params[:playerid]
+      @curgamegroupid=params[:format]
+      @curgroup=Gamegroup.find(params[:format])
+      if(params[:keyword1] && params[:keyword2])
+        @newplayer1=get_inputplayer(params[:playerid],params[:keyword1])
+        @newplayer2=get_inputplayer(params[:playerid],params[:keyword2])
+        if @newplayer1 && @newplayer2
+           @playerlist.push( @newplayer1)
+           @playerlist.push( @newplayer2)
+        end
+      end  
+    end 
+    
+    redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) if params[:registration] || params[:quit]      
+   
 end
 def show
 

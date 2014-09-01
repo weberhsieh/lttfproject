@@ -18,6 +18,8 @@ class Gamegroup < ActiveRecord::Base
   end
   def check_meet_group_qualify(player_curscore)
 
+    return true if player_curscore==0
+      
   	case self.scorelimitation
       when '無積分限制'
          return true
@@ -39,11 +41,12 @@ class Gamegroup < ActiveRecord::Base
         end  
         return playerlist
       when 'double'  
+      when 'team'  
     end
   end
 
   def findplayer(player_id)
-    binding.pry
+
     self.groupattendants.each do |attendrecord|
      return true if attendrecord.findplayer(player_id)  
     end 

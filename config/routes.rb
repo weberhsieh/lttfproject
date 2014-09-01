@@ -10,6 +10,7 @@ Lttfproject::Application.routes.draw do
           post :cancel_current_user_registration
           get :playerinput
           get :singleplayerinput
+          get :doubleplayersinput
           get :singlegroupregistration
         end  
 

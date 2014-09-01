@@ -95,9 +95,12 @@
        
          
 </td>     
-
-<td><%= button_to '幫他人報名', singleplayerinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
-                 
+<% case gamegroup.regtype %>
+  <% when "single" %>
+     <td><%= button_to '幫他人(整批)報名', singleplayerinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
+  <% when "double" %>
+       <td><%= button_to '幫他人(整批)報名', doubleplayersinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
+<%end%>                  
 </tr>
 </table>
 
@@ -120,7 +123,7 @@
         </tr>
       </thead>  
       <tbody>
-          <%binding.pry%>
+
           <tr>
           <% case gamegroup.regtype %>
             <% when "single" %>
@@ -134,7 +137,7 @@
                 <td>
                     <% if player.player_id==current_user.id ||  player.registor_id==current_user.id ||@holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser)   %>
                  
-                      <%= button_to '取消報名', cancel_current_user_registration_holdgame_gamegroups_path(@holdgame, gamegroup, :user_in_groupattendant=>user_in_group) ,  {:onclick => "return confirm('確定取消報名?')", :method => :post}  %>
+                      <%= button_to '取消報名', cancel_current_user_registration_holdgame_gamegroups_path(@holdgame, gamegroup, :user_in_groupattendant=>gamegroup.find_player_in_attendants(player.player_id)) ,  {:onclick => "return confirm('確定取消報名?')", :method => :post}  %>
                     <%end%>
                 </td>  
                 </tr> 

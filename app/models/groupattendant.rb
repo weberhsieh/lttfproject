@@ -4,17 +4,15 @@ class Groupattendant < ActiveRecord::Base
   has_many :attendants
   default_scope order('id ASC')
   def playerlist 
-      binding.pry
   	  @playerlist=self.attendants
       @playerlist
   end	
 
   def findplayer(player_id)
-      binding.pry
-   	  if self.playerlist.find_all{|v| v.player_id==player_id}
-   	    return true
+   	  if self.playerlist.find_all{|v| v.player_id==player_id}.empty?
+   	    return false
    	  else
-   	  	return false 
+   	  	return true
    	  end	
   end	
 
