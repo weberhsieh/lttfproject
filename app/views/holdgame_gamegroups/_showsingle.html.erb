@@ -95,12 +95,9 @@
        
          
 </td>     
-<% case gamegroup.regtype %>
-  <% when "single" %>
-     <td><%= button_to '幫他人(整批)報名', singleplayerinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
-  <% when "double" %>
-       <td><%= button_to '幫他人(整批)報名', doubleplayersinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
-<%end%>                  
+
+  <td><%= button_to '整批報名', singleplayerinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
+                
 </tr>
 </table>
 

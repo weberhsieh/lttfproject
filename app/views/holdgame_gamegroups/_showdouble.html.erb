@@ -85,22 +85,9 @@
      <td><%= button_to '刪除此分組', holdgame_gamegroup_path(@holdgame, gamegroup),
                               :method => :delete %></td>
   <% end %>                            
-
-<td>
-       
-
-  <% if !user_in_group && user_meet_group && gamegroup.regtype=='single'%>
-     <%= button_to '報名參賽',registration_holdgame_gamegroups_path(@holdgame,gamegroup),{:onclick => "return confirm('確定報名參賽?')", :method => :post}  %>
-  <%end%>   
-       
-         
-</td>     
-<% case gamegroup.regtype %>
-  <% when "single" %>
-     <td><%= button_to '幫他人(整批)報名', singleplayerinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
-  <% when "double" %>
-       <td><%= button_to '幫他人(整批)報名', doubleplayersinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
-<%end%>                  
+ 
+   <td><%= button_to '報名參賽', doubleplayersinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
+                 
 </tr>
 </table>
 
@@ -115,24 +102,32 @@
       <caption class="text-center" ><strong>已報名清單</strong></caption> 
 
         <thead>
-          <tr>
-          <th>報名序號</th>
-          <th>會員編號</th>
-          <th>會員姓名</th>
-          <th>目前積分</th>
-          <th></th>
-          </tr>
+         
+        <tr>
+        <th>序號</th>         
+        <th>會員編號</th>
+        <th>會員姓名</th>
+        <th>目前積分</th>
+        <th>會員編號</th>
+        <th>會員姓名</th>
+        <th>目前積分</th>
+        <th></th>
+         </tr>
         </thead>  
         <tbody>
 
           <tr>
-              <%  attendeearray.each_with_index do |player,serial| %> 
+              <%  attendeearray.each_with_index do |row_group,groupindex| %> 
               
-                <td><%= serial+1 %></td>
+               <td >第 <%= groupindex+1 %>隊</td>
               
-                <td><%= player.player_id %></td>
-                <td><%= player.name %></td>
-                <td><%= player.curscore %></td>
+                <%for player in row_group%>
+                         
+                <td> <%=  player.player_id  %></td>
+                <td> <%=  player.name  %></td>
+                <td> <%=  player.curscore %></td>
+                <%end%>
+                              
                 <td>
                     <% if player.player_id==current_user.id ||  player.registor_id==current_user.id ||@holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser)   %>
                  

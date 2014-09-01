@@ -163,13 +163,48 @@ def singlegroupregistration(group_id, playerids)
     #@targettabindex=@gamegroups.index(@curgroup)+1
     
 
-end  
+end 
+def doubleregistration(group_id, playerids)
+  
+  @curgroup=Gamegroup.find(group_id)
+  attendantrecord=@curgroup.groupattendants.build 
+  @playerlist=Array.new
+  @playerlist=User.find(playerids).in_groups_of(2) if playerids
+
+  Groupattendant.transaction do
+     
+    attendantrecord.regtype= @curgroup.regtype
+    attendantrecord.phone=current_user.phone
+    attendantrecord.registor_id=current_user.id
+    if attendantrecord.save
+      @playerlist.each do |players|
+        for player in players
+          attendant=attendantrecord.attendants.build
+          attendant.regtype=attendantrecord.regtype
+          attendant.phone=attendantrecord.phone
+          attendant.registor_id=attendantrecord.registor_id
+          attendant.player_id=player.id
+          attendant.name=player.username
+          attendant.email=player.email
+          attendant.curscore=player.playerprofile.curscore
+          attendant.save
+        end
+      end 
+    end
+   
+  end 
+
+    #@gamegroups = @holdgame.gamegroups
+    #@attendee=create_attendee_array(@gamegroups)
+    #@targettabindex=@gamegroups.index(@curgroup)+1
+    
+
+end   
 def cancel_current_user_registration
 
   @attendantrecord=Groupattendant.find(params[:user_in_groupattendant])
   @curgroup=@attendantrecord.gamegroup
-  @attendantrecord.attendants.delete_all
-  @attendantrecord.delete
+  @attendantrecord.destroy
     
   redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
 
@@ -218,7 +253,7 @@ def singleplayerinput
         else
           @newplayer=User.find_by_id(params[:keyword].to_i)  
         end  
-        binding.pry
+   
         if !@newplayer 
           flash[:notice] = "無此球友資料，請查明後再輸入!" 
     
@@ -240,6 +275,10 @@ def singleplayerinput
 end
 
 def get_inputplayer(playerlist,keyword)
+  if !keyword
+     flash[:notice]='因為是雙打賽,兩位球友資料皆不得有空白!請重新輸入!'
+     return nil
+  end
   reg = /^\d+$/
   if ! reg.match(keyword)
     @newplayer = User.where(:username=>keyword).first
@@ -266,18 +305,19 @@ end
 def doubleplayersinput
 
   if params[:registration]
-     singlegroupregistration(params[:format], params[:playerid].uniq)
+    doubleregistration(params[:format], params[:playerid].uniq)
      
                         
     elsif params[:quit]
       @curgroup=Gamegroup.find(params[:format])
     
     else #for "getplayerfromuser" and no name option
-      binding.pry
+
       @playerlist=Array.new
       @playerlist=User.find(params[:playerid].uniq) if params[:playerid]
       @curgamegroupid=params[:format]
       @curgroup=Gamegroup.find(params[:format])
+
       if(params[:keyword1] && params[:keyword2])
         @newplayer1=get_inputplayer(params[:playerid],params[:keyword1])
         @newplayer2=get_inputplayer(params[:playerid],params[:keyword2])
@@ -285,7 +325,10 @@ def doubleplayersinput
            @playerlist.push( @newplayer1)
            @playerlist.push( @newplayer2)
         end
-      end  
+     else
+ 
+      flash[:notice]='因為是雙打賽,輸入兩位球友資料皆不得有空白!請重新輸入' 
+     end  
     end 
     
     redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) if params[:registration] || params[:quit]      
