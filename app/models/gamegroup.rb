@@ -41,14 +41,17 @@ class Gamegroup < ActiveRecord::Base
         end  
         return playerlist
       when 'double' 
-
         playerlist=Array.new
         self.groupattendants.each do |attendrecord|
           playerlist=playerlist+attendrecord.attendants.in_groups_of(2) 
         end 
-
         return playerlist
-      when 'team'  
+      when 'team' 
+        playerlist=Array.new
+        self.groupattendants.each do |attendrecord|
+        playerlist=playerlist+attendrecord.attendants.in_groups_of(10,false) 
+        end 
+        return playerlist 
     end
   end
 

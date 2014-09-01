@@ -6,7 +6,7 @@ class HoldgameGamegroupsController < ApplicationController
 def index
 
   @gamegroups = @holdgame.gamegroups
-  if !params[:targroupid]
+  if !params[:targroupid] && !@gamegroups.empty?
     @targetgroup_id=@gamegroups.first.id
    
     #@gamegroup=@holdgame.gamegroups.first
@@ -129,21 +129,20 @@ def registration
    
     redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
 end  
-def singlegroupregistration(group_id, playerids)
+def singleregistration(group_id, playerids)
   
   @curgroup=Gamegroup.find(group_id)
-  attendantrecord=@curgroup.groupattendants.build 
+
   @playerlist=Array.new
   @playerlist=User.find(playerids) if playerids
 
   Groupattendant.transaction do
-     
-    attendantrecord.regtype= @curgroup.regtype
-    attendantrecord.attendee='(,'+current_user.id.to_s+','+current_user.username+','+current_user.email+','+''+')'
-    attendantrecord.phone=current_user.phone
-    attendantrecord.registor_id=current_user.id
-    if attendantrecord.save
-      @playerlist.each do |player|
+    @playerlist.each do |player| 
+      attendantrecord=@curgroup.groupattendants.build 
+      attendantrecord.regtype= @curgroup.regtype
+      attendantrecord.phone=player.phone
+      attendantrecord.registor_id=current_user.id
+      if attendantrecord.save
         attendant=attendantrecord.attendants.build
         attendant.regtype=attendantrecord.regtype
         attendant.phone=attendantrecord.phone
@@ -193,13 +192,48 @@ def doubleregistration(group_id, playerids)
     end
    
   end 
+end  
 
-    #@gamegroups = @holdgame.gamegroups
-    #@attendee=create_attendee_array(@gamegroups)
-    #@targettabindex=@gamegroups.index(@curgroup)+1
-    
+def teamregistration(group_id, playerids,teamname)
+  
+  @curgroup=Gamegroup.find(group_id)
+  attendantrecord=@curgroup.groupattendants.build 
+  @playerlist=Array.new
+  @playerlist=User.find(playerids).in_groups_of(10,false) if playerids
 
-end   
+  Groupattendant.transaction do
+     
+    attendantrecord.regtype= @curgroup.regtype
+    attendantrecord.phone=current_user.phone
+    attendantrecord.registor_id=current_user.id
+    attendantrecord.teamname=teamname
+    if attendantrecord.save
+      @playerlist.each do |players|
+        for player in players
+          attendant=attendantrecord.attendants.build
+          attendant.regtype=attendantrecord.regtype
+          attendant.phone=attendantrecord.phone
+          attendant.registor_id=attendantrecord.registor_id
+          attendant.teamname=attendantrecord.teamname
+          attendant.player_id=player.id
+          attendant.name=player.username
+          attendant.email=player.email
+          attendant.curscore=player.playerprofile.curscore
+          attendant.save
+        end
+      end 
+    end
+   
+  end 
+
+end  
+
+def cancel_player_registration
+    @attendantrecord=Groupattendant.find(params[:user_in_groupattendant])
+    @curgroup=@attendantrecord.gamegroup
+    @attendantrecord.destroy
+    redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
+end 
 def cancel_current_user_registration
 
   @attendantrecord=Groupattendant.find(params[:user_in_groupattendant])
@@ -232,6 +266,73 @@ def playerinput
 end
 def singleplayerinput
 
+  @playerlist=Array.new #to avoid pass nil array to view 
+  if params[:registration]
+     singleregistration(params[:format], params[:playerid].uniq)
+     
+                        
+    elsif params[:quit]
+      @curgroup=Gamegroup.find(params[:format])
+    
+    elsif params[:getplayerfromuser] 
+     
+      @curgamegroupid=params[:format]
+      @curgroup=Gamegroup.find(params[:format])
+      if params[:keyword] 
+        @newplayer=get_inputplayer(params[:playerid],params[:keyword])
+      
+        if @newplayer  
+           @playerlist.push(@newplayer)
+        end  
+      else
+        flash[:notice]='球友資料皆不得為空白!請重新輸入'
+      end 
+   
+    end 
+  redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) if params[:registration] || params[:quit]      
+end    
+def teamplayersinput
+
+  @playerlist=Array.new #to avoid pass nil array to view 
+  if params[:registration]
+    if params[:teamname]!=""
+      teamregistration(params[:format], params[:playerid].uniq, params[:teamname])
+    else
+       @playerlist=User.find(params[:playerid].uniq) if params[:playerid]
+       @curgroup=Gamegroup.find(params[:format])
+       flash[:notice]='隊名不得為空白!請重新輸入'
+    end 
+                        
+    elsif params[:quit]
+      @curgroup=Gamegroup.find(params[:format])
+    
+    elsif params[:getplayerfromuser] 
+      if !params[:playerid] || params[:playerid].length<10
+         @playerlist=User.find(params[:playerid].uniq) if params[:playerid]
+         @curgroup=Gamegroup.find(params[:format])
+         @teamname=params[:teamname]
+        if params[:keyword] 
+          @newplayer=get_inputplayer(params[:playerid],params[:keyword])
+      
+          if @newplayer  
+            @playerlist.push(@newplayer)
+          end  
+        else
+          flash[:notice]='球友資料皆不為空白!請重新輸入'
+        end 
+      else
+         @playerlist=User.find(params[:playerid].uniq) if params[:playerid]
+         @curgroup=Gamegroup.find(params[:format])
+         flash[:notice]='團隊球員不得超過10位!'
+      end  
+    end 
+    
+    redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) if (params[:registration]&&params[:teamname]!="")  || params[:quit]      
+end
+
+def singleplayerinput
+
+  @playerlist=Array.new #to avoid pass nil array to view 
   if params[:singleplayerregistration]
      singlegroupregistration(params[:format], params[:playerid].uniq)
      
@@ -239,43 +340,28 @@ def singleplayerinput
     elsif params[:quit]
       @curgroup=Gamegroup.find(params[:format])
     
-    else #for "getplayerfromuser" and no name option
+    elsif params[:getplayerfromuser] 
+      @playerlist=User.find(params[:playerid].uniq) if params[:playerid]
       @curgamegroupid=params[:format]
       @curgroup=Gamegroup.find(params[:format])
-      reg = /^\d+$/
-      @playerlist=Array.new
-      @playerlist=User.find(params[:playerid].uniq) if params[:playerid]
-      if(params[:keyword])
-          
-        if ! reg.match(params[:keyword])
-          @newplayer = User.where(:username=>params[:keyword]).first
-        else
-          @newplayer=User.find_by_id(params[:keyword].to_i)  
-        end  
-   
-        if !@newplayer 
-          flash[:notice] = "無此球友資料，請查明後再輸入!" 
-    
-        elsif(@curgroup.findplayer(@newplayer.id))
-          flash[:notice] = "此球友已經完成報名，請勿重覆報名!"
-
-        elsif params[:playerid] && params[:playerid].include?(@newplayer.id.to_s)
-          flash[:notice]="此球友已經輸入("+@newplayer.id.to_s+","+@newplayer.username+")，請勿重覆輸入!"
-        elsif !@curgroup.check_meet_group_qualify(@newplayer.playerprofile.curscore) 
-          flash[:notice] = "此球友不符合此分組參賽資格，無法報名此分組比賽!"  
-           
-        else   
+      if params[:keyword] 
+        @newplayer=get_inputplayer(params[:playerid],params[:keyword])
+      
+        if @newplayer  
            @playerlist.push(@newplayer)
         end  
-      end  
+      else
+        flash[:notice]='球友資料皆不為空白!請重新輸入'
+      end 
+   
     end 
     
     redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) if params[:singleplayerregistration] || params[:quit]      
 end
-
 def get_inputplayer(playerlist,keyword)
+
   if !keyword
-     flash[:notice]='因為是雙打賽,兩位球友資料皆不得有空白!請重新輸入!'
+     flash[:notice]='球友資料不得有空白!請重新輸入!'
      return nil
   end
   reg = /^\d+$/
@@ -293,8 +379,7 @@ def get_inputplayer(playerlist,keyword)
   elsif playerlist && playerlist.include?(@newplayer.id.to_s)
           flash[:notice]="此球友("+@newplayer.id.to_s+","+@newplayer.username+")已經輸入，請勿重覆輸入!"
   elsif !@curgroup.check_meet_group_qualify(@newplayer.playerprofile.curscore) 
-          flash[:notice] = "此球友("+@newplayer.id.to_s+","+@newplayer.username+","+@newpayer.playerprofile.curscore.to_s
-               +")不符合此分組參賽資格，無法報名此分組比賽!"  
+          flash[:notice] = "此球友("+@newplayer.id.to_s+","+@newplayer.username+","+@newplayer.playerprofile.curscore.to_s+ ")不符合此分組參賽資格，無法報名此分組比賽!"  
   else
     return @newplayer    
   end
@@ -302,7 +387,7 @@ def get_inputplayer(playerlist,keyword)
 end  
 
 def doubleplayersinput
-  
+   @playerlist=Array.new #to avoid pass nil array to view 
   if params[:registration]
     doubleregistration(params[:format], params[:playerid].uniq)
      
@@ -328,8 +413,7 @@ def doubleplayersinput
  
       flash[:notice]='因為是雙打賽,輸入兩位球友資料皆不得有空白!請重新輸入' 
       end  
-    else
-      @playerlist=Array.new   
+      
     end 
     
     redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) if params[:registration] || params[:quit]      

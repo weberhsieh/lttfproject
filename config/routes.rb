@@ -8,9 +8,11 @@ Lttfproject::Application.routes.draw do
         collection do
           post :registration
           post :cancel_current_user_registration
+          post :cancel_player_registration
           get :playerinput
           get :singleplayerinput
           get :doubleplayersinput
+          get :teamplayersinput
           get :singlegroupregistration
         end  
 

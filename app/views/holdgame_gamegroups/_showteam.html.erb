@@ -83,21 +83,11 @@
      <td><%= button_to '修改分組資料', edit_holdgame_gamegroup_path(@holdgame, gamegroup), :method=>:get %></td>
 
      <td><%= button_to '刪除此分組', holdgame_gamegroup_path(@holdgame, gamegroup),
-                              :method => :delete, data: { confirm: '確定刪除此分組資料?' } %></td>
+                              :method => :delete %></td>
   <% end %>                            
-
-<td>
-       
-
-  <% if !user_in_group && user_meet_group && gamegroup.regtype=='single'%>
-     <%= button_to '本人報名',registration_holdgame_gamegroups_path(@holdgame,gamegroup),{:onclick => "return confirm('確定報名參賽?')", :method => :post}  %>
-  <%end%>   
-       
-         
-</td>     
-
-  <td><%= button_to '整批報名', singleplayerinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
-                
+ 
+   <td><%= button_to '報名參賽', teamplayersinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
+                 
 </tr>
 </table>
 
@@ -112,31 +102,40 @@
       <caption class="text-center" ><strong>已報名清單</strong></caption> 
 
         <thead>
-          <tr>
-          <th>報名序號</th>
-          <th>會員編號</th>
-          <th>會員姓名</th>
-          <th>目前積分</th>
-          <th></th>
-          </tr>
+         
+        <tr>
+        <th>序號</th>         
+        <th>會員編號</th>
+        <th>會員姓名</th>
+        <th>目前積分</th>
+         </tr>
         </thead>  
         <tbody>
 
           <tr>
-              <%  attendeearray.each_with_index do |player,serial| %> 
+              <%  attendeearray.each_with_index do |row_group,groupindex| %> 
               
-                <td><%= serial+1 %></td>
-              
-                <td><%= player.player_id %></td>
-                <td><%= player.name %></td>
-                <td><%= player.curscore %></td>
-                <td>
-                    <% if player.player_id==current_user.id ||  player.registor_id==current_user.id ||@holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser)   %>
-                 
-                      <%= button_to '取消報名', cancel_player_registration_holdgame_gamegroups_path(@holdgame, gamegroup, :user_in_groupattendant=>gamegroup.find_player_in_attendants(player.player_id)) ,  {:onclick => "return confirm('確定取消報名?')", :method => :post}  %>
-                    <%end%>
+                <td colspan=4 > <%= row_group[0].teamname %></td>
+                </tr>
+                <% if row_group[0].registor_id==current_user.id ||@holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser)   %>
+                <td colspan=4 >
+ 
+                <%= button_to '取消報名', cancel_player_registration_holdgame_gamegroups_path(@holdgame, gamegroup, :user_in_groupattendant=>gamegroup.find_player_in_attendants(row_group[0].player_id)) ,  {:onclick => "return confirm('確定取消報名?')", :method => :post}  %>
+                   
                 </td>  
                 </tr> 
+                <%end%>
+               <% player_index=1 %>
+                <%for player in row_group%>
+                <td> <%=player_index %></td>         
+                <td> <%=  player.player_id  %></td>
+                <td> <%=  player.name  %></td>
+                <td> <%=  player.curscore %></td>
+                <% player_index+=1 %>
+                </tr>  
+                <%end%>
+                         
+
     
               <% end %>
         

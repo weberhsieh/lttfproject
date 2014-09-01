@@ -105,6 +105,8 @@
             <%= render :partial => "showsingle", :locals => { :gamegroup => gamegroup , :attendeearray =>  gamegroup.allgroupattendee, :user_registered=>@user_registered, :user_in_group => gamegroup.findplayer(current_user.id), :user_meet_group => gamegroup.check_meet_group_qualify(current_user.playerprofile.curscore)} %>
           <% when 'double' %>
             <%= render :partial => "showdouble", :locals => { :gamegroup => gamegroup , :attendeearray =>  gamegroup.allgroupattendee, :user_registered=>@user_registered, :user_in_group => gamegroup.findplayer(current_user.id), :user_meet_group => gamegroup.check_meet_group_qualify(current_user.playerprofile.curscore)} %>
+          <% when 'team' %>
+            <%= render :partial => "showteam", :locals => { :gamegroup => gamegroup , :attendeearray =>  gamegroup.allgroupattendee, :user_registered=>@user_registered, :user_in_group => gamegroup.findplayer(current_user.id), :user_meet_group => gamegroup.check_meet_group_qualify(current_user.playerprofile.curscore)} %>
           <%end%> 
 
           </div> 
