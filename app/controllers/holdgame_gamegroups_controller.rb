@@ -205,7 +205,6 @@ def cancel_current_user_registration
   @attendantrecord=Groupattendant.find(params[:user_in_groupattendant])
   @curgroup=@attendantrecord.gamegroup
   @attendantrecord.destroy
- b   
   redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
 
 end 
