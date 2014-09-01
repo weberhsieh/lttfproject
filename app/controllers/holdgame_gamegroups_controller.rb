@@ -205,7 +205,7 @@ def cancel_current_user_registration
   @attendantrecord=Groupattendant.find(params[:user_in_groupattendant])
   @curgroup=@attendantrecord.gamegroup
   @attendantrecord.destroy
-    
+ b   
   redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id})
 
 end 
@@ -303,7 +303,7 @@ def get_inputplayer(playerlist,keyword)
 end  
 
 def doubleplayersinput
-
+  
   if params[:registration]
     doubleregistration(params[:format], params[:playerid].uniq)
      
@@ -311,7 +311,7 @@ def doubleplayersinput
     elsif params[:quit]
       @curgroup=Gamegroup.find(params[:format])
     
-    else #for "getplayerfromuser" and no name option
+    elsif params[:getplayerfromuser] 
 
       @playerlist=Array.new
       @playerlist=User.find(params[:playerid].uniq) if params[:playerid]
@@ -325,10 +325,12 @@ def doubleplayersinput
            @playerlist.push( @newplayer1)
            @playerlist.push( @newplayer2)
         end
-     else
+      else
  
       flash[:notice]='因為是雙打賽,輸入兩位球友資料皆不得有空白!請重新輸入' 
-     end  
+      end  
+    else
+      @playerlist=Array.new   
     end 
     
     redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) if params[:registration] || params[:quit]      
