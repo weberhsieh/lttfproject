@@ -64,6 +64,7 @@ devise_for :users, :controllers => { :registrations => 'users/registrations' }
        post :approve
      end 
   end 
+  resources :gamesmaps
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
