@@ -137,11 +137,15 @@ function createSidebar(json_array){
   handler.fitMapToBounds();
   handler.getMap().setZoom(7);
   handler.map.centerOn({ lat: 24, lng: 120.5 }); 
-
+  var gamecount=0
   _.each(cities_arr, function(city, index){
     var city_courts=_.where(json_array, {city: city});
-    $('.collapsibleList').append("<li><strong><font color=\'blue\'>"+city+"("+city_courts.length+")"+"</font></strong><ul id=city"+ (index+1)+">");
-    createCollpasingSidebar(courts_array,city_courts,(index+1));
+    if(city_courts.length>0)
+    {  
+      $('.collapsibleList').append("<li><strong><font color=\'blue\'>"+city+"("+city_courts.length+")"+"</font></strong><ul id=city"+ (gamecount+1)+">");
+      createCollpasingSidebar(courts_array,city_courts,(gamecount+1));
+      gamecount++;
+    } 
   });
     
     CollapsibleLists.applyTo(document.getElementById('ttcourtslist'));

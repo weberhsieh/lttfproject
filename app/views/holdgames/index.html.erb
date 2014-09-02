@@ -43,12 +43,13 @@
               
 
 
-            <td><%= link_to_if( (current_user.has_role? :admin) || (current_user.has_role? :superuser)  || (current_user.id==holdgame.gameholder.user_id), '修改比賽資料',  edit_holdgame_path(holdgame) )%>
+            <td><%= link_to_if( current_user &&((current_user.has_role? :admin) || (current_user.has_role? :superuser)  || (current_user.id==holdgame.gameholder.user_id)), '修改比賽資料',  edit_holdgame_path(holdgame) )%>
             </td>
 
 
 
-            <td><%= link_to_if( (current_user.has_role? :admin) || (current_user.has_role? :superuser)  || (current_user.id==  holdgame.gameholder.user_id), '刪除此場比賽', holdgame, method: :delete, data: { confirm: '確定要刪除本場比賽資料?'}  ) %></td>
+            <td><%= link_to_if( current_user&& ((current_user.has_role? :admin) || (current_user.has_role? :superuser)  || (current_user.id==  holdgame.gameholder.user_id)), '刪除此場比賽', holdgame, method: :delete, data: { confirm: '確定要刪除本場比賽資料?'}  ) %></td>
+
             <td><%= link_to '比賽分組及報名', holdgame_gamegroups_path(holdgame) %>
             </td>
 
@@ -73,4 +74,4 @@
 
 
 
-<%= link_to_if((current_user.has_role? :admin) || (current_user.has_role? :superuser) || (current_user.has_role? :gameholder), '登錄新比賽', new_holdgame_path) %>
+<%= link_to_if(current_user && ((current_user.has_role? :admin) || (current_user.has_role? :superuser) || (current_user.has_role? :gameholder)), '登錄新比賽', new_holdgame_path) %>

@@ -85,9 +85,9 @@ function createSidebarLi(json){
 function createCollpasingSidebarLi(cur_court,json){
   
  return ("<li><font color=\'red\'>" + json.name +"</font><ul><li>"+ 
-           "所在地址:"+cur_court['address']+"</li><li>"+
            "比賽日期:"+cur_court['startdate']+"</li><li>"+
-           "比賽場地:"+cur_court['courtname']+"</li><li>"+
+           "比賽場地:"+cur_court['address']+"</li><li>"+
+           "比賽地地址:"+cur_court['courtname']+"</li><li>"+
            "比賽資訊:"+cur_court['gamenote']+"</li>"+
        "</ul></li>");
 };
@@ -101,12 +101,15 @@ function bindLiToMarker($li, marker){
 };
 
 function createCollpasingSidebar(courts_array,json_array,index){
- 
+
   _.each(json_array, function(json){
     var cur_court=_.findWhere(courts_array, {id: json.id});
-    if(cur_court!=null)
+
+    if(cur_court.length!=0)
     { 
+
     var $li = $( createCollpasingSidebarLi(cur_court,json) );
+
     var ul='city'+index;
     $("#city"+index).append($li);
     bindLiToMarker($li, json.marker);
@@ -127,7 +130,7 @@ function createSidebar(json_array){
   handler.buildMap({ provider: {auto_adjust:false}, internal: {id: 'map'}}, function(){
   var json_array= <%=raw @hash.to_json %>;
   var cities_arr= <%= raw @citiesarray %>
-  var courts_array =<%= raw @holdgames_hash_hash.to_json %>      
+  var courts_array =<%= raw @holdgames_hash.to_json %>      
   markers = handler.addMarkers(json_array);
   handler.bounds.extendWith(markers);
 
@@ -142,13 +145,15 @@ function createSidebar(json_array){
   var gamecount=0
   _.each(cities_arr, function(city, index){
     var city_courts=_.where(json_array, {city: city});
-    console.log(city_courts);
-    if(city_courts!=null)
+   
+    if(city_courts.length>0)
     {
-     $('.collapsibleList').append("<li><strong><font color=\'blue\'>"+city+"("+city_courts.length+")"+"</font></strong><ul id=city"+ (index+1)+">");
+     
+     $('.collapsibleList').append("<li><strong><font color=\'blue\'>"+city+"("+city_courts.length+")"+"</font></strong><ul id=city"+ (gamecount+1)+">");
      createCollpasingSidebar(courts_array,city_courts,(gamecount+1));
      gamecount++;
     }
+    
   });
     
     CollapsibleLists.applyTo(document.getElementById('gamesmaplist'));

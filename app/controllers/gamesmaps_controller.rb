@@ -21,10 +21,11 @@ class GamesmapsController < ApplicationController
                       })
        
       marker.title(holdgame.courtname)
-      marker.json({ :id => holdgame.id , :name=>holdgame.gamename+'('+holdgame.courtname+')', :city => holdgame.city })
+      marker.json({ :id => holdgame.id , :name=>holdgame.startdate.to_s+holdgame.gamename+'('+holdgame.courtname+')', :city => holdgame.city })
       @tempgame=Hash.new
       @tempgame['id']=holdgame.id
       @tempgame['gamename']=holdgame.gamename
+      @tempgame['courtname']=holdgame.courtname
       @tempgame['address']=holdgame.address
       @tempgame['startdate']=holdgame.startdate
       @tempgame['gamenote']=holdgame.gamenote

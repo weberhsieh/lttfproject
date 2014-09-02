@@ -1,6 +1,6 @@
 # encoding: UTF-8”
 class HoldgameGamegroupsController < ApplicationController
- before_filter :authenticate_user!, :except=>[:index,:teamplayersinput, :singleplayerinput, :doubleplayersinput, :cancel_player_registration]
+ before_filter :authenticate_user!, :except=>[:index,:teamplayersinput, :singleplayerinput, :doubleplayersinput, :cancel_player_registration, :update, :find_holdgame]
  layout :resolve_layout 
  before_filter :find_holdgame 
 

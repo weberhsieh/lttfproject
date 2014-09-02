@@ -19,9 +19,11 @@ class HoldgamesController < InheritedResources::Base
       end
   end 
   def new
-  
+   binding.pry
   	
-  	@holdgame = Holdgame.new(:gameholder_id => @cur_gameholder.id)
+  	#@holdgame = Holdgame.new(:gameholder_id => @cur_gameholder.id)
+    @holdgame=@cur_gameholder.holdgames.build
+    #@holdgame.url=holdgame_gamegroups_url(@holdgame)
   	 respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @holdgame }
@@ -35,8 +37,12 @@ class HoldgamesController < InheritedResources::Base
      end
   end	
   def create
+    binding.pry
+
   	@holdgame = Holdgame.new(params[:holdgame])
-  	@holdgame.gameholder_id=@cur_gameholder.id
+    @holdgame.gameholder_id=@cur_gameholder.id
+    @holdgame.url='LTTF'
+
   	respond_to do |format|
       if @holdgame.save
  
@@ -74,6 +80,7 @@ class HoldgamesController < InheritedResources::Base
   end
   private
   def find_gameholder
-  	@cur_gameholder= Gameholder.where( :user_id=> current_user.id  ).first
+
+  	@cur_gameholder= Gameholder.where( :user_id=> current_user.id  ).first if current_user
   end	
 end

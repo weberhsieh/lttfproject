@@ -63,18 +63,8 @@
  
 <div class="col-md-12">
    
-<% @gamegroups.each do |gamegroup| %>
-	<li>
-	  <%= gamegroup.groupname %>
-	  <%= link_to 'show', holdgame_gamegroup_path(@holdgame,gamegroup) %>
-	  <%= link_to 'edit', edit_holdgame_gamegroup_path(@holdgame, gamegroup) %>
-	  <%= link_to 'destroy', holdgame_gamegroup_path(@holdgame, gamegroup),
-	                            :method => :delete %>
-    <td><!%= link_to 'gameplayers', holdgame_gamegroup_gameplayers_path(@holdgame,gamegroup) %></td>
-	</li>
-<% end %>
-
- <% if @holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser)   %>
+ 
+ <% if current_user && ( @holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser) )  %>
    <%= button_to '新增比賽分組', new_holdgame_gamegroup_path(@holdgame), :method => :get  %>
  <%end%>  
 <!%= link_to 'new game', new_holdgame_gamegroup_path(@holdgame) %>
@@ -102,13 +92,22 @@
           <% else %>
             <div class="tab-pane" id="<%= 'tab'+ (tabindex+1).to_s %>" >
           <% end  %>   
+          <% if !current_user %>
+            <% @user_registered=false %>
+            <% @user_in_group=false %>
+            <% @user_meet_group=false %>
+          <% else %>
+            <% @user_in_group=gamegroup.findplayer(current_user.id) %>
+            <% @user_meet_group=gamegroup.check_meet_group_qualify(current_user.playerprofile.curscore) %>
+          <% end %>  
+
           <%case gamegroup.regtype %>
           <% when 'single' %>
-            <%= render :partial => "showsingle", :locals => { :gamegroup => gamegroup , :attendeearray =>  gamegroup.allgroupattendee, :user_registered=>@user_registered, :user_in_group => gamegroup.findplayer(current_user.id), :user_meet_group => gamegroup.check_meet_group_qualify(current_user.playerprofile.curscore)} %>
+            <%= render :partial => "showsingle", :locals => { :gamegroup => gamegroup , :attendeearray =>  gamegroup.allgroupattendee, :user_registered=>@user_registered, :user_in_group => @user_in_group, :user_meet_group => @user_meet_group} %>
           <% when 'double' %>
-            <%= render :partial => "showdouble", :locals => { :gamegroup => gamegroup , :attendeearray =>  gamegroup.allgroupattendee, :user_registered=>@user_registered, :user_in_group => gamegroup.findplayer(current_user.id), :user_meet_group => gamegroup.check_meet_group_qualify(current_user.playerprofile.curscore)} %>
+            <%= render :partial => "showdouble", :locals => { :gamegroup => gamegroup , :attendeearray =>  gamegroup.allgroupattendee, :user_registered=>@user_registered, :user_in_group =>@user_in_group, :user_meet_group =>@user_meet_group} %>
           <% when 'team' %>
-            <%= render :partial => "showteam", :locals => { :gamegroup => gamegroup , :attendeearray =>  gamegroup.allgroupattendee, :user_registered=>@user_registered, :user_in_group => gamegroup.findplayer(current_user.id), :user_meet_group => gamegroup.check_meet_group_qualify(current_user.playerprofile.curscore)} %>
+            <%= render :partial => "showteam", :locals => { :gamegroup => gamegroup , :attendeearray =>  gamegroup.allgroupattendee, :user_registered=>@user_registered, :user_in_group => @user_in_group, :user_meet_group =>@user_meet_group} %>
           <%end%> 
 
           </div> 

@@ -1,10 +1,11 @@
 <div class="wrapper">
-  <p align=center><strong><%= holdgame.gamename %></strong><br></p>
-  比賽場地：<%=holdgame.courtname %><br>
-  比賽地址：<%=holdgame.address %><br>
-  開始日期：<%=holdgame.startdate %><br>
-  主辦人：  <%=holdgame.gameholder.name %><br>
-  贊助單位：<%=holdgame.gameholder.sponsor %><br>
-  比賽資訊：<%=holdgame.gamenote %><br>
-  
+  <p align=center> <font color ='blue'><strong><%=holdgame.startdate %><%= holdgame.gamename %></strong></font><br></p>
+  <font color ='blue'>比賽場地：<%=holdgame.courtname %></font><br>
+   <font color ='blue'>比賽地址：<%=holdgame.address %></font><br>
+   <font color ='blue'>開始日期：<%=holdgame.startdate %></font><br>
+   <font color ='blue'>主辦人：  <%=holdgame.gameholder.name %></font><br>
+   <font color ='blue'>贊助單位：<%=holdgame.gameholder.sponsor %></font><br>
+   <font color ='blue'>比賽資訊：<%=holdgame.gamenote %></font><br>
+
+   <font color ='blue'>報名網址:</font> <%= link_to_if(holdgame.url=='LTTF', holdgame.gamename, holdgame_gamegroups_url(holdgame) ,style: 'color:#FF11FF;') %>
  </div>

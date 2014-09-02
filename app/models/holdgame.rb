@@ -1,6 +1,6 @@
 class Holdgame < ActiveRecord::Base
   attr_accessible :enddate, :gameholder_id, :gamename, :gamenote, :gametype, :startdate 
-  attr_accessible :city, :county, :address, :zipcode, :courtname, :lat, :lng
+  attr_accessible :city, :county, :address, :zipcode, :courtname, :lat, :lng, :url
   belongs_to :gameholder
   has_many :gamegroups , dependent: :destroy
   after_commit :assign_informs_from_holder
@@ -12,6 +12,6 @@ class Holdgame < ActiveRecord::Base
   	self.zipcode=self.gameholder.zipcode
   	self.lat=self.gameholder.lat
     self.lng=self.gameholder.lng
-  	self.save
+   	self.save
   end	
 end

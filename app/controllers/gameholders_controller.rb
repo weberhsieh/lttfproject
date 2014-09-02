@@ -92,6 +92,7 @@ class GameholdersController < InheritedResources::Base
     @countiesarray=TWZipCode_hash[@gameholder.city].keys
     @areacourts=@ttcourts.find_all{|v| (v["city"]==@citiesarray[0])&&(v["county"]==@countiesarray[0])}
     gon.areacourts=@ttcourts   
+    gon.twzipecode=TWZipCode_hash
     gon.lat=@gameholder.lat
     gon.lng=@gameholder.lng
   end

@@ -81,11 +81,7 @@
 
 
 </div>
- <%= link_to 'show', holdgame_gamegroup_path(@holdgame,gamegroup) %>
-         <%= link_to 'edit', edit_holdgame_gamegroup_path(@holdgame, gamegroup) %>
-         <%= link_to 'destroy', holdgame_gamegroup_path(@holdgame, gamegroup),
-                      :method => :delete %>  
-              
+
 
 
 
@@ -94,15 +90,15 @@
 
 <table width="100">
 <tr>
-  <% if @holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser)   %>
+  <% if current_user && (@holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser) )  %>
      <td><%= button_to '修改分組資料', edit_holdgame_gamegroup_path(@holdgame, gamegroup), :method=>:get %></td>
 
      <td><%= button_to '刪除此分組', holdgame_gamegroup_path(@holdgame, gamegroup),
                               :method => :delete %></td>
   <% end %>                            
- 
+  <% if current_user %>
    <td><%= button_to '報名參賽', teamplayersinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
-                 
+  <% end %>               
 </tr>
 </table>
 
