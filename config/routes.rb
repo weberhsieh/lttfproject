@@ -14,6 +14,7 @@ Lttfproject::Application.routes.draw do
           get :doubleplayersinput
           get :teamplayersinput
           get :singlegroupregistration
+          put :update
         end  
 
       end

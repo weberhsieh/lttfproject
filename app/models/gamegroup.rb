@@ -25,7 +25,7 @@ class Gamegroup < ActiveRecord::Base
          return true
       when '限制高低分'
        return( (player_curscore >= self.scorelow) &&
-                                        (player_curscore<=self.scorehigh) )
+            (player_curscore<=self.scorehigh) )
       when '限制最高分'
          return (player_curscore<=self.scorehigh) 
       when '限制最低分'                                    
@@ -61,5 +61,10 @@ class Gamegroup < ActiveRecord::Base
      return true if attendrecord.findplayer(player_id)  
     end 
     false 
+  end
+  def totalresgisteredsplayersno
+   
+    return self.groupattendants.length
+     
   end
 end

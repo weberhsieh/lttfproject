@@ -15,7 +15,7 @@ class HoldgamesController < InheritedResources::Base
   	  @holdgame= Holdgame.find(params[:id])
   	  respond_to do |format|
         format.html # show.html.erb
-        format.json { render json: @gameholder}
+        format.json { render json:@holdgame}
       end
   end 
   def new
@@ -31,7 +31,7 @@ class HoldgamesController < InheritedResources::Base
   	 @holdgame = Holdgame.find(params[:id])
   	 respond_to do |format|
        format.html # show.html.erb
-       format.json { render json: @gameholder}
+       format.json { render json: @holdgame}
      end
   end	
   def create
@@ -46,7 +46,7 @@ class HoldgamesController < InheritedResources::Base
         flash[:notice] = "比賽資料建檔資料失敗!"
 
         format.html { render action: "new", notice: '比賽資料建檔資料失敗，請跟管理員連絡辦理!' }
-        format.json { render json: @gameholder.errors, status: :unprocessable_entity }
+        format.json { render json: @holdgame.errors, status: :unprocessable_entity }
       end
     end
   end	
@@ -54,7 +54,7 @@ class HoldgamesController < InheritedResources::Base
   def update
     @holdgame = Holdgame.find(params[:id])
     respond_to do |format|
-      if @gameholder.update_attributes(params[:holdgame])
+      if @holdgame.update_attributes(params[:holdgame])
         format.html { redirect_to @holdgame, notice: '資料修改成功.' }
         format.json { head :no_content }
       else
@@ -65,10 +65,6 @@ class HoldgamesController < InheritedResources::Base
   end
   def destroy
     @holdgame = Holdgame.find(params[:id])
-    @holdgame.gamegroups.each do |gamegroup|
-      gamegroup.groupattendants.delete_all
-    end  
-    @holdgame.gamegroups.delete_all
     @holdgame.destroy
 
     respond_to do |format|

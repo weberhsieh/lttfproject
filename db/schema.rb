@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140831120348) do
+ActiveRecord::Schema.define(:version => 20140902065831) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "namespace"
@@ -107,6 +107,13 @@ ActiveRecord::Schema.define(:version => 20140831120348) do
     t.text     "gamenote"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.text     "address"
+    t.string   "city"
+    t.string   "county"
+    t.string   "zipcode"
+    t.string   "courtname"
+    t.float    "lat"
+    t.float    "lng"
   end
 
   create_table "playerprofiles", :force => true do |t|

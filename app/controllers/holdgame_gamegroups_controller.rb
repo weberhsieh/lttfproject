@@ -1,5 +1,6 @@
 # encoding: UTF-8”
 class HoldgameGamegroupsController < ApplicationController
+ before_filter :authenticate_user!, :except=>[:index,:teamplayersinput, :singleplayerinput, :doubleplayersinput, :cancel_player_registration]
  layout :resolve_layout 
  before_filter :find_holdgame 
 
@@ -264,35 +265,9 @@ def playerinput
   
     
 end
-def singleplayerinput
-
-  @playerlist=Array.new #to avoid pass nil array to view 
-  if params[:registration]
-     singleregistration(params[:format], params[:playerid].uniq)
-     
-                        
-    elsif params[:quit]
-      @curgroup=Gamegroup.find(params[:format])
-    
-    elsif params[:getplayerfromuser] 
-     
-      @curgamegroupid=params[:format]
-      @curgroup=Gamegroup.find(params[:format])
-      if params[:keyword] 
-        @newplayer=get_inputplayer(params[:playerid],params[:keyword])
-      
-        if @newplayer  
-           @playerlist.push(@newplayer)
-        end  
-      else
-        flash[:notice]='球友資料皆不得為空白!請重新輸入'
-      end 
-   
-    end 
-  redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) if params[:registration] || params[:quit]      
-end    
+ 
 def teamplayersinput
-
+  flash.clear
   @playerlist=Array.new #to avoid pass nil array to view 
   if params[:registration]
     if params[:teamname]!=""
@@ -331,10 +306,10 @@ def teamplayersinput
 end
 
 def singleplayerinput
-
+  flash.clear
   @playerlist=Array.new #to avoid pass nil array to view 
-  if params[:singleplayerregistration]
-     singlegroupregistration(params[:format], params[:playerid].uniq)
+  if params[:registration]
+     singleregistration(params[:format], params[:playerid].uniq)
      
                         
     elsif params[:quit]
@@ -356,7 +331,7 @@ def singleplayerinput
    
     end 
     
-    redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) if params[:singleplayerregistration] || params[:quit]      
+    redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@curgroup.id}) if params[:registration] || params[:quit]      
 end
 def get_inputplayer(playerlist,keyword)
 
@@ -387,7 +362,8 @@ def get_inputplayer(playerlist,keyword)
 end  
 
 def doubleplayersinput
-   @playerlist=Array.new #to avoid pass nil array to view 
+  flash.clear
+  @playerlist=Array.new #to avoid pass nil array to view 
   if params[:registration]
     doubleregistration(params[:format], params[:playerid].uniq)
      
@@ -445,17 +421,17 @@ end
 
 def edit
 
-  
   @gamegroup = @holdgame.gamegroups.find( params[:id] )
 end
 
 def update
-  @gamegroup = @holdgame.gamegroups.find( params[:id] )
+
+  @gamegroup = @holdgame.gamegroups.find( params[:format] )
 
   if @gamegroup.update_attributes( params[:gamegroup] )
     redirect_to  holdgame_gamegroups_path(@holdgame, {:targroupid=>@gamegroup.id}) 
   else
-    render :action => :new
+    render :action => :edit
   end
 
 end
@@ -473,9 +449,9 @@ protected
 def find_holdgame
   @holdgame = Holdgame.find( params[:holdgame_id] )
   @gameholder=Gameholder.find( @holdgame.gameholder_id)
-  gon.lat=@gameholder.lat
-  gon.lng=@gameholder.lng
-  gon.courtname=@gameholder.courtname+'--['+@gameholder.address+']'
+  gon.lat=@holdgame.lat
+  gon.lng=@holdgame.lng
+  gon.courtname=@holdgame.courtname+'--['+@holdgame.address+']'
 end
 def resolve_layout
     case action_name

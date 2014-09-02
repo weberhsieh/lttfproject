@@ -23,7 +23,7 @@
               <% if current_user &&((current_user.has_role? :admin)||(current_user.has_role? :superuser)||(current_user.has_role? :gameholder)) %>
                 <li><%= link_to '積分賽成績作業', uploadgames_path %></li>
                 <li><%= link_to '參賽名單整理', googleplayerlist_playerprofiles_path %></li>
-               
+                <li><%= link_to '比賽登錄及管理', holdgames_path %></li>
               <%end%>
               <% if current_user %>
                 <li><%= link_to '主辦人相關資料處理及主辦人申請', gameholders_path %></li>

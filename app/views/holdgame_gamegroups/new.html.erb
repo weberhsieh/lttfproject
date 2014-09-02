@@ -50,14 +50,7 @@
                 <%= f.number_field :noofplayers , :required => true , :class => "form-control" %>
               </div>
             </div>
-            <div class="form-group">
-              <div class="col-xs-12 col-md-12 col-lg-12">
-                <%= f.label "備取人數:", :class => "form-label" %>
-                <%= f.number_field :noofbackupplayers , :required => true, :class => "form-control" %>
-
-              </div>
-            </div>
-            <br>
+             <br>
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
                 <%= f.label "比賽制度:", :class => "form-label" %>
@@ -157,7 +150,7 @@ $("#gamegroup_starttime").datetimepicker({dateFormat:"yy-mm-dd",
 <script type="text/javascript">
 function toggleSelect()
 {
- console.log("toogle");
+ 
 if (document.getElementById("gamegroup_scorelimitation").value == '限制最高分')
 {
    document.getElementById("gamegroup_scorelow").style.display="none";

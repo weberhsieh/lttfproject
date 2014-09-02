@@ -1,10 +1,8 @@
-<div class="top-buffer">
-</div>  
 
 <div class="row">
    <div class="col-xs-8 col-md-8 col-lg-8">
     <div style="margin-top:20px">
-      <div class="pull-right"><h3><font color="blue">桌球愛好者聯盟比賽舉辦登錄系統</font></h3></div>
+     <h2><font color="blue">桌球愛好者聯盟比賽登錄及報名系統</font></h2>
     </div>
   </div>
   <div class="col-md-4">
@@ -26,7 +24,6 @@
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -37,15 +34,24 @@
                 <td><%= holdgame.gameholder.courtname %></td>
                 <td><%= holdgame.gameholder.name %></td>
                 <td>
-                  <p style="white-space: pre-line ;width:200px ;background:#0ff">
+                  <p style="white-space: pre-line ;width:auto; text-align:justify ">
                     <%= holdgame.gamenote %>
                   </p>
                 </td>
              
-                <td><%= link_to 'Show', holdgame %></td>
-                <td><%= link_to 'Edit', edit_holdgame_path(holdgame) %></td>
-                <td><%= link_to 'Destroy', holdgame, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-                <td><%= link_to 'gamegroups', holdgame_gamegroups_path(holdgame) %></td>
+               
+              
+
+
+            <td><%= link_to_if( (current_user.has_role? :admin) || (current_user.has_role? :superuser)  || (current_user.id==holdgame.gameholder.user_id), '修改比賽資料',  edit_holdgame_path(holdgame) )%>
+            </td>
+
+
+
+            <td><%= link_to_if( (current_user.has_role? :admin) || (current_user.has_role? :superuser)  || (current_user.id==  holdgame.gameholder.user_id), '刪除此場比賽', holdgame, method: :delete, data: { confirm: '確定要刪除本場比賽資料?'}  ) %></td>
+            <td><%= link_to '比賽分組及報名', holdgame_gamegroups_path(holdgame) %>
+            </td>
+
             </tr>
           <% end %>
         </tbody>
@@ -67,4 +73,4 @@
 
 
 
-<%= link_to 'New Holdgame', new_holdgame_path %>
+<%= link_to_if((current_user.has_role? :admin) || (current_user.has_role? :superuser) || (current_user.has_role? :gameholder), '登錄新比賽', new_holdgame_path) %>
