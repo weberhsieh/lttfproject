@@ -19,7 +19,6 @@ class HoldgamesController < InheritedResources::Base
       end
   end 
   def new
-   binding.pry
   	
   	#@holdgame = Holdgame.new(:gameholder_id => @cur_gameholder.id)
     @holdgame=@cur_gameholder.holdgames.build
@@ -37,11 +36,10 @@ class HoldgamesController < InheritedResources::Base
      end
   end	
   def create
-    binding.pry
 
   	@holdgame = Holdgame.new(params[:holdgame])
     @holdgame.gameholder_id=@cur_gameholder.id
-    @holdgame.url='LTTF'
+    @holdgame.lttfgameflag =true
 
   	respond_to do |format|
       if @holdgame.save

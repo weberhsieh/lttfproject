@@ -7,7 +7,7 @@ class GamesmapsController < ApplicationController
   def index
     @citiesarray=TWZipCode_hash.keys
 
-    @holdgames=Holdgame.all
+    @holdgames=Holdgame.forgamesmaps.where("startdate >= ? ", Time.zone.now.to_date)
     @holdgames_hash=Array.new
     @hash  = Gmaps4rails.build_markers @holdgames do |holdgame, marker|
       marker.lat(holdgame.lat)
@@ -28,6 +28,9 @@ class GamesmapsController < ApplicationController
       @tempgame['courtname']=holdgame.courtname
       @tempgame['address']=holdgame.address
       @tempgame['startdate']=holdgame.startdate
+      @tempgame['name']=holdgame.contact_name
+      @tempgame['phone']=holdgame.contact_phone
+      @tempgame['email']=holdgame.contact_email
       @tempgame['gamenote']=holdgame.gamenote
       @holdgames_hash.push( @tempgame)
     end
@@ -61,6 +64,31 @@ class GamesmapsController < ApplicationController
     
     gon.countiesarray=@countiesarray
     gon.twzipecode=TWZipCode_hash
+
+   
+    @citiesarray=TWZipCode_hash.keys
+    @countiesarray=TWZipCode_hash[@citiesarray[0]].keys
+    gon.lat=24
+    gon.lng=120.5
+    gon.citiesarray=@citiesarray
+    gon.areacourts=@ttcourts
+    @ttcourts = Ttcourt.all 
+    gon.ttcourts=@ttcourts
+    @ttcourts_hash=Array.new
+    @ttcourts.each do |ttcourt|
+      @tempcourt=Hash.new
+      @tempcourt['id']=ttcourt.id
+      @tempcourt['placename']=ttcourt.placename
+      @tempcourt['address']=ttcourt.address
+      @tempcourt['lat']=ttcourt.lat
+      @tempcourt['lng']=ttcourt.lng
+      @ttcourts_hash.push(@tempcourt)
+    end  
+
+    @areacourts=@ttcourts.find_all{|v| (v["city"]==@citiesarray[0])&&(v["county"]==@countiesarray[0])}
+
+ 
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @holdgame }
@@ -74,23 +102,43 @@ class GamesmapsController < ApplicationController
     @holdgame = Holdgame.find(params[:id])
     @citiesarray=TWZipCode_hash.keys
     gon.citiesarray=@citiesarray
-    @countiesarray=TWZipCode_hash[@ttcourt.city].keys
+    @countiesarray=TWZipCode_hash[@holdgame.city].keys
     gon.countiesarray=@countiesarray
     gon.twzipecode=TWZipCode_hash
     gon.lat=@holdgame.lat
     gon.lng=@holdgame.lng
+    gon.citiesarray=@citiesarray
+    @ttcourts = Ttcourt.all 
+    gon.areacourts=@ttcourts
+
+    gon.ttcourts=@ttcourts
+    @ttcourts_hash=Array.new
+    @ttcourts.each do |ttcourt|
+      @tempcourt=Hash.new
+      @tempcourt['id']=ttcourt.id
+      @tempcourt['placename']=ttcourt.placename
+      @tempcourt['address']=ttcourt.address
+      @tempcourt['lat']=ttcourt.lat
+      @tempcourt['lng']=ttcourt.lng
+      @ttcourts_hash.push(@tempcourt)
+    end  
+
+    @areacourts=@ttcourts.find_all{|v| (v["city"]==@citiesarray[0])&&(v["county"]==@countiesarray[0])}
   end
 
   # POST /ttcourts
   # POST /ttcourts.json
   def create
-    @holdgame = Holdgame.new(params[:holdgame])
 
+    @holdgame = Holdgame.new(params[:holdgame])
+    @holdgame.gameholder_id = current_user.id #use this field for uploder id not real gameholder_id
+    @holdgame.lttfgameflag = false
     respond_to do |format|
       if @holdgame.save
-        format.html { redirect_to @holdgame, notice: @holdgame.gamename+'資料新增成功!' }
-        format.json { render json: @holdgame, status: :created, location: @holdgame }
+        format.html { redirect_to  gamesmaps_path, notice: @holdgame.gamename+'資料新增成功!' }
+        format.json { render json: gamesmaps_path, status: :created, location: @holdgame }
       else
+        
         format.html { render action: "new" }
         format.json { render json:@holdgame.errors, status: :unprocessable_entity }
       end
@@ -101,10 +149,11 @@ class GamesmapsController < ApplicationController
   # PUT /ttcourts/1.json
   def update
     @holdgame = Holdgame.find(params[:id])
-
+    @hodgame.gameholder_id = current_user.id #use this field for uploder id not real gameholder_id
+    @holdgame.lttfgameflag = false
     respond_to do |format|
-      if @ttcourt.update_attributes(params[:holdgame])
-        format.html { redirect_to @holdgame, notice: @holdgame.gamename+'資料更新成功!' }
+      if @holdgame.update_attributes(params[:holdgame])
+        format.html { redirect_to  gamesmaps_path, notice: @holdgame.gamename+'資料更新成功!' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -132,7 +181,7 @@ class GamesmapsController < ApplicationController
     when "index" 
       "gamesmaplayout"
     when "edit" ,"new"
-      "gmapedit"  
+      "gamesmapedit"  
     else
       "application"
     end
