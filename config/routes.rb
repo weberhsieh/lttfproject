@@ -15,6 +15,7 @@ Lttfproject::Application.routes.draw do
           get :teamplayersinput
           get :singlegroupregistration
           put :update
+          get :groupdumptoxls
          end  
 
       end

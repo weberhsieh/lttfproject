@@ -5,7 +5,7 @@ class Holdgame < ActiveRecord::Base
   has_many :gamegroups , dependent: :destroy
   after_commit :assign_informs_from_holder
   scope :forgamesmaps, order(' zipcode ASC , startdate ASC ')
-  default_scope order('startdate ASC , zipcode ASC ')
+  default_scope  order('startdate ASC , zipcode ASC ')
   def assign_informs_from_holder
 
     if self.lttfgameflag

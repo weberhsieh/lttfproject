@@ -5,7 +5,7 @@ class HoldgamesController < InheritedResources::Base
   before_filter :find_gameholder
   
   def index
-    @holdgames=Holdgame.includes(:gameholder).where(:lttfgameflag=>true).page(params[:page]).per(50)
+    @holdgames=Holdgame.includes(:gameholder).where(:lttfgameflag=>true).where("startdate >= ? ", Time.zone.now.to_date-30).page(params[:page]).per(50)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @holdgames }

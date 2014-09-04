@@ -136,7 +136,7 @@ function deleteMarkers() {
 }
 
 function codeAddress() {
-    console.log('into codeAddress');
+
     var address = document.getElementById("ttcourt_address").value;
     geocoder.geocode( { 'address': address}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
@@ -191,7 +191,7 @@ alert('Cannot determine address at this location.');
 function addresschange() 
 {
   codeAddress();
-  console.log('addresschange'+gon.lat+gon.lng);
+
   document.getElementById("ttcourt_lat").value=gon.lat;
   document.getElementById("ttcourt_lng").value=gon.lng;
 }

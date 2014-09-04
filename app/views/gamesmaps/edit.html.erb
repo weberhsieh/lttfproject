@@ -31,7 +31,7 @@
         <div style="padding-top:30px" class="panel-body" >
  
     
-           <%= form_for(@holdgame, :url =>@holdgame,:html =>{:class =>"form-horizontal form-inline",:role =>"form" },method: :put ) do |f| %>
+           <%= form_for(@holdgame, :url =>@holdgame,:html =>{:class =>"form-horizontal",:role =>"form" },method: :put ) do |f| %>
 
             <% if @holdgame.errors.any? %>
               <div id="error_explanation">
@@ -51,20 +51,6 @@
               </div>
             </div>
             <br>
-            <div class="form-group">
-              <div class="col-xs-12 col-md-12 col-lg-12">
-                <%= f.label '比賽類型:' %>
-                <%= f.select :gametype, ['桌盟積分賽','桌盟團體友誼賽','桌盟雙打友誼賽','桌盟個人友誼賽','業餘桌球好手之家積分賽','鄉鎮級錦標賽','縣市級錦標賽','全國性錦標賽','國際性比賽','裁判及教練講習','桌球訓練營隊','其他賽事或活動'] ,:required => true,:size=>"50" %>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <div class="col-xs-12 col-md-12 col-lg-12">
-                <%= f.label '比賽場地:' %>
-                <%= f.text_field :courtname ,:size=>"50",:required => true %>
-              </div>
-            </div>
-
 
             <div class="form-group">
               <div class="col-xs-12 col-md-12 col-lg-12">
@@ -72,6 +58,16 @@
                 <%= f.text_field :startdate ,:required => true,:size=>"50" %>
               </div>
             </div>
+
+            <div class="form-group">
+              <div class="col-xs-12 col-md-12 col-lg-12">
+                <%= f.label '比賽類型:' %>
+                <%= f.select :gametype, ['桌盟積分賽','桌盟團體友誼賽','桌盟雙打友誼賽','桌盟個人友誼賽','業餘桌球好手之家積分賽','鄉鎮級錦標賽','縣市級錦標賽','全國性錦標賽','國際性比賽','裁判及教練講習','桌球訓練營隊','其他賽事或活動'] ,:required => true,:size=>"50" %>
+              </div>
+            </div>
+
+
+
 
             <div class="col-xs-10 col-md-10 col-lg-10"></br></div>
             <div class="form-group">
@@ -95,6 +91,13 @@
                   <a href="#" class="btn btn-lg btn-info" data-toggle="modal" data-target="#myMapModal">從打桌球地圖上的場地挑選</a>
                   </p>
               </div>    
+
+            <div class="form-group">
+              <div class="col-xs-12 col-md-12 col-lg-12">
+                <%= f.label '比賽場地:' %>
+                <%= f.text_field :courtname ,:size=>"50",:required => true %>
+              </div>
+            </div>
 
             <div class="col-xs-12 col-md-10 col-lg-10"></br></div>
             <div class="form-group">
@@ -252,7 +255,7 @@ $("#holdgame_endtime").datetimepicker({dateFormat:"yy-mm-dd",
 </script>
 <script type="text/javascript">
 $(document).on("click", "#btn", function(event){
-  console.log("btn click");
+
   var cCourtname=document.getElementById("area_courts"); 
   areacourtsChange(cCourtname);
 });

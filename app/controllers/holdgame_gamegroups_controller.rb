@@ -369,7 +369,17 @@ def destroy
 
   redirect_to holdgame_gamegroups_url( @holdgame )
 end
+def groupdumptoxls
 
+   @gamegroup = @holdgame.gamegroups.find( params[:gamegroup_id] )
+   @groupttendee= @gamegroup.groupattendants
+   @attendee =@gamegroup.allgroupattendee
+   filename=@holdgame.gamename+@gamegroup.groupname
+   headers["Content-Disposition"] = "attachment; filename=\"#{filename}.xls\"" 
+   respond_to do |format|
+     format.xls 
+  end
+end  
 protected
 
 def find_holdgame

@@ -98,7 +98,8 @@
   <% end %>                            
   <% if current_user %>
    <td><%= button_to '報名參賽', teamplayersinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
-  <% end %>               
+  <% end %>  
+  <td>  <%= link_to "輸出到excel", groupdumptoxls_holdgame_gamegroups_path(@holdgame,:gamegroup_id=>gamegroup.id,format: "xls") %></td>             
 </tr>
 </table>
 
@@ -109,7 +110,7 @@
 <br>
 
 <div class="table-responsive datagrid">
-    <table class="datatable table-striped" border=1 link=blue>
+    <table class="datatable " border=1 link=blue>
       <caption class="text-center" ><strong>已報名清單</strong></caption> 
 
         <thead>
@@ -139,11 +140,7 @@
                 <%end%>
 
                 <% player_index=1 %>
-                <% if groupindex+1 >gamegroup.totalresgisteredsplayersno %>
-                <tr class="danger">
-                <%else%>
-                <tr>
-                <%end%>
+              
                 <%for player in row_group%>
                 <td> <%=  player_index %></td>         
                 <td> <%=  player.player_id  %></td>

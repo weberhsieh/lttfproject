@@ -67,7 +67,7 @@
  <% if current_user && ( @holdgame.gameholder.user_id==current_user.id || current_user.has_role?(:admin)||current_user.has_role?(:superuser))   %>
    <%= button_to '新增比賽分組', new_holdgame_gamegroup_path(@holdgame), :method => :get  %>
  <%end%>  
-<!%= link_to 'new game', new_holdgame_gamegroup_path(@holdgame) %>
+
 </div>
 </div>
 

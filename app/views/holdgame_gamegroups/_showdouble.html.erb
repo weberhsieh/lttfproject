@@ -95,7 +95,9 @@
   <% end %>                            
   <% if current_user %>
   <td><%= button_to '報名參賽', doubleplayersinput_holdgame_gamegroups_path(@holdgame,gamegroup, :name => 'init') , :method=>:get  %></td>
-  <% end %>               
+  <% end %>  
+  
+  <td>  <%= link_to "輸出到excel", groupdumptoxls_holdgame_gamegroups_path(@holdgame,:gamegroup_id=>gamegroup.id,format: "xls") %></td>             
 </tr>
 </table>
 
