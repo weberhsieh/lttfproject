@@ -6,52 +6,52 @@
    <div class ="well" style='width: 100%'>
 
     <p>
-      <b>比賽名稱:</b>
-       <%= @holdgame.gamename %>
+    <b>比賽名稱:</b>
+     <font color="blue"><%= @holdgame.gamename %></font>
     </p>
 
     <p>
     <b>比賽日期:</b>
-      <%= @holdgame.startdate %>
+      <font color="blue"><%= @holdgame.startdate %></font>
     </p>
     <p>
     <b>比賽場地:</b>
-      <%= @holdgame.courtname %>
+      <font color="blue"><%= @holdgame.courtname %></font>
     </p>
     <p>
       <b>比賽地址:</b>
-      <%= @holdgame.address %>
+      <font color="blue"><%= @holdgame.address %></font>
     </p>
 
     <p>
     <b>比賽類型:</b>
-      <%= @holdgame.gametype %>
+      <font color="blue"><%= @holdgame.gametype %></font>
     </p>
 
    <p>
       <b>主辦人:</b>
-      <%= @gameholder.name %>
+      <font color="blue"><%= @gameholder.name %></font>
    </p>
 
 
    <p>
      <b>主辦人電話:</b>
-     <%= @gameholder.phone %>
+     <font color="blue"><%= @gameholder.phone %></font>
    </p>
 
    <p>
      <b>主辦人信箱:</b>
-     <%=  @gameholder.email %>
+     <font color="blue"><%=  @gameholder.email %></font>
     </p>
    <p>
      <b>贊助單位:</b>
-     <%=  @gameholder.sponsor %>
+     <font color="blue"><%=  @gameholder.sponsor %></font>
    </p>
 
    <p>
     <b>比賽相關資料說明:</b>
       <p style="white-space: pre-line ;width:auto; text-align:justify ">
-        <%= @holdgame.gamenote %>
+        <font color="blue"><%= @holdgame.gamenote %></font>
     </p>
    </p>
  </div>
@@ -62,9 +62,9 @@
 
  
 <div class="col-md-12">
-   
+
  
- <% if current_user && ( @holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser) )  %>
+ <% if current_user && ( @holdgame.gameholder.user_id==current_user.id || current_user.has_role?(:admin)||current_user.has_role?(:superuser))   %>
    <%= button_to '新增比賽分組', new_holdgame_gamegroup_path(@holdgame), :method => :get  %>
  <%end%>  
 <!%= link_to 'new game', new_holdgame_gamegroup_path(@holdgame) %>
@@ -91,7 +91,8 @@
             <div class="tab-pane in active" id="<%= 'tab'+ (tabindex+1).to_s %>" >
           <% else %>
             <div class="tab-pane" id="<%= 'tab'+ (tabindex+1).to_s %>" >
-          <% end  %>   
+          <% end  %>  
+
           <% if !current_user %>
             <% @user_registered=false %>
             <% @user_in_group=false %>

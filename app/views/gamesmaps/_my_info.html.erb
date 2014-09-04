@@ -1,11 +1,36 @@
 <div class="wrapper">
   <p align=center> <font color ='blue'><strong><%=holdgame.startdate %><%= holdgame.gamename %></strong></font><br></p>
-  <font color ='blue'>比賽場地：<%=holdgame.courtname %></font><br>
+    <% if holdgame.lttfgameflag %>
+     <font color ='blue'>報名網址:</font> <%= link_to  holdgame.gamename, holdgame_gamegroups_path(holdgame) ,style: 'color:#FF11FF;'  %><br>
+   <% else %>
+      <font color ='blue'>報名網址:</font> <%= link_to_if(holdgame.url!="", holdgame.gamename, holdgame.url ,style: 'color:#FF11FF;' ) %></br>
+   <% end %>
+   <font color ='blue'>比賽場地：<%=holdgame.courtname %></font><br>
    <font color ='blue'>比賽地址：<%=holdgame.address %></font><br>
    <font color ='blue'>開始日期：<%=holdgame.startdate %></font><br>
-   <font color ='blue'>主辦人：  <%=holdgame.gameholder.name %></font><br>
-   <font color ='blue'>贊助單位：<%=holdgame.gameholder.sponsor %></font><br>
-   <font color ='blue'>比賽資訊：<%=holdgame.gamenote %></font><br>
+    <font color ='blue'>比賽類型：<%=holdgame.gametype %></font><br>
+   <font color ='blue'>主辦人：  <%=holdgame.contact_name %></font><br>
+   <font color ='blue'>連絡電話：<%=holdgame.contact_phone %></font><br>
+   <font color ='blue'>連絡信箱：<%=holdgame.contact_email %></font><br>
+   <%if holdgame.lttfgameflag %>
+     <font color ='blue'>贊助單位：<%=holdgame.gameholder.sponsor %></font><br>
+   <%end%>  
+   <p style="white-space: pre-line ;width:auto; text-align:justify ">
+   <font color ='blue'>比賽資訊：<br><%=holdgame.gamenote %></font><br>
+   </p>
 
-   <font color ='blue'>報名網址:</font> <%= link_to_if(holdgame.url=='LTTF', holdgame.gamename, holdgame_gamegroups_url(holdgame) ,style: 'color:#FF11FF;') %>
+  <% if holdgame.lttfgameflag %>
+  <% if current_user &&( holdgame.gameholder.user_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser) )  %>
+    <%= link_to image_tag('/images/edit.ico'), edit_holdgame_path(holdgame), :method=>:get %></td>
+
+     <%=link_to image_tag('/images/delete.ico'), holdgame,
+                              :method => :delete, data: { confirm: '確定刪除此比賽資料?' } %></td>
+  <% end %>      
+  <% else %>
+      <% if current_user && ( (current_user.has_role? :admin)||(current_user.has_role? :superuser)||(current_user.id== holdgame.gameholder_id)) %>
+       <%= link_to image_tag('/images/edit.ico') , edit_gamesmap_path(holdgame)  %>
+       <%= link_to image_tag('/images/delete.ico') , gamesmap_path(holdgame) , method: :delete, data: { confirm: '確定刪除此比賽活動資料?' } %>
+    <% end %>
+  <% end %>  
+
  </div>

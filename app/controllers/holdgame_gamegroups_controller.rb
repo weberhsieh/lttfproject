@@ -332,7 +332,7 @@ end
 def new
  
   @gamegroup = @holdgame.gamegroups.build
- 
+  @gamegroup.starttime=@holdgame.startdate.to_date
 end
 
 def create

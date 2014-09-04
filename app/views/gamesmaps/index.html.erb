@@ -5,18 +5,15 @@
 <br ><br><br>
 <div class="map_pagecontainer">
   <div  id='sidebar_container'> 
-    <h4 align="center"><font color="blue">台灣打桌球地圖</font></h4>
-    <h6 align="center"><font color="blue">本地圖由<%= link_to '桌球愛好者聯盟', 'https://www.facebook.com/groups/LTTF.TW/' %> 提供，歡迎轉載使用，轉載時請註明出處!</font></h6>
-    <h6 align="center"><font color="blue"><%= link_to '舊版台灣打桌球地圖', 'http://tt.177.tw' %></font></h6> 
-   
+    <h4 align="center"><font color="blue">台灣桌球比賽及活動地圖</font></h4>
+    <h6 align="justify"><font color="blue">本地圖由<%= link_to '桌球愛好者聯盟', 'https://www.facebook.com/groups/LTTF.TW/' %> 提供，歡迎轉載使用，轉載時請註明出處!</font></h6>
+    <h6 align="justify"><font color="blue">歡迎球友主動輸入台灣各地桌球比賽及活動資料(教練及裁判或桌球訓練營等皆歡迎提供)，以提供其他球友參考!(需先註冊桌盟會員才可操作比賽資料新增功能)</font></h6>  
 
-    <ul class="collapsibleList" id="gamesmaplist">
+    <ul class="collapsibleList" id="holdgamelist">
                               
     </ul>    
     <% if current_user%> 
-      <% if (current_user.has_role? :admin)||(current_user.has_role? :superuser)||(current_user.has_role? :mapmanager) %>
-        <%= link_to image_tag('/images/button_add.ico') , new_ttcourt_path  %>
-     <% end %>
+      <%= link_to image_tag('/images/button_add.ico') , new_gamesmap_path  %>
     <% end %>    
    </div>
 

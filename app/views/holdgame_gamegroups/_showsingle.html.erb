@@ -75,7 +75,7 @@
 
 <table width="100">
 <tr>
-  <% if current_user &&( @holdgame.gameholder_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser) )  %>
+  <% if current_user &&( @holdgame.gameholder.user_id==current_user.id|| current_user.has_role?(:admin)||current_user.has_role?(:superuser) )  %>
      <td><%= button_to '修改分組資料', edit_holdgame_gamegroup_path(@holdgame, gamegroup), :method=>:get %></td>
 
      <td><%= button_to '刪除此分組', holdgame_gamegroup_path(@holdgame, gamegroup),
@@ -127,7 +127,11 @@
                  <td><%= serial+1 %></td>
                
                 <td><%= player.player_id %></td>
-                <td><%= player.name %></td>
+                <td>
+                  <%= link_to(playerprofile_path(player.player_id)) do %>
+                    <i class="fa fa-file-o"></i>&nbsp;<font color="#3A01DF"><%=  player.name  %></font>
+                  <% end %>
+                </td>
                 <td><%= player.curscore %></td>
                 <%if (serial+1)>gamegroup.noofplayers%>
                   <td><font color='red'>候補</font></td>
@@ -152,3 +156,6 @@
       </tfoot>  
     </table>  
   </div>
+
+  <%= link_to '返回前頁', :back %>
+  <%= link_to '桌球比賽地圖', gamesmaps_path %>

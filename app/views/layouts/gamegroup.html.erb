@@ -173,8 +173,8 @@ function codeAddress() {
 
 
 
-        gon.lat=results[0].geometry.location.d;
-        gon.lng=results[0].geometry.location.e;
+        gon.lng=results[0].geometry.location.A;
+        gon.lat=results[0].geometry.location.k;
         handler.map.centerOn({ lat: gon.lat, lng: gon.lng }); 
         deleteMarkers();
         markers = handler.addMarkers([

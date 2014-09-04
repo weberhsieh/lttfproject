@@ -80,15 +80,15 @@ var handler = Gmaps.build('Google');
 //var marker=new google.maps.Marker({
 //    position:myCenter
 //});
- var courts_array =<%= raw @ttcourts_hash.to_json %>  
+ var courts_array =<%= raw @holdgames_hash.to_json %>  
 
 geocoder = new google.maps.Geocoder();
 if(gon.action=='new')
  {
   gon.lat=25.118;
   gon.lng=121.745;
-  var templat= document.getElementById("gameholder_lat");
-  var templng= document.getElementById("gameholder_lng");
+  var templat= document.getElementById("holdgame_lat");
+  var templng= document.getElementById("holdgame_lng");
   templat.value=gon.lat;
   templng.value=gon.lng;
  
@@ -166,7 +166,7 @@ function resetlocation(courtinfo)
             height: 24
           },
 
-          infowindow: courtinfo['placename'],
+          infowindow: courtinfo['courtname'],
             
         }
       ], {draggable: false});
@@ -176,7 +176,7 @@ function resetlocation(courtinfo)
 
 }
 function codeAddress() {
-    var address = document.getElementById("gameholder_address").value;
+    var address = document.getElementById("holdgame_address").value;
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode( { 'address': address}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
@@ -203,8 +203,8 @@ function codeAddress() {
       ], {draggable: true});
       handler.map.listen_to_markers(markers);
       Markers=markers;
-      document.getElementById("gameholder_lat").value=gon.lat;
-      document.getElementById("gameholder_lng").value=gon.lng;
+      document.getElementById("holdgame_lat").value=gon.lat;
+      document.getElementById("holdgame_lng").value=gon.lng;
       var latlng = new google.maps.LatLng(gon.lat,gon.lng);
       reverseGeocode(latlng,false);
 
@@ -230,15 +230,15 @@ function addresschange()
 {
   codeAddress();
   
-  document.getElementById("gameholder_lat").value=gon.lat;
-  document.getElementById("gameholder_lng").value=gon.lng;
+  document.getElementById("holdgame_lat").value=gon.lat;
+  document.getElementById("holdgame_lng").value=gon.lng;
 }
 
 function testdragend(pos)
 {
   
-  var tt_lat = document.getElementById("gameholder_lat");
-  var tt_lng = document.getElementById("gameholder_lng");
+  var tt_lat = document.getElementById("holdgame_lat");
+  var tt_lng = document.getElementById("holdgame_lng");
   tt_lat.value = pos.d;
   tt_lng.value = pos.e;
   handler.getMap().setZoom(16);
@@ -278,7 +278,7 @@ function reverseGeocode(latlng,addressupdate){
                     }
                 }
             }
-           
+            
             updateAddress(level_2,results[0].formatted_address,addressupdate);
        } else
        {
@@ -288,8 +288,8 @@ function reverseGeocode(latlng,addressupdate){
 }
 function setcitycountforaddress(city, county)
 {
-  var cCity=document.getElementById("gameholder_city");
-  var cCounty=document.getElementById("gameholder_county");
+  var cCity=document.getElementById("holdgame_city");
+  var cCounty=document.getElementById("holdgame_county");
   cCity.value=city;
 
   gon.countiesarray=Object.keys(gon.twzipecode[city]);
@@ -319,6 +319,7 @@ function setcitycountforaddress(city, county)
   cCounty.value=county;
 }
 function updateAddress(county,address){
+  console.log(address);
  // document.getElementById("ttcourt_city").value=prov;
  if( address.search("台灣")>0)
  {
@@ -351,8 +352,8 @@ function updateAddress(county,address){
  ;
   
 setcitycountforaddress(city, county);
-
-     document.getElementById("gameholder_address").value=address;
+ 
+     document.getElementById("holdgame_address").value=address;
   
    // do what you want with the address here
 }

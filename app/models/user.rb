@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   validates :username, presence: true
   validates :username, uniqueness: true, if: -> { self.username.present? }
   validate :username_without_
+  validate :fbaccount_without_email
   validates_format_of :email,:with => Devise.email_regexp
   rolify
 
@@ -51,4 +52,7 @@ end
        errors.add(:username, "姓名不得含有\"_\"字元請重新輸入，請用\"-\"字元取代\"_\"字元 ") unless read_attribute(:username).to_s.exclude? "_"  
       
     end
+    def fbaccount_without_email
+      errors.add(:fbaccount, "FB帳號不可使用email，請使用FB上的名字") unless read_attribute(:fbaccount).to_s.exclude? "@"  
+    end  
 end

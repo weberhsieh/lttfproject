@@ -83,12 +83,14 @@ function createSidebarLi(json){
   return ("<li><a>" + json.name + "</a></li>");
 };
 function createCollpasingSidebarLi(cur_court,json){
-  
+
  return ("<li><font color=\'red\'>" + json.name +"</font><ul><li>"+ 
            "比賽日期:"+cur_court['startdate']+"</li><li>"+
            "比賽場地:"+cur_court['address']+"</li><li>"+
-           "比賽地地址:"+cur_court['courtname']+"</li><li>"+
-           "比賽資訊:"+cur_court['gamenote']+"</li>"+
+           "比賽地址:"+cur_court['courtname']+"</li><li>"+
+           "主辦人員:"+cur_court['name']+"</li><li>"+
+           "連絡電話:"+cur_court['phone']+"</li>"+
+      
        "</ul></li>");
 };
 function bindLiToMarker($li, marker){
@@ -107,12 +109,10 @@ function createCollpasingSidebar(courts_array,json_array,index){
 
     if(cur_court.length!=0)
     { 
-
-    var $li = $( createCollpasingSidebarLi(cur_court,json) );
-
-    var ul='city'+index;
-    $("#city"+index).append($li);
-    bindLiToMarker($li, json.marker);
+      var $li = $( createCollpasingSidebarLi(cur_court,json) );
+      var ul='city'+index;
+      $("#city"+index).append($li);
+      bindLiToMarker($li, json.marker);
     }
   });
  
@@ -156,7 +156,7 @@ function createSidebar(json_array){
     
   });
     
-    CollapsibleLists.applyTo(document.getElementById('gamesmaplist'));
+    CollapsibleLists.applyTo(document.getElementById('holdgamelist'));
 
 
     });

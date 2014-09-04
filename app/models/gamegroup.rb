@@ -17,7 +17,6 @@ class Gamegroup < ActiveRecord::Base
   	return nil
   end
   def check_meet_group_qualify(player_curscore)
-
     return true if player_curscore==0
       
   	case self.scorelimitation
