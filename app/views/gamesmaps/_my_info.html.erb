@@ -1,3 +1,4 @@
+# encoding: utf-8
 <div class="wrapper">
   <p align=center> <font color ='blue'><strong><%=holdgame.startdate %><%= holdgame.gamename %></strong></font><br></p>
     <% if holdgame.lttfgameflag %>
@@ -15,8 +16,11 @@
    <%if holdgame.lttfgameflag %>
      <font color ='blue'>贊助單位：<%=holdgame.gameholder.sponsor %></font><br>
    <%end%>  
+   <% if  holdgame.original_filename %>
+      <%= link_to "說明附檔:"+holdgame.original_filename, holdgame.gameinfofile_url %>
+    <%end%>
    <p style="white-space: pre-line ;width:auto; text-align:justify ">
-   <font color ='blue'>比賽資訊：<br><%=holdgame.gamenote %></font><br>
+   <font color ='blue'>比賽辦法說明:<br><%=holdgame.gamenote %></font><br>
    </p>
 
   <% if holdgame.lttfgameflag %>

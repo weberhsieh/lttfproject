@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140903014719) do
+ActiveRecord::Schema.define(:version => 20140905070201) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "namespace"
@@ -27,6 +27,22 @@ ActiveRecord::Schema.define(:version => 20140903014719) do
   add_index "active_admin_comments", ["author_type", "author_id"], :name => "index_active_admin_comments_on_author_type_and_author_id"
   add_index "active_admin_comments", ["namespace"], :name => "index_active_admin_comments_on_namespace"
   add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_active_admin_comments_on_resource_type_and_resource_id"
+
+  create_table "articles", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "attachments", :force => true do |t|
+    t.text     "description"
+    t.string   "file"
+    t.integer  "attachable_id"
+    t.string   "attachable_type"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
 
   create_table "attendants", :force => true do |t|
     t.integer  "groupattendant_id"
@@ -105,8 +121,8 @@ ActiveRecord::Schema.define(:version => 20140903014719) do
     t.date     "enddate"
     t.string   "gametype"
     t.text     "gamenote"
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.text     "address"
     t.string   "city"
     t.string   "county"
@@ -115,10 +131,12 @@ ActiveRecord::Schema.define(:version => 20140903014719) do
     t.float    "lat"
     t.float    "lng"
     t.string   "url"
-    t.boolean  "lttfgameflag",  :default => false
+    t.boolean  "lttfgameflag",      :default => false
     t.string   "contact_name"
     t.string   "contact_phone"
     t.string   "contact_email"
+    t.string   "gameinfofile"
+    t.string   "original_filename"
   end
 
   create_table "playerprofiles", :force => true do |t|

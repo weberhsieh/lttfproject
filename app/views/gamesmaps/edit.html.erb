@@ -1,3 +1,4 @@
+# encoding: utf-8
 <%= content_for :head do %>
   <meta charset="utf-8">
   <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/hot-sneaks/jquery-ui.css" rel="stylesheet">
@@ -31,7 +32,7 @@
         <div style="padding-top:30px" class="panel-body" >
  
     
-           <%= form_for(@holdgame, :url =>@holdgame,:html =>{:class =>"form-horizontal",:role =>"form" },method: :put ) do |f| %>
+           <%= form_for(@holdgame, :url =>@holdgame,:html =>{:class =>"form-horizontal form-inline",:role =>"form" },method: :put ) do |f| %>
 
             <% if @holdgame.errors.any? %>
               <div id="error_explanation">
@@ -72,7 +73,7 @@
             <div class="col-xs-10 col-md-10 col-lg-10"></br></div>
             <div class="form-group">
               <div class="col-xs-10 col-md-10 col-lg-10">
-                <%= f.label "所在縣市", :class => "form-label" %>:
+                <%= f.label "所在縣市:", :class => "form-label" %>
                 <%= f.select :city, @citiesarray, {:required => true, :class =>"form-control", :size => "50"}, :onchange => "cityChange(this);",:click=>"countyChange(this);"  %>
               </div>
             </div>
@@ -81,7 +82,7 @@
            <div class="col-xs-10 col-md-10 col-lg-10"></br></div>
             <div class="form-group">
               <div class="col-xs-10 col-md-10 col-lg-10">
-                <%= f.label "鄉鎮市區", :class => "form-label" %>:
+                <%= f.label "鄉鎮市區:", :class => "form-label" %>
                 <%= f.select :county, @countiesarray, {:required => true, :class => "form-control", :size => "50"}, :onchange => "countyChange(this);", :click=>"countyChange(this);"  %>
               </div>
             </div> 
@@ -102,7 +103,7 @@
             <div class="col-xs-12 col-md-10 col-lg-10"></br></div>
             <div class="form-group">
               <div class="col-xs-10 col-md-10 col-lg-10">
-                <%= f.label "地址", :class => "form-label" %>:
+                <%= f.label "地址:", :class => "form-label" %>
                 <%= f.text_field :address, :required => true,:required => true, :class => "form-control", :size => "50",:onchange=>"codeAddress(this);"  %>
               
               </div>
@@ -115,14 +116,14 @@
            <div class="col-xs-12 col-md-10 col-lg-10"></br></div>
             <div class="form-group">
               <div class="col-xs-10 col-md-10 col-lg-10">
-                <%= f.label "經度", :class => "form-label" %>:
+                <%= f.label "經度:", :class => "form-label" %>
                 <%= f.number_field :lng, :required => true, :class => "text_field",:step=>'any' ,:size => "20"%>
               </div>
             </div>
 
             <div class="form-group">
               <div class="col-xs-10 col-md-10 col-lg-10">
-                <%= f.label "緯度", :class => "form-label" %>:
+                <%= f.label "緯度:", :class => "form-label" %>
                 <%= f.number_field :lat, :required => true, :class => "text_field",:step=>'any', :size => "20"  %>
               </div>
             </div>
@@ -156,9 +157,23 @@
               <div class="col-xs-10 col-md-10 col-lg-10"></br></div>
               <div class="form-group">
               <div class="col-xs-10 col-md-10 col-lg-10">
-                <%= f.label "相關網址", :class => "form-label" %>:
+                <%= f.label "相關網址:", :class => "form-label" %>
                 <%= f.text_field :url ,  :class => "form-control", :size => "50"  %>
               </div>
+              </div>
+               <div class="col-xs-12 col-md-12 col-lg-12"></br></div>
+              <% if  @holdgame.original_filename %>
+                    <%= link_to "說明附檔:"+@holdgame.original_filename, @holdgame.gameinfofile_url %>
+                    <br>
+              <%end%>
+             <div class="col-xs-12 col-md-12 col-lg-12"></br></div>
+              <div class="form-group">
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                  <%= f.label "上傳附檔:", :class => "form-label" %><br>
+                  <div class="col-xs-12 col-md-12 col-lg-12 md-offset-6">
+                  <%= f.file_field :gameinfofile, :class => "file"  %>
+                  </div>
+                </div>
               </div>
 
             <div class="form-group">
