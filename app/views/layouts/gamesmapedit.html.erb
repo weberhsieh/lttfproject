@@ -239,10 +239,10 @@ function testdragend(pos)
   
   var tt_lat = document.getElementById("holdgame_lat");
   var tt_lng = document.getElementById("holdgame_lng");
-  tt_lat.value = pos.d;
-  tt_lng.value = pos.e;
+  tt_lat.value = pos.A;
+  tt_lng.value = pos.k;
   handler.getMap().setZoom(16);
-  handler.map.centerOn({ lat: pos.d, lng: pos.e }); 
+  handler.map.centerOn({ lat: pos.A, lng: pos.k }); 
   reverseGeocode(pos,true);
 }
 
