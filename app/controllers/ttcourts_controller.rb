@@ -11,6 +11,7 @@ class TtcourtsController < ApplicationController
     @hash  = Gmaps4rails.build_markers @ttcourts do |ttcourt, marker|
       marker.lat(ttcourt.lat)
       marker.lng(ttcourt.lng)
+     
       marker.infowindow render_to_string(:partial => "/ttcourts/my_info", :formats => [:html],:locals => { :ttcourt => ttcourt})
       marker.picture({
        
@@ -40,8 +41,9 @@ class TtcourtsController < ApplicationController
   # GET /ttcourts/1
   # GET /ttcourts/1.json
   def show
+ 
     @ttcourt = Ttcourt.find(params[:id])
-
+    @ttourt_photos= @ttcourt.courtphotos.all
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @ttcourt }
@@ -53,6 +55,7 @@ class TtcourtsController < ApplicationController
   def new
     gon.action='new'
     @ttcourt = Ttcourt.new
+    @ttourt_photo= @ttcourt.courtphotos.build
     @citiesarray=TWZipCode_hash.keys
     @countiesarray=TWZipCode_hash[@citiesarray[0]].keys
     @ttcourt.address= @citiesarray[0]+@countiesarray[0]
@@ -76,6 +79,7 @@ class TtcourtsController < ApplicationController
   def edit
     gon.action='edit'
     @ttcourt = Ttcourt.find(params[:id])
+    @ttourt_photos= @ttcourt.courtphotos.all
     @citiesarray=TWZipCode_hash.keys
     gon.citiesarray=@citiesarray
     @countiesarray=TWZipCode_hash[@ttcourt.city].keys
@@ -88,10 +92,17 @@ class TtcourtsController < ApplicationController
   # POST /ttcourts
   # POST /ttcourts.json
   def create
-    @ttcourt = Ttcourt.new(params[:ttcourt])
 
+    @ttcourt = Ttcourt.new(params[:ttcourt])
     respond_to do |format|
       if @ttcourt.save
+        if params[:ttcourt_courtphotos]
+           params[:ttcourt_courtphotos].each do |photo|
+           @courtphoto=@ttcourt.courtphotos.build
+           @courtphoto.photo =photo
+           @courtphoto.save
+          end  
+        end  
         format.html { redirect_to @ttcourt, notice: @ttcourt.placename+'資料新增成功!' }
         format.json { render json: @ttcourt, status: :created, location: @ttcourt }
       else
@@ -107,7 +118,15 @@ class TtcourtsController < ApplicationController
     @ttcourt = Ttcourt.find(params[:id])
 
     respond_to do |format|
-      if @ttcourt.update_attributes(params[:ttcourt])
+      updateflag=@ttcourt.update_attributes(params[:ttcourt])
+      if  updateflag
+        if params[:ttcourt_courtphotos]
+          params[:ttcourt_courtphotos].each do |photo|
+             @courtphoto=@ttcourt.courtphotos.build
+             @courtphoto.photo =photo
+             @courtphoto.save
+           end  
+        end  
         format.html { redirect_to @ttcourt, notice: @ttcourt.placename+'資料更新成功!' }
         format.json { head :no_content }
       else

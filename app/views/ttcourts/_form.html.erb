@@ -128,7 +128,13 @@
               </div>
               </div>
 
-            
+            <%= f.fields_for :ttcourt_courtphotos do |p| %>
+              <div class="field">
+                <%= p.label '場地照片' %><br>
+                <%= p.file_field :photo, :multiple => true, name: "ttcourt_courtphotos[]" %>
+              </div>
+            <% end %>
+
 
             <div class="col-xs-8 col-md-8 col-lg-8"></br></div>
             <div class="col-md-offset-4 col-md-5">

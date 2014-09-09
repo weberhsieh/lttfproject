@@ -41,7 +41,39 @@ class GamesmapsController < ApplicationController
       format.json { render json: @holdgames }
     end
   end
+ def lttfgamesindex
+ @citiesarray=TWZipCode_hash.keys
 
+    @holdgames=Holdgame.forgamesmaps.where("startdate >= ? ", Time.zone.now.to_date).where(:lttfgameflag => true)
+    @holdgames_hash=Array.new
+    @hash  = Gmaps4rails.build_markers @holdgames do |holdgame, marker|
+      marker.lat(holdgame.lat)
+      marker.lng(holdgame.lng)
+      marker.infowindow render_to_string(:partial => "/gamesmaps/my_info", :formats => [:html],:locals => { :holdgame => holdgame})
+      marker.picture({
+       
+                       :width  => "24",
+                       :height => "24",
+                       
+                      })
+       
+      marker.title(holdgame.courtname)
+      marker.json({ :id => holdgame.id , :name=>holdgame.startdate.to_s+holdgame.gamename+'('+holdgame.courtname+')', :city => holdgame.city })
+      @tempgame=Hash.new
+      @tempgame['id']=holdgame.id
+      @tempgame['gamename']=holdgame.gamename
+      @tempgame['courtname']=holdgame.courtname
+      @tempgame['address']=holdgame.address
+      @tempgame['startdate']=holdgame.startdate
+      @tempgame['name']=holdgame.contact_name
+      @tempgame['phone']=holdgame.contact_phone
+      @tempgame['email']=holdgame.contact_email
+      @tempgame['gamenote']=holdgame.gamenote
+      @holdgames_hash.push( @tempgame)
+    end
+
+    render :index
+ end  
   # GET /ttcourts/1
   # GET /ttcourts/1.json
   def show
@@ -178,7 +210,7 @@ class GamesmapsController < ApplicationController
   def resolve_layout
     case action_name
     
-    when "index" 
+    when "index","lttfgamesindex" 
       "gamesmaplayout"
     when "edit" ,"new"
       "gamesmapedit"  

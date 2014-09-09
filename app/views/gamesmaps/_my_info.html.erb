@@ -17,7 +17,7 @@
      <font color ='blue'>贊助單位：<%=holdgame.gameholder.sponsor %></font><br>
    <%end%>  
    <% if  holdgame.original_filename %>
-      <%= link_to "說明附檔:"+holdgame.original_filename, holdgame.gameinfofile_url %>
+      <%= link_to "說明附檔:"+holdgame.original_filename, holdgame.gameinfofile_url ,style: 'color:#FF11FF;'%>
     <%end%>
    <p style="white-space: pre-line ;width:auto; text-align:justify ">
    <font color ='blue'>比賽辦法說明:<br><%=holdgame.gamenote %></font><br>
