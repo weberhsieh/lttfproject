@@ -17,8 +17,9 @@ Lttfproject::Application.routes.draw do
           put :update
           get :groupdumptoxls
          end  
-
+        
       end
+      
   end
 
 
@@ -26,6 +27,7 @@ Lttfproject::Application.routes.draw do
     collection do
       get  :upload
       get  :displayuploadfile
+      get  :uploadfile_fromholdgame
       post :savetoupload
       post :publishuploadgame
       post :calculategamepage
@@ -68,6 +70,7 @@ devise_for :users, :controllers => { :registrations => 'users/registrations' }
   resources :gamesmaps do
      collection do
       put :update
+      get :lttfgamesindex
      end
   end    
   # The priority is based upon order of creation:

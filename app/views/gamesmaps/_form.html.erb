@@ -275,7 +275,7 @@ function cityChange(selectObj) {
   var idx = selectObj.selectedIndex;
   // get the value of the selected option
   var which = selectObj.options[idx].value;
-
+  console.log("incitychange");
   //gon.countiesarray= gon.twzipecode[which];
   // get the country select element via its known id
   gon.countiesarray=Object.keys(gon.twzipecode[which]);

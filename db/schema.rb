@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140905070201) do
+ActiveRecord::Schema.define(:version => 20140911120244) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "namespace"
@@ -28,22 +28,6 @@ ActiveRecord::Schema.define(:version => 20140905070201) do
   add_index "active_admin_comments", ["namespace"], :name => "index_active_admin_comments_on_namespace"
   add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_active_admin_comments_on_resource_type_and_resource_id"
 
-  create_table "articles", :force => true do |t|
-    t.string   "title"
-    t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  create_table "attachments", :force => true do |t|
-    t.text     "description"
-    t.string   "file"
-    t.integer  "attachable_id"
-    t.string   "attachable_type"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
   create_table "attendants", :force => true do |t|
     t.integer  "groupattendant_id"
     t.string   "name"
@@ -56,6 +40,13 @@ ActiveRecord::Schema.define(:version => 20140905070201) do
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
     t.integer  "player_id"
+  end
+
+  create_table "courtphotos", :force => true do |t|
+    t.integer  "ttcourt_id"
+    t.string   "photo"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "gamegroups", :force => true do |t|
@@ -137,6 +128,7 @@ ActiveRecord::Schema.define(:version => 20140905070201) do
     t.string   "contact_email"
     t.string   "gameinfofile"
     t.string   "original_filename"
+    t.string   "inputfileurl"
   end
 
   create_table "playerprofiles", :force => true do |t|

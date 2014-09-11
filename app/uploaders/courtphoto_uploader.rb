@@ -1,46 +1,15 @@
 # encoding: utf-8
-class GameInfofileUploader < CarrierWave::Uploader::Base
-  before :cache, :save_original_filename
- # Include RMagick or MiniMagick support:
+
+class CourtphotoUploader < CarrierWave::Uploader::Base
+
+  # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   include CarrierWave::MiniMagick
 
   # Choose what kind of storage to use for this uploader:
   storage :file
   # storage :fog
-  IMAGE_EXTENSIONS = %w(jpg jpeg gif png)
-  DOCUMENT_EXTENSIONS = %w(exe pdf doc docm docx xls xlsx)
-  def extension_white_list
-    IMAGE_EXTENSIONS + DOCUMENT_EXTENSIONS
-  end
-  def save_original_filename(file)
-    model.original_filename = file.original_filename if file.respond_to?(:original_filename)
-  end
-  # create a new "process_extensions" method.  It is like "process", except
-  # it takes an array of extensions as the first parameter, and registers
-  # a trampoline method which checks the extension before invocation
-  def self.process_extensions(*args)
-    extensions = args.shift
-    args.each do |arg|
-      if arg.is_a?(Hash)
-        arg.each do |method, args|
-          processors.push([:process_trampoline, [extensions, method, args]])
-        end
-      else
-        processors.push([:process_trampoline, [extensions, arg, []]])
-      end
-    end
-  end
- 
-  # our trampoline method which only performs processing if the extension matches
-  def process_trampoline(extensions, method, args)
-    extension = File.extname(original_filename).downcase
-    extension = extension[1..-1] if extension[0,1] == '.'
-    self.send(method, *args) if extensions.include?(extension)
-  end
-  
- 
- 
+
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
@@ -80,6 +49,12 @@ class GameInfofileUploader < CarrierWave::Uploader::Base
   # def filename
   #   "something.jpg" if original_filename
   # end
-  
+  process :resize_to_fill => [600,400]
 
+  version :thumb do
+    process :resize_to_fill => [300,200]
+  end
+  version :tiny do
+    process :resize_to_fill => [60,40]
+  end
 end

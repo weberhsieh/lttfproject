@@ -91,8 +91,7 @@ class UploadgamesController < ApplicationController
   end
 
   def displayuploadfile
-    #@NewFoo=Foo.new
-    #@uploadgame=Uploadgame.upload(params[:gamefileurl], @NewFoo)
+
     @uploadgame=Uploadgame.upload(params[:gamefileurl])
     #@uploadgame =  Uploadgame.last
     @playerssummery=getplayersummary(@uploadgame.players_result)
@@ -108,6 +107,23 @@ class UploadgamesController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @uploadgame }
     end
+  end  
+  def uploadfile_fromholdgame
+
+    holdgame=Holdgame.find(params[:format])
+
+    @uploadgame=Uploadgame.upload(holdgame.inputfileurl)
+    #@uploadgame =  Uploadgame.last
+    @playerssummery=getplayersummary(@uploadgame.players_result)
+    #@playerssummery=@NewFoo.uploadplayerinfo
+   
+   
+    @gamesrecords=getdetailgamesrecord(@uploadgame.detailgameinfo)
+    #@gamesrecords=@NewFoo.uploadgamesrecord
+
+    Rails.cache.write("curgame", @uploadgame)
+    Rails.cache.write("playersummery",@playerssummery)
+    render :displayuploadfile
   end  
 
   def getplayersummary(players_result)

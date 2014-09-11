@@ -1,16 +1,21 @@
 # encoding: UTF-8”
+
+require 'google_drive'
 class HoldgamesController < InheritedResources::Base
- 
+
   before_filter :authenticate_user! , :except=>[:index,:show]
   before_filter :find_gameholder
-  
   def index
+       
     @holdgames=Holdgame.includes(:gameholder).where(:lttfgameflag=>true).where("startdate >= ? ", Time.zone.now.to_date-30).page(params[:page]).per(50)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @holdgames }
     end
   end
+  def callback
+
+  end  
   def show
   	  @holdgame= Holdgame.find(params[:id])
   	  respond_to do |format|
@@ -19,7 +24,6 @@ class HoldgamesController < InheritedResources::Base
       end
   end 
   def new
-  	
   	#@holdgame = Holdgame.new(:gameholder_id => @cur_gameholder.id)
     @holdgame=@cur_gameholder.holdgames.build
     #@holdgame.url=holdgame_gamegroups_url(@holdgame)
@@ -40,7 +44,7 @@ class HoldgamesController < InheritedResources::Base
   	@holdgame = Holdgame.new(params[:holdgame])
     @holdgame.gameholder_id=@cur_gameholder.id
     @holdgame.lttfgameflag =true
-
+    @holdgame.inputfileurl=create_gameinputfile(@holdgame.startdate.to_s+ @holdgame.gamename)
   	respond_to do |format|
       if @holdgame.save
  
@@ -76,6 +80,17 @@ class HoldgamesController < InheritedResources::Base
       format.json { head :no_content }
     end
   end
+
+  def create_gameinputfile(filename)
+    connection = GoogleDrive.login(APP_CONFIG['Google_Account'], APP_CONFIG['Google_PWD'])
+    folder = connection.collection_by_title(APP_CONFIG['Input_File_Folder'])
+    spreadsheet = connection.spreadsheet_by_url(APP_CONFIG['Inupt_File_Template'])
+    newspreadsheet=spreadsheet.duplicate(filename)
+    folder.add(newspreadsheet)
+    return newspreadsheet.human_url
+  
+  end
+
   private
   def find_gameholder
 
