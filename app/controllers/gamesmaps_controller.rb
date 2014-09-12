@@ -161,7 +161,7 @@ class GamesmapsController < ApplicationController
   # POST /ttcourts
   # POST /ttcourts.json
   def create
-    binding.pry
+
     @holdgame = Holdgame.new(params[:holdgame])
     @holdgame.gameholder_id = current_user.id #use this field for uploder id not real gameholder_id
     @holdgame.lttfgameflag = false
